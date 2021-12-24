@@ -1,0 +1,46 @@
+#Playbook to add irules to F5 load balancer
+##The vars "irules" is going to look for the files irule1 and irule2
+##f5networks_f5_modules_big9p_irule: is a parameter used to create irule on an F5 load balancer
+##The server paramater tells the module to use the F5 private IP variable in the inventory
+##The user: "ansible_user" parameter tells the module the username to login to the F5 with, variable in the inventory
+##The password: "ansible_password parameter tells the module the password to login to the F5 with, variable in the inventory
+##The server_port: parameter tells the module the port to connect to the F5 device with
+##The validate_certs: false parameter tells the module to not validate SSL certificates
+##The name: "item" parameter tells the module to create an iRule with the name 'irule1' and 'irule2'
+##The content: "{{lookup('file','{{item}}')}}" parameter tells the module what content to add to the iRule using the lookup plugin
+##The loop: tells the task to loop over the provided list. The list in this case is the list of iRules
+
+---
+- name: BIG-IP SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+  vars:
+    irules: ['irule1', 'irule2']
+
+  tasks:
+    - name: ADD iRules
+      f5networks.f5_modules.bigip_irule:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_ssh_pass}}"
+          server_port: 8443
+          validate_certs: false
+        module: "ltm"
+        name: "{{item}}"
+        content: "{{lookup('file','{{item}}')}}"
+      with_items: "{{irules}}"
+
+    - name: ATTACH iRules TO VIRTUAL SERVER
+      f5networks.f5_modules.bigip_virtual_server:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_ssh_pass}}"
+          server_port: 8443
+          validate_certs: false
+        name: "vip"
+        irules: "{{irules}}"
+...
+

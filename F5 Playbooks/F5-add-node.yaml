@@ -1,0 +1,33 @@
+#This playbook uses the bigip_node module to configure two web servers as nodes on the F5 load balancer
+##name is a user defined description that will display in the terminal output
+##bigip_node: tells the task which module to use. Everything except loop is a module parameter
+##The server: private_ip parameter tells the module to connect to the F5 IP address stored as a variable in the inventory
+##The provider: parameter is a group of connection details for the Load balancer
+##The user: "ansible_user" parameter tells the module the username to login to the F5 with, variable in the inventory
+##The password: "ansible_password parameter tells the module the password to login to the F5 with, variable in the inventory
+##The server_port: parameter tells the module the port to connect to the F5 with
+##The host: "hostvars[item].ansible_host" parameter tells the module to add a web server IP address already defined in the inventory
+##The name: "hostvars[item].inventory_hostname" parameter tells the module to use the inventory_hostname
+##The validate_certs: false parameter tells the module to not validate SSL certificates
+##loop: tells the task to loop over the provided list. The list in this case is the group web which includes two webserver hosts
+
+
+---
+- name: F5 Add Nodes
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: CREATE NODES
+      f5networks.f5_modules.bigip_node:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_password}}"
+          server_port: 8443
+          validate_certs: false
+        host: "{{hostvars[item].ansible_host}}"
+        name: "{{hostvars[item].inventory_hostname}}"
+      loop: "{{ groups['web'] }}"
+...

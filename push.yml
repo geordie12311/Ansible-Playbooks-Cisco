@@ -1,0 +1,16 @@
+# Playbook to push config file using commands in push.txt
+
+- hosts: all
+  connection: network-cli
+  gather_facts: false
+
+  tasks:
+  - name: Push config file 
+    ios_config:
+      src: "./configs/push.txt"
+
+  - name: Save config when modified
+    ios_config:
+      save_when: modified
+
+...

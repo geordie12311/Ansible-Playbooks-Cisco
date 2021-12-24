@@ -1,0 +1,31 @@
+#Playbook to create a pool on F5 load balancer
+##The f5network.f5_)modeules.bigip_pool is the paramater used to create or change a pool via Ansible
+##The user: "ansible_user" parameter tells the module the username to login to the F5 with, variable in the inventory
+##The password: "ansible_password parameter tells the module the password to login to the F5 with, variable in the inventory
+##The server_port: parameter tells the module the port to connect to the F5 with
+##The validate_certs: false parameter tells the module to not validate SSL certificates
+##the name: is where you specify the pool name
+##The lb_method parameter tells the module the loadd balancing mentod to use
+##The monitors parameter tells the module what monitor type to use
+##The monitor_type parameter  "and_list" ensures that all monitors are checked
+
+---
+- name: BIG-IP SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: CREATE POOL
+      f5networks.f5_modules.bigip_pool:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_password}}"
+          server_port: 8443
+          validate_certs: false
+        name: "http_pool"
+        lb_method: "round-robin"
+        monitors: "/Common/http"
+        monitor_type: "and_list"
+...

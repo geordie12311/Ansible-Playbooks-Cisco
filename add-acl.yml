@@ -1,0 +1,26 @@
+---
+- hosts: RTR-1
+
+  gather_facts: false
+  connection: local 
+
+  tasks:
+   - name: Configure ACL on Cisco Switch 
+     ios_config:
+       authorize: yes
+       lines:
+         - access-list 99 permit 172.16.1.100  
+
+   - name: Verify ACL is present 
+     ios_command: 
+       commands:
+         - sh access-l 
+       waitfor: 
+         - result[0] contains 'permit 172.16.1.100'
+
+   - name: SAVE CONFIG 
+     ios_config: 
+       authorize: yes
+       save: yes
+
+...

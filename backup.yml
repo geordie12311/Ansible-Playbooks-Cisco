@@ -1,0 +1,39 @@
+---
+# Playbook to Backup Cisco Config Files 
+
+- hosts: Routers
+
+  tasks:
+   - name: Get ansible date/time facts
+     setup:
+       filter: "ansible_date_time"
+       gather_subset: "!all"
+
+   - name: Store DTG as fact
+     set_fact:
+       DTG: "{{ ansible_date_time.weekday }}"
+
+   - name: Create Directory {{hostvars.localhost.DTG}}
+     file:
+      path: /etc/ansible/backups/{{hostvars.localhost.DTG}}
+      state: directory
+  run_once: true
+
+- hosts: Switches
+
+  tasks:
+   - name: Backup config  
+     ios_command: 
+       commands: show run 
+     register: config 
+
+   - name: Save output to /etc/ansible/backups/{{hostvars.localhost.DTG}}
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "/etc/ansible/backups/{{hostvars.localhost.DTG}}/{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.txt"
+
+   - name: Save Config 
+     ios_config: 
+       save_when: modified 
+
+...

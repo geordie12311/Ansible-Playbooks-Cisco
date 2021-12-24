@@ -1,0 +1,6 @@
+username geordie priv15 password geordie123
+ntp server 8.8.8.8
+no ip domain-lookup
+no http-server
+
+

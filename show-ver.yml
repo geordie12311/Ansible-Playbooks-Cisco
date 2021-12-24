@@ -1,0 +1,17 @@
+---
+# Playbook to show version on IOS  
+
+- hosts: all
+
+  tasks:
+   - name: Show Version 
+     ios_command: 
+       commands: show ip int brief
+     register: version 
+
+   - name: Save output to /etc/ansible/
+     copy:
+       content: "{{version.stdout[0]}}"
+       dest: "/etc/ansible/{{inventory_hostname}}-version.txt"
+
+...

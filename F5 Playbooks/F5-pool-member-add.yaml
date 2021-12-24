@@ -1,0 +1,36 @@
+#This playbook adds members to a pool on the F5 load balancer
+##The f5network.f5_)modules.bigip_pool is the paramater used to create or change a pool via Ansible
+##The user: "ansible_user" parameter tells the module the username to login to the F5 with, variable in the inventory
+##The password: "ansible_password parameter tells the module the password to login to the F5 with, variable in the inventory
+##The server_port: parameter tells the module the port to connect to the F5 with
+##The validate_certs: false parameter tells the module to not validate SSL certificates
+##The server_port: parameter tells the module the port to connect to the F5 device with
+##The state: "present" parameter tells the module we want this to be added rather than deleted
+##The name: "hostvars[item].inventory_hostname" parameter tells the module to use the inventory_hostname as the name
+##The host: "hostvars[item].ansible_host" parameter tells the module to add the web server IP address already defined in inventory
+##The port: parameter tells the pool member port
+##The pool: "http_pool" parameter tells the module to put this node into a pool named http_pool
+##The validate_certs: "no" parameter tells the module to not validate SSL certificate
+##loop: tells the task to loop over the provided list. The list in this case is the group web which includes two hosts
+
+---
+- name: BIG-IP SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: ADD POOL MEMBERS
+      f5networks.f5_modules.bigip_pool_member:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_password}}"
+          server_port: 8443
+          validate_certs: false
+        state: "present"
+        name: "{{hostvars[item].inventory_hostname}}"
+        host: "{{hostvars[item].ansible_host}}"
+        port: "80"
+        pool: "http_pool"
+      loop: "{{ groups['web'] }}"

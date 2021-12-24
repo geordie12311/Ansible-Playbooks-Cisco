@@ -1,0 +1,38 @@
+#Playbook to create a VIP on F5 load balancer
+##The server private_ip parameter tells the module to connect the LB IP address which is stored as a variable in the inventory file
+##The provider parameter is a group of connection details for the BIG-IP
+##The ansible_user parameter tells the module the username to login to the F5 BIG-IP device with
+##The ansible_password parameter tells the module the password to login to the F5 which is a variable stored in host file
+##The server_port parameter tells the module the port to connect to the F5 Bwhich is a variable stored in host file
+##The name parameter tells the module to create a virtual server named "in this example test-VIP"
+##The destination parameter tells the module which IP address to assign for the virtual server
+##The port paramter tells the module which Port the virtual server will be listening on
+##The enabled_vlans parameter tells the module which all vlans the virtual server is enbaled for
+##The all_profiles paramter tells the module which all profiles are assigned to the virtuals server
+##The pool parameter tells the module which pool is assigned to the virtual server
+##The snat paramter tells the module what the Source network address address should be
+##The validate_certs parameter tells the module to validate SSL certificates or not
+
+---
+- name: F5 LB VIP SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: ADD VIRTUAL SERVER
+      f5networks.f5_modules.bigip_virtual_server:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_ssh_pass}}"
+          server_port: 8443
+          validate_certs: false
+        name: "vip-test"
+        destination: "{{private_ip}}"
+        port: "443"
+        enabled_vlans: "all"
+        all_profiles: ['http', 'clientssl', 'oneconnect']
+        pool: "http_pool"
+        snat: "Automap"
+...

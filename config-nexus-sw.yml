@@ -1,0 +1,12 @@
+---
+# Playbook to configure Nexus Switches
+
+- hosts: nxos
+
+  tasks: 
+    - name: Configure a single command on Nexus 
+      nxos_config: 
+        lines: ntp server 9.9.9.9 use-vrf default
+        save_when: modified 
+
+...

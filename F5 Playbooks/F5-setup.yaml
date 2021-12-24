@@ -1,0 +1,89 @@
+# Playbook to setup a F5 load balancer nodes, pool, VIP in one go and save the
+## First task is going to create the nodes
+## Second task is going to create the pool
+## Third task is going to add members to the pool
+## Fourth task is going to add the VIP
+## Fith task is the Resuce or failsafe stanza. If any task within the block fails, the rescue stanza will 
+## execute in order. The VIP, pool, and nodes will be removed gracefully
+## Sixth and final task is going to save the running Configuration
+
+---
+- name: F5 Load balancer SETUP
+  hosts: lb
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Setup provider
+      set_fact:
+        provider:
+          server: "{{private_ip}}"
+          user: "{{ansible_user}}"
+          password: "{{ansible_password}}"
+          server_port: 8443
+          validate_certs: false
+
+    - name: SETUP AND GRACEFUL ROLLBACK BIG-IP CONFIGURATION
+      block:
+        - name: CREATE NODES
+          f5networks.f5_modules.bigip_node:
+            provider: "{{provider}}"
+            host: "{{hostvars[item].ansible_host}}"
+            name: "{{hostvars[item].inventory_hostname}}"
+          loop: "{{ groups['web'] }}"
+
+        - name: CREATE POOL
+          f5networks.f5_modules.bigip_pool:
+            provider: "{{provider}}"
+            name: "http_pool"
+            lb_method: "round-robin"
+            monitors: "/Common/http"
+            monitor_type: "and_list"
+
+        - name: ADD POOL MEMBERS
+          f5networks.f5_modules.bigip_pool_member:
+            provider: "{{provider}}"
+            state: "present"
+            name: "{{hostvars[item].inventory_hostname}}"
+            host: "{{hostvars[item].ansible_host}}"
+            port: "80"
+            pool: "http_pool"
+          loop: "{{ groups['web'] }}"
+
+        - name: ADD VIRTUAL SERVER
+          f5networks.f5_modules.bigip_virtual_server:
+            provider: "{{provider}}"
+            name: "vip"
+            destination: "{{private_ip}}"
+            port: "443"
+            enabled_vlans: "all"
+            all_profiles: ['http', 'clientssl', 'oneconnect']
+            pool: "http_pool"
+            snat: "Automap1"
+
+      rescue:
+        - name: DELETE VIRTUAL SERVER
+          f5networks.f5_modules.bigip_virtual_server:
+            provider: "{{provider}}"
+            name: "vip"
+            state: absent
+
+        - name: DELETE POOL
+          f5networks.f5_modules.bigip_pool:
+            provider: "{{provider}}"
+            name: "http_pool"
+            state: absent
+
+        - name: DELETE NODES
+          f5networks.f5_modules.bigip_node:
+            provider: "{{provider}}"
+            name: "{{hostvars[item].inventory_hostname}}"
+            state: absent
+          loop: "{{ groups['web'] }}"
+
+      always:
+        - name: SAVE RUNNING CONFIGURATION
+          f5networks.f5_modules.bigip_config:
+            provider: "{{provider}}"
+            save: true
+...
