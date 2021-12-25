@@ -1,5 +1,5 @@
 ---
-# Playbook to show version on IOS  
+# Playbook to show version on IOS devices and save to file
 
 - hosts: all
 
