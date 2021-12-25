@@ -1,4 +1,4 @@
-# Playbook to push config file using commands in push.txt
+# Playbook to push config file using commands listed in push.txt
 
 - hosts: all
   connection: network-cli

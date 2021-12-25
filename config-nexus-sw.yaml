@@ -1,7 +1,7 @@
 ---
-# Playbook to configure Nexus Switches
+# Playbook to configure Nexus Switch - single command
 
-- hosts: nxos
+- hosts: nxsw01
 
   tasks: 
     - name: Configure a single command on Nexus 
