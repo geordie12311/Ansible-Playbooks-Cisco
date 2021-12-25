@@ -1,5 +1,7 @@
+#Playbook to add an ACL to Cisco Switch
+
 ---
-- hosts: RTR-1
+- hosts: SW01
 
   gather_facts: false
   connection: local 
