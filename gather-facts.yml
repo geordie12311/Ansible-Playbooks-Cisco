@@ -1,0 +1,26 @@
+#Ansible playbook to display information about cisco IOS devices. It iwll display the message and information gathered from the device
+
+--- 
+
+- name: gather information from ios devices
+  hosts: routers
+  gather_facts: no
+
+
+  tasks:
+  - name: gather device facts
+    ios_facts:
+
+  - name: display device model
+    debug:
+    msg: "the device model is: {{ ansible_net_model }}"
+
+  - name: display version
+    debug:
+      msg: "the IOS version is: {{ ansible_net_version }}"
+
+  - name: display serial number
+    debug:
+      msg: "The serial number is: {{ ansible_net_serialnum }}"
+
+...

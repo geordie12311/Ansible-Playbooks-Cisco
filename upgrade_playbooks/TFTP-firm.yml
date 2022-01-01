@@ -1,0 +1,68 @@
+#Ansible playbook to upgrade switch firmware using tftp
+
+---
+- name: UPGRADE SWITCH FIRMWARE
+  hosts: SW01
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: GATHER SWITCH FACTS
+      ios_facts:
+
+    - name: UPGRADE IOS IMAGE IF NOT COMPLIANT
+      block:
+      - name: COPY OVER IOS IMAGE
+        ios_command:
+           commands:
+              - command: "copy tftp://192.168.11.179/etc/ansible/tftp{{ c3750-ipbasek9-mz.122-55.SE12.bin }} bootflash:"
+                prompt: '[{{ c3750-ipbasek9-mz.122-55.SE12.bin }}]'
+                answer: "\r"
+        vars:
+          ansible_command_timeout: 1800
+
+      - name: CHANGE BOOT IMAGE SETTINGS
+        block:
+        - name: SETTING BOOT IMAGE
+          ios_config:
+            lines:
+            - no boot system
+            - boot system flash bootflash:{{ c3750-ipbasek9-mz.122-55.SE12.bin }}
+            match: none
+            save_when: always
+
+        - name: REBOOT SWITCH IF INSTRUCTED
+          block:
+          - name: REBOOT SWITCH
+            ios_command:
+               commands:
+                  - command: "reload"
+                    prompt: '[confirm]'
+                    answer: "\r"
+            vars:
+              ansible_command_timeout: 30
+
+          - name: WAIT FOR SWITCH TO RETURN
+            wait_for:
+              host: "{{inventory_hostname}}"
+              port: 22
+              delay: 60
+              timeout: 600
+            delegate_to: localhost
+
+          - name: GATHER ROUTER FACTS FOR VERIFICATION
+            ios_facts:
+
+          - name: ASSERT THAT THE IOS VERSION IS CORRECT
+            assert:
+              that:
+                - compliant_ios_version == ansible_net_version
+              msg: "IOS version does not match compliant version. Upgrade unsuccessful."
+
+          when: should_reboot == "YES"
+
+        when: '"new_ios_md5" in md5_result.stdout[0]'
+
+      when: ansible_net_version != compliant_ios_version
+
+...

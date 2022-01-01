@@ -1,0 +1,103 @@
+# Ansible playbook for hardening Cisco IOS devices. Password is encrypted using ansible-vault
+## COMMANDS CONFIGURED ARE BELOW - NOTE YOU CAN CHANGE THEM AS NEEDED
+
+### + no service pad
+### + ip ssh version 2
+### + no ip domain-lookup
+### + no ip http server
+### + no ip http secure-server
+### + no ip finger
+### + no ip bootp
+### + no mop enabled
+### + no service pad
+### + service tcp-keepalives-in
+### + service tcp-keepalives-out
+### + transport input ssh
+### + logging buffered 15000
+### + Write changes to startup configuration
+
+
+- hosts: routers
+  gather_facts: no
+
+  vars:
+    cli:
+      username: geordie
+      password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          66336533663538366365646534303965616634356333346131363862616630623734363064313030
+          3334303061373938316130363833386630643361353666320a326135383639313163303033373161
+          30306134336237343534393036663931376565613635626566663964616337613061386635623534
+          6230303066623933640a396235356234346637353237313432346437633332383732376131323436
+          39383339613537663933316232376263363061306462383664373030373965346662
+
+  tasks:
+ 
+  - name: NO SERVICE PAD 
+    ios_config:
+      lines:
+        - no service pad
+
+  - name: IP SSH VERSION 2 
+    ios_config:
+      lines:
+        - ip ssh version 2
+
+  - name: NO IP DOMAIN-LOOKUP
+    ios_config:
+      lines:
+        - no ip domain-lookup
+
+  - name: DISABLE HTTP/HTTPS MANAGMENT 
+    ios_config:
+      lines:
+        - no ip http server
+        - no ip http secure-server
+
+  - name: DISABLE IP FINGER 
+    ios_config:
+      lines:
+        - no ip finger 
+
+  - name: DISABLE IP BOOT SERVER 
+    ios_config:
+      lines:
+        - no ip bootp server       
+
+  - name: DISABLE MOP 
+    ios_config:
+      lines:
+        - no mop device-code
+
+  - name: DISABLE SERVICE PAD 
+    ios_config:
+      lines:
+        - no service pad          
+
+  - name: SERVICE TCP-KEEPALIVES-IN
+    ios_config:
+      lines:
+        - service tcp-keepalives-in  
+ 
+  - name: SERVICE TCP-KEEPALIVES-OUT
+    ios_config:
+      lines:
+        - service tcp-keepalives-out
+
+  - name: TRANSPORT INPUT SSH 
+    ios_config:
+      parents: line vty 0 4
+      lines:        
+        - transport input ssh
+
+  - name: LOGGING BUFFERED 15000 
+    ios_config:
+      lines:
+        - logging buffered 15000
+
+  - name: Saving the configuration 
+    ios_config:
+      lines:
+        - do wr mem    
+
+...

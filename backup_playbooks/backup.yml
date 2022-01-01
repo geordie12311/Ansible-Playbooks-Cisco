@@ -1,0 +1,18 @@
+#Ansible Playbook to take a backup of running configs
+---
+- name: backup running config
+  hosts: all
+  gather_facts: false
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag22
+
+
+  tasks:
+   - name: Backup running-config
+     ios_config:
+       backup: yes
+
+...

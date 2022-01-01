@@ -1,0 +1,41 @@
+#Ansible Playbook to add new vlans
+---
+- name: Configure new VLANs on each IOS Switch
+  hosts: switches
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag
+
+    vlans:
+      10: "HR"
+      20: "Finance"
+      30: "Voice"
+      40: "Mgnt"
+
+  tasks:
+    
+    - name: create vlans
+      ios_config:
+        provider: "{{cli}}"
+        lines:
+          - name {{item.value}}
+
+        parents:
+          - vlan {{item.key}}
+      with_dict: "{{vlans}}"
+
+    - name: show vlan brief
+      ios_command:
+        provider: "{{cli}}"
+        commands: show vlan brief
+
+      register: vlan_brief
+
+    - name: print output to screen
+      debug:
+        var=vlan_brief.stdoubt_lines
+...

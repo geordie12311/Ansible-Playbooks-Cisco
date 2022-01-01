@@ -1,0 +1,23 @@
+# Ansible playbook to gather information from cisco IOS devices about the interfaces and save to a file
+
+---
+- name: Save interface configuration to a file
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: run multiple commands
+      ios_command:
+        commands:
+            - show ip int brief
+      register: print_output
+    -  debug: var=print_output.stdout_lines
+#Task runs show IP interface brief on each device and prints the output
+
+    - name: save output to a file
+      copy: content=" {{ print_output.stdout_lines [0] }}" dest="./interfaces/{{ inventory_hostname }}.txt"
+#Task saves the output from first task and puts it into a file call "interfaces" and names each file with the hostname
+
+...
+#final three ... is closure of playbook

@@ -1,0 +1,14 @@
+#Ansible playbook using telnet to run show commands on cisco ios devices
+
+---
+- name: run show commands
+  hosts: routers
+  ansible.netcommon.telnet:
+    user: cisco
+    password: cisco
+    login_prompt: 'Username: '
+    prompts:
+    - '[>#]'
+    command:
+    - terminal length 0
+    - show version

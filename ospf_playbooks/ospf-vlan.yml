@@ -1,0 +1,48 @@
+---
+- name: Configure OSPF on all devices
+  hosts: switchs
+  gather_facts: false
+  connection: local
+  
+  vars:
+    cli:
+      username: cisco
+      password: cisco
+
+  tasks:
+    - name: enable OSPF
+      ios_config:
+        provider: "{{ cli }}"
+        authorize: yes
+        parents: router ospf 1
+        lines:
+          - network 0.0.0.0 255.255.255.255 area 0
+
+      register: print_output
+
+    -  debug: var=print_output
+
+- name: Configure Access VLANs
+  hosts: all
+  gather_facts: false
+  connection: local
+  
+  vars:
+    cli:
+      username: cisco
+      password: cisco
+
+  tasks:
+    - name: Create VLAN
+      ios_config:
+        provider: "{{ cli }}"
+        authorize: yes
+        lines:
+          - VLAN 10
+          - VLAN 20
+          - VLAN 30
+          - VLAN 40
+
+      register: print_output
+    -  debug: var=print_output
+...

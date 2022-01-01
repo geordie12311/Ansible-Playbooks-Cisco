@@ -1,0 +1,23 @@
+#Ansible playbook to Automate Routing Configs via Jinja2 template
+---
+
+- name: "First Play: Automate Routing Configs via Jinja2"
+  hosts: routers
+  connection: network_cli
+  tasks:
+    - name: "First task: Identify correct Jinja2 Template"
+      set_fact:
+        eigrp_path: "templates/{{ eigrp_os_type }}_eigrp.Jinja2
+
+    - name: "Second task: Source Template & Apply configuration"
+      cli_config:
+        config: "{{ lookup('template', eigrp_path) }}"
+      notify: config_changed
+      debug: 
+        msg: "{{ response }}"
+      
+      handlers: 
+        - name: "Output Changes..."
+          listen: config_changed
+          debug: 
+            msg: " {{ response }}"

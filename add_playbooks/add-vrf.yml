@@ -1,0 +1,28 @@
+#Ansible Playbook to add a new VRF to router
+---
+- name: Add VRF to ios Routers
+  hosts: routers
+  connection: network_cli
+  gather_facts: no
+  vars:
+    thestate: merged
+    vrf_name: sample_vrf
+    vrf_description: added by Ansible
+#add the vrf name and decription above
+
+  tasks:
+
+  - name: "Configure the {{ vrf_name }} vrf"
+    ios_vrf:
+      name: "{{ vrf_name }}"
+      description: "{{ vrf_description }}"
+      state: present
+    when: thestate == "merged"
+#The above task will add the new VRF to the router
+
+  - name: "Remove the {{ vrf_name }} vrf"
+    ios_vrf:
+      name: "{{ vrf_name }}"
+      state: absent
+    when: thestate == "deleted"
+#The above sectoin will remove the vrf named so # out if not needed

@@ -1,0 +1,28 @@
+# Ansible playbook to set some basic global settings to cisco IOS routers
+
+---
+- name: Generic Router configuration
+  hosts: routers
+  gather_facts: false
+  connection: local
+
+  vars: 
+    cli:
+     username: geordie
+     password: teabag
+     timeout: 200
+
+  tasks:
+    - name: Generic config settings
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+          - no ip http server
+          - no ip http secure-server
+          - banner motd &******THIS IS GEORDIE LAB ROUTER - DO NOT MAKE CHANGES OR YOU WILL BE SHOT! ******&
+
+
+      register: print_output
+    - debug: var=print_output
+
+...

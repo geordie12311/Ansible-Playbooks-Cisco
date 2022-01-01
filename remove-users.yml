@@ -1,0 +1,33 @@
+# Ansible playbook to remove users from cisco ios devices
+---
+- name: remove users
+  hosts: all
+  gather_facts: no
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag22
+
+# Add the usernames you want to remove below
+    names:
+      - user1
+      - user2
+
+  tasks:
+     - name: remove users
+       ios_user:
+         name: "{{ item }}"
+         state: absent
+         privilege: 15
+       with_items: "{{ names }}"
+       notify: save
+#Task will lookup the users listed in Vars and if found remove them
+
+  handlers:
+     - name: save
+       ios_config:
+         save_when: modified
+#Task will save configuration following the changes
+
+...

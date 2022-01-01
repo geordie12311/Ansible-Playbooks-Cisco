@@ -1,0 +1,12 @@
+---
+plugin: netbox
+api_endpoint: http://192.168.1.10/
+token: 0b37ac1846dbe80764035d9b2a5cf8b908a9995b
+validate_certs: False
+config_context: False
+group_by:
+  - device_roles
+compose:
+  ansible_network_os: platform.slug
+  
+...

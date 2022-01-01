@@ -1,0 +1,88 @@
+#Ansible playbook to configure Cisco IOS Hardening
+
+##+ no service pad
+##+ ip ssh version 2
+##+ no ip domain-lookup
+##+ no ip http server
+##+ no ip finger
+##+ no ip bootp
+##+ no service pad
+##+ service tcp-keepalives-in
+##+ service tcp-keepalives-out
+##+ transport input ssh
+##+ logging buffered 15000
+##+ Write changes to startup configuration
+
+
+- hosts: routers
+  gather_facts: no
+
+  tasks:
+ 
+  - name: NO SERVICE PAD 
+    ios_config:
+      lines:
+        - no service pad
+
+  - name: IP SSH VERSION 2 
+    ios_config:
+      lines:
+        - ip ssh version 2
+
+  - name: NO IP DOMAIN-LOOKUP
+    ios_config:
+      lines:
+        - no ip domain-lookup
+
+  - name: DISABLE HTTP MANAGMENT 
+    ios_config:
+      lines:
+        - no ip http server
+       
+  - name: DISABLE IP FINGER 
+    ios_config:
+      lines:
+        - no ip finger 
+
+  - name: DISABLE IP BOOT SERVER 
+    ios_config:
+      lines:
+        - no ip bootp server       
+
+  - name: DISABLE SERVICE PAD 
+    ios_config:
+      lines:
+        - no service pad          
+
+  - name: SERVICE TCP-KEEPALIVES-IN
+    ios_config:
+      lines:
+        - service tcp-keepalives-in  
+ 
+  - name: SERVICE TCP-KEEPALIVES-OUT
+    ios_config:
+      lines:
+        - service tcp-keepalives-out
+
+  - name: TRANSPORT INPUT SSH 
+    ios_config:
+      parents: line vty 0 15
+      lines:        
+        - transport input ssh
+
+  - name: LOGGING BUFFERED 15000 
+    ios_config:
+      lines:
+        - logging buffered 15000
+
+  - name: Saving the configuration 
+    ios_config:
+      lines:
+        - do wr mem  
+
+  - name: Saving the configuration 
+    ios_config:
+      lines:
+        - do wr mem       
+
+...

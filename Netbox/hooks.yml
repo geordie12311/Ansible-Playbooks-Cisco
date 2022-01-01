@@ -1,0 +1,35 @@
+#Script to add webhooks for Netbox
+[
+  {
+    "id": "interfaces",
+    "execute-command": "/etc/ansible/update_vlan.sh",
+    "command-working-directory": "/etc/ansible/webhook_test",
+    "pass-arguments-to-command": [
+      {
+        "source": "payload",
+        "name": "data.device.name"
+      },
+      {
+        "source": "payload",
+        "name": "data.name"
+      },
+      {
+        "source": "payload",
+        "name": "data.untagged_vlan.vid"
+      }
+    ],
+    "trigger-rule":
+    {
+      "match":
+      {
+        "type": "value",
+        "value": "access",
+        "parameter":
+        {
+          "source": "payload",
+          "name": "data.mode.value"
+        }
+      }
+    }
+  }
+]

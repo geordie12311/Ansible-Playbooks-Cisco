@@ -1,0 +1,32 @@
+# Ansible playbook to set some basic global settings to cisco IOS devices
+
+---
+
+- name: Globaly Configuration Playbook
+  hosts: routers
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+    username: geordie
+    password: teabag22
+    timeout: 100
+
+  tasks:
+    - name: Router Global Settings
+      ios_config:
+        provider: "{{ CLI }}"
+        lines:
+          - security passwords min length 5
+          - ip nameserver 8.8.4.4
+          - no ip http server
+          - ip http secure server
+          - banner motd $***********WELCOME TO GH LAB**********$
+
+      register: print_output
+
+    - debug: var=print_output
+
+
+ 

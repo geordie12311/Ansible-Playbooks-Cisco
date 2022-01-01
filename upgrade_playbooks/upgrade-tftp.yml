@@ -1,0 +1,89 @@
+#Ansible playbook to upgrade switch firmware using tftp
+
+---
+- name: UPGRADE SWITCH FIRMWARE via TFTP
+  hosts: switches
+  connection: network_cli
+  gather_facts: no
+
+  vars_prompt:
+   - name: "compliant_ios_version"
+     prompt: "What is the compliant IOS version?"
+     private: no
+
+   - name: "new_ios_bin"
+     prompt: "What is the name of the new IOS file?"
+     private: no
+
+   - name: "new_ios_md5"
+     prompt: "What is the MD5 value of the new IOS file?"
+     private: no
+
+   - name: "should_reboot"
+     prompt: "Do you want Ansible to reboot the hosts? (YES or NO)"
+     private: no
+
+  tasks:
+    - name: GATHER SWITCH FACTS
+      ios_facts:
+
+    - name: UPGRADE IOS IMAGE IF NOT COMPLIANT
+      block:
+      - name: COPY OVER IOS IMAGE
+        ios_command:
+           commands:
+              - command: "copy tftp://c3750-ipbasek9-mz.122-55.SE12.bin/{{ new_ios_bin }} bootflash:"
+                prompt: '[{{ new_ios_bin }}]'
+                answer: "\r"
+        vars:
+          ansible_command_timeout: 1800
+
+      - name: CHECK MD5 HASH
+        ios_command:
+           commands:
+              - command: "verify /md5 bootflash:{{ new_ios_bin }}"
+        register: md5_result
+        vars:
+          ansible_command_timeout: 300
+
+      - name: CONTINUE UPGRADE IF MD5 HASH MATCHES
+        block:
+        - name: SETTING BOOT IMAGE
+          ios_config:
+            lines:
+            - no boot system
+            - boot system flash bootflash:{{ new_ios_bin }}
+            match: none
+            save_when: always
+
+        - name: REBOOT SWITCH IF INSTRUCTED
+          block:
+          - name: REBOOT SWITCH
+            ios_command:
+               commands:
+                  - command: "reload"
+                    prompt: '[confirm]'
+                    answer: "\r"
+            vars:
+              ansible_command_timeout: 30
+
+          - name: WAIT FOR SWITCH TO RETURN
+            wait_for:
+              host: "{{inventory_hostname}}"
+              port: 22
+              delay: 60
+              timeout: 600
+            delegate_to: localhost
+
+          - name: GATHER ROUTER FACTS FOR VERIFICATION
+            ios_facts:
+
+          - name: ASSERT THAT THE IOS VERSION IS CORRECT
+            assert:
+              that:
+                - compliant_ios_version == ansible_net_version
+              msg: "IOS version does not match compliant version. Upgrade unsuccessful."
+              when: should_reboot == "YES"
+              when: '"new_ios_md5" in md5_result.stdout[0]'
+              when: ansible_net_version != compliant_ios_version
+...

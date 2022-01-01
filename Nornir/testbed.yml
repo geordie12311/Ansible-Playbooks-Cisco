@@ -1,0 +1,154 @@
+#Testbed Ansible playbook for Pyats / Genie
+
+---
+
+testbed:
+    name: IOS_Testbed
+
+devices:
+  HQ-RTR-01:
+    alias: HQ-RTR-01
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 11.11.11.11
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  RTR-1:
+    alias: R1
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 1.1.1.1
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  RTR-2:
+    alias: R2
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 2.2.2.2
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  RTR-3:
+    alias: R3
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 3.3.3.3
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  RTR-4:
+    alias: R4
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 4.4.4.4
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  
+  SW01:
+    alias: SW01
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 5.5.5.5
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  SW02:
+    alias: SW02
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 6.6.6.6
+
+    custom:
+      abstraction:
+         order: [os, type]   
+
+  SW03:
+    alias: SW03
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 7.7.7.7
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+  SW04:
+    alias: SW04
+    os: ios
+    type: IOSv    
+    connections:
+       
+       defaults:
+         class: unicon.Unicon
+       console:
+          protocol: ssh
+          ip: 9.9.9.9
+
+    custom:
+      abstraction:
+         order: [os, type]  
+
+...

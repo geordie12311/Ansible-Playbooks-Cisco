@@ -1,0 +1,25 @@
+#Ansible Playbook to add users
+---
+- name: add users
+- hosts: all
+  gather_facts: no
+#Add the new user names in the vars section:
+  vars:
+     names:
+       - user1
+       - user2
+
+  tasks:
+     - name: add users
+       ios_user:
+         name: "{{ item }}"
+         state: present
+         privilege: 15
+       with_items: "{{ names }}"
+       notify: save
+#The above section is going to take the names listed in vars
+#and add htem with priv 15 access
+  handlers:
+     - name: save
+       ios_config:
+         save_when: modified

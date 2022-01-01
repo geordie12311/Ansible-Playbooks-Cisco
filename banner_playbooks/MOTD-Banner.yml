@@ -1,0 +1,24 @@
+# Ansible playbook to add a MOTD banner to cisco IOS devices
+
+---
+- name: Add MOTD Banner to all devices
+  hosts: all
+  order: sorted
+  gather_facts: false
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag22
+  
+  tasks:
+    - name: configure MOTD Banner
+      ios_config:
+        lines:
+         - banner motd &Unauthorised users will be shot!&
+
+      register: print_ouptput
+    - debug: var=print_ouptput  
+
+
+...

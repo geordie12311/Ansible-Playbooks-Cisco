@@ -1,0 +1,13 @@
+#Ansible playbook to set ssh diffie helman group on cisco ios device
+
+---
+ ansible_become: yes
+ ansible_become_method: enable 
+ ansible_become_password: cisco
+
+ ansible_ssh_user:  cisco
+ ansible_ssh_pass: cisco122
+ ansible_network_os: ios
+ ansible_connection: network_cli
+ ansible_ssh_common_args: '-oKexAlgorithms=+diffie-hellman-group1-sha1'
+...

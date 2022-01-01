@@ -1,0 +1,48 @@
+#Ansible playbook to add snmp-server and enable traps
+---
+
+- hosts: routers
+  gather_facts: no
+  connection: network_cli
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag22
+      timeout: 100
+
+  tasks:
+ 
+  - name: SET COMMUNITY STRING 
+    ios_config:
+      lines:
+        - snmp-server community labro RO 99
+
+  - name: TRAP-SOURCE LOOPBACK0 
+    ios_config:
+      lines:
+         - snmp-server trap-source Loopback0
+
+  - name: SET CONTACT INFORMATION
+    ios_config:
+      lines:
+        - snmp-server contact geordie12311@test.com
+
+  - name: ENABLE TRAPS 
+    ios_config:
+      lines:
+        - snmp-server enable traps bgp state-changes
+        - snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart 
+        - snmp-server enable traps tty
+        - snmp-server enable traps bgp state-changes
+        - snmp-server enable traps config-copy
+        - snmp-server enable traps config
+        - snmp-server enable traps config-ctid
+
+
+  - name: SET SNMP SERVER ADDRESS 
+    ios_config:
+      lines:
+        - snmp-server host 80.80.80.1 version 2c public udp-port 161
+
+...

@@ -1,0 +1,6 @@
+router ospf {{ ospf.as }}
+network {{ ospf.network }}
+ospf router-id {{ ospf.rid }}
+ospf stub {{ ospf.stub }}
+log-adjacency-changes
+redistribute eigrp 1 subnets metric 10 

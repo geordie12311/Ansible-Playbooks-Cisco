@@ -1,0 +1,20 @@
+#Ansbible Playbook to add a login banner and new loopback int
+---
+
+- name: Add a login banner & a new loopback
+  hosts: all
+
+  tasks:
+  - name: Add Banner
+    ios_banner:
+      banner: login
+      text: |
+        trespassers will be shot!
+      state: present
+
+  - name: Add loopback
+    ios_interface:
+      name: Loopback21
+      state: present
+      
+...

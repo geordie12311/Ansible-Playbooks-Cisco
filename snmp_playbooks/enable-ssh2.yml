@@ -1,0 +1,20 @@
+# Ansible playbook to configure SSH version 2 on Cisco devices
+---
+- hosts: ios
+  gather_facts: no
+
+  tasks:
+  - name: CONFIGURE SSH VERSION 2 
+    ios_config:
+      lines:
+        - ip ssh version 2
+
+  - name: SHOW RUN | I SSH 
+    ios_command:
+      commands:
+        - show run | i ssh
+    register: after_v2
+
+  - debug: var=after_v2.stdout_lines
+
+...

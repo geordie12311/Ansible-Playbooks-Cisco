@@ -1,0 +1,16 @@
+#Ansible playbook to print out the vty information from cisco IOS devices
+
+---
+- hosts: all 
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+  - name: REGISTER VTY CONFIGURATION ON DEVICE
+    ios_command:
+      commands:
+        - show run | beg line vty
+    register: vty
+
+  - debug: var=vty.stdout_lines
+

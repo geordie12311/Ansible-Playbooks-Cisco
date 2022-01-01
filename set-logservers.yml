@@ -1,0 +1,31 @@
+#Ansible playbook to set logservers on cisco IOS devices
+
+---
+- hosts: all
+  gather_facts: no
+  
+    vars:
+    cli:
+      username: geordie
+      password: teabag22
+          
+      log_servers:
+      - logging 10.10.10.1
+      - logging 10.10.10.2
+
+  tasks:
+  
+  - name: get the current log server configs 
+    ios_command:
+      commands:
+        - show running-config full | include logging [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
+    register: log
+
+  - debug: var=log.stdout_lines
+
+  - name: set logging commands
+    ios_config:
+      commands: "{{ item }}"
+    loop: "{{ log_servers }}"
+    register: set_logging
+...

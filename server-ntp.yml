@@ -1,0 +1,11 @@
+#Ansible playbook to validate that NTP is running on the localhost
+
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Ensure NTP is installed
+      apt: name=ntp state=present
+
+    - name: Ensure NTP is running
+      service@ name=ntpd state=started enabled=yes

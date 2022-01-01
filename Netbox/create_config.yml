@@ -1,0 +1,16 @@
+#Ansible Playbook used to create config using Netbox
+--
+
+-name: Create config using netbox
+connection: local
+hosts: device_roles_routers
+gather_facts: false
+
+tasks:
+  - name: "generate configs uisng data from netbox"
+    template:
+      src: "./templates/config_template.j2"
+      dest: "./output/{{ inventory_hostname }}.cfg"
+      lstrip_blocks: yes
+
+...

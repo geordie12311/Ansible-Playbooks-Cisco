@@ -1,0 +1,29 @@
+# Ansible playbook to add a banner that is held on file
+# Note you need to create the banner file and save it as raw_banner.cfg in etc/ansible/vars as playbook will lookup and apply the detail from that file
+---
+
+- hosts: all
+  gather_facts: no
+
+   vars:
+    cli:
+      username: geordie
+      password: teabag22
+
+  tasks:
+
+  - name: CONFIGURE BANNER ON CISCO DEVICES
+    ios_banner:
+      banner: login
+      text: "{{ lookup('file', './vars/raw_banner.cfg') }}"
+      state: present
+
+  - name: SHOW RUN | BEG BANNER 
+    ios_command:
+      commands:
+        - show run | beg Banner
+    register: banner
+
+  - debug: var=banner.stdout_lines
+
+...

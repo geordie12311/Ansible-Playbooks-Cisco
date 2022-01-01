@@ -1,0 +1,7 @@
+router eigrp {{ eigrp.virtual }}
+adress-family ipv4 unicast autonomous-system {{ eigrp.as }}
+network {{ eigrp.network }}
+eigrp router-id {{ eigrp.rid }}
+eigrp stub {{ eigrp.stub }}
+topology base
+no auto

@@ -1,0 +1,25 @@
+#Ansible Playbook to copy running configs to a file
+---
+
+- name: backup running config to file
+  hosts: routers
+
+  vars:
+    cli:
+      username: geordie
+      password: teabag22
+
+  tasks:
+  - name: run backups
+    ios_command:
+      commands:
+        - show run
+      host: "{{ ansible_host }}"
+    register: config
+
+  - name: save output to backups
+    copy:
+      content: "{{ config.stdout[0] }}"
+      dest: "/etc/ansible/backups/show_run_{{ inventory_hostname }}.txt"
+
+...
