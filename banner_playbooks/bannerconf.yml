@@ -1,0 +1,23 @@
+---
+
+- name: "My Banner Playbook"
+  hosts: cisco_ios
+  gather_facts: false
+  connection: network_cli
+
+  tasks: 
+    - name: "Configure MOTD Banner"
+      cisco.ios.ios_banner:
+        banner: motd
+        text: |
+          Welcome to GH-LAB Network, 
+          do not make changes unless
+          you are authorised to do
+          so!
+        state: present
+      
+      register: my_banner
+    
+    - debug: var=my_banner
+
+...
