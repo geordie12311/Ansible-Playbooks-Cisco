@@ -1,7 +1,7 @@
-#Ansible Playbook to add AAA Authentication
+#Ansible Playbook to add AAA Authentication to cisco IOS devices
 ---
-- hosts: routers
-  gather_facts: no
+- hosts: cisco_ios
+  gather_facts: false
 
   vars:
   
@@ -25,7 +25,9 @@
     ios_command:
       commands:
         - "show running-config full | include aaa"
+        
     register: get_config
+
   - debug: var=get_config.stdout_lines
 
 ...
