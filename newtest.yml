@@ -1,0 +1,6 @@
+---
+
+username: cisco
+data:
+  bgp: 65001
+  ospf_neighbors: [2.2.2.2, 3.3.3.3, 4.4.4.4]

@@ -5,6 +5,13 @@ R3
 R4
 SW1
 
+[cisco_ios]
+R1
+R2
+R3
+R4
+SW1
+
 [North]
 R1
 R3
