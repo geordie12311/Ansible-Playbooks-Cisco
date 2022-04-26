@@ -1,0 +1,4 @@
+---
+
+ansible_network_os: ios
+ntp: 4.4.4.4

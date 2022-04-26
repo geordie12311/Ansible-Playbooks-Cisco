@@ -1,0 +1,12 @@
+---
+
+- name: "Printing Host Variables"
+  hosts: North
+  gather_facts: false
+
+  tasks:
+    - name: "Parse Variable details"
+      debug: 
+        msg: "These devices have an ospf neighbor of {{ hostvars[ansible_host].ospf.network.0 }}"
+
+...

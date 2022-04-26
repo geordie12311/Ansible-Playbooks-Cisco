@@ -1,0 +1,25 @@
+# Ansible playbook for cisco ios devices used to set baseline config
+
+---
+-  hosts: all
+   connection: local
+   gather_facts: false
+   vars:
+     cli:
+       username: elaine
+       password: elaine1
+
+   tasks:
+     - name: Facts
+       ios_facts:
+
+     - name: Baseline
+       ios_config:
+         lines:
+          - no cdp run
+          - no cns aaa
+
+     - name: VTY
+       ios_config:
+         parents: line vty 0 4
+         lines: transport preferred ssh

@@ -1,0 +1,12 @@
+---
+
+- name: "Printing Host Variables"
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: "Display the Host Variable details"
+      debug: 
+        msg: "{{ hostvars[ansible_host] }}"
+
+...
