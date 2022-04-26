@@ -1,5 +1,0 @@
-ansible_user: "cisco"
-ansible_password: "cisco1"
-ansible_network_os: ios
-
-
