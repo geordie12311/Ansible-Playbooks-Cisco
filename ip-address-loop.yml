@@ -1,0 +1,12 @@
+---
+- name: "Looping through IP interface info"
+  hosts: North
+  gather_facts: true
+  connection: network_cli
+
+#using a loop to pull out all the ipv4 addresses from the group of hosts from gather_facts
+  tasks:
+    - name: "Loop thorugh IP interface information"
+      debug:
+        msg: "{{ ansible_net_hostname }} has an IP address {{ item }} configured"
+      loop: "{{ ansible_net_all_ipv4_addresses }}"

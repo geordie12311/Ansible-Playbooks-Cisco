@@ -1,0 +1,15 @@
+---
+
+- name: "playbook to test conditional logic"
+  hosts: North
+  gather_facts: true
+  connection: network_cli
+
+  tasks:
+    - name: "First Task"
+      debug:
+        msg: "Interface {{ item ['key'] }} has an IP address of {{ item['value']['ipv4'][0]['address'] }}"
+      loop: "{{ ansible_net_interfaces | dict2items }}"
+#using dict2items to convert dictonary output to a list
+      when: item['value']['ipv4'] != []
+#setting the when to only show msg where the ipv4 output is not empty

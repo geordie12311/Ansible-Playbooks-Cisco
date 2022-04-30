@@ -1,0 +1,24 @@
+---
+- name: "NTP Config Playbook - with loop"
+  hosts: North
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: "Looping through NTP server and configuring the hosts"
+      vars:
+        ntpservers:
+          - "8.8.8.8"
+          - "4.4.4.4"
+          - "8.8.4.4"
+          - "4.4.8.8"
+
+      cisco.ios.ios_ntp_global:
+        config:
+          peers:
+            - peer: "{{ item }}"
+              version: 2
+      loop: "{{ ntpservers }}"
+      
+
+        
