@@ -10,6 +10,6 @@
       debug:
         msg: "Interface {{ item ['key'] }} has an IP address of {{ item['value']['ipv4'][0]['address'] }}"
       loop: "{{ ansible_net_interfaces | dict2items }}"
-#using dict2items to convert dictonary output to a list
+# Using a loop and dict2items to convert the dictonary output from ansible_net_interfaces to a list
       when: item['value']['ipv4'] != []
-#setting the when to only show msg where the ipv4 output is not empty
+# When is conditional statement, using it to only show msg where the ipv4 output is not empty
