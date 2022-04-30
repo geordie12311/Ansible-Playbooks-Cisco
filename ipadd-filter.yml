@@ -1,0 +1,13 @@
+---
+
+- name: "IP test filter"
+  hosts: "R1"
+
+  tasks:
+    - name: "test using ipaddr filter"
+      vars:
+        myip: "12.12.12.1/24"
+
+      debug:
+        msg: "{{ myip | ansible.utils.ipaddr('network') }}"
+# using Ansible utils ipaddr to filter the network range based on the ip address
