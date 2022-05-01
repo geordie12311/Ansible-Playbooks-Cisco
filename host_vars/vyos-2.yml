@@ -1,0 +1,4 @@
+---
+ansible_user: vyos
+ansible_pass: vyos
+ansible_ios: vyos

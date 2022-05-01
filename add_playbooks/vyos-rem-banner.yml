@@ -1,0 +1,13 @@
+---
+- name: "Playbook for vyos"
+  hosts: "vyos"
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: "Remove pre-login banner configuration"
+      vyos.vyos.vyos_banner:
+        banner: pre-login
+        state: absent
+...
+

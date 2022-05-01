@@ -1,0 +1,23 @@
+---
+- name: "Playbook to use Genie Collection to parse data from IP route"
+  hosts: "R1"
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: "TASK1 - send a show command"
+      cisco.ios.ios_command:
+        commands: "show ip route"
+      register: show_iproute_output
+    
+    - name: "TASK2 - Parse show command via genie"
+      set_fact:
+        parsed_data: >-
+          {{ show_iproute_output.stdout[0] | clay584.genie.parse_genie
+          (command='show ip route', os='ios') }}
+# >- allows you to split the command over multiple lines. using clay584.genie collection to
+# parse out the routes from show ip route output   
+    - name: "TASK3 - Print the output"
+      debug:
+        msg: "{{ parsed_data.vrf.default.address_family.ipv4.routes }}"
+      

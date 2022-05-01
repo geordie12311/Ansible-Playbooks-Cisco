@@ -1,0 +1,7 @@
+---
+# defaults file for ntp_role
+TASK_ONE_NAME: "Configure NTP servers"
+TASK_TWO_NAME: "Sending show commands to devices"
+TASK_THREE_NAME: "Printing output from Show commands"
+ntp_template: "ntp.j2"
+show_commands: "show run | section ntp" 

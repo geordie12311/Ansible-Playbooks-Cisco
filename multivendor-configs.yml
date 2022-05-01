@@ -1,0 +1,45 @@
+---
+- name: "Gather facts from Multi Vendor devices and saving the configs"
+  hosts: ios_routers, vyos
+  connection: network_cli
+  
+  tasks:
+    - name: "TASK1 - Gather IOS device configs"
+      cisco.ios.ios_facts:
+        gather_subset: config
+      register: ios_facts
+      when: "ansible_network_os == 'cisco.ios.ios'"
+    
+    - name: "TASK2 - Gather VYOS device configs"
+      vyos.vyos.vyos_facts:
+        gather_subset: config
+      register: vyos_facts
+      when: "ansible_network_os  == 'vyos.vyos.vyos'"
+
+    - name: "TASK3- Print IOS output" 
+      debug:
+        msg: "{{ ios_facts.ansible_facts.ansible_net_config.split('\n') }}"
+      when: "ansible_network_os == 'cisco.ios.ios'"
+
+    - name: " TASK4 - Print VYOS output"
+      debug:
+        msg: "{{ vyos_facts.ansible_facts.ansible_net_config[0].split('\n') }}"
+      when: "ansible_network_os == 'vyos.vyos.vyos'"
+
+    - name: "TASK5 - configure backup path and save IOS configs"
+      cisco.ios.ios_config:
+        backup: yes
+        backup_options:
+          dir_path: /home/geordie/Ansible-Playbooks-Network/backup_configs/ios_devices
+      when: "ansible_network_os == 'cisco.ios.ios'"
+
+    - name: " TASK6 - configurable backup path and save VYOS configs"
+      vyos.vyos.vyos_config:
+        backup: yes
+        backup_options:
+          dir_path: /home/geordie/Ansible-Playbooks-Network/backup_configs/vyos_devices
+      when: "ansible_network_os == 'vyos.vyos.vyos'"
+...
+
+
+        

@@ -1,0 +1,26 @@
+---
+- name: "Playbook to test Genie Collection"
+  hosts: "R1"
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: "TASK1 - send a show command"
+      cisco.ios.ios_command:
+        commands: "show version"
+      register: show_version_output
+    
+    - name: "TASK2 - Parse show command via genie"
+      set_fact:
+        parsed_data: >-
+          {{ show_version_output.stdout[0] | clay584.genie.parse_genie
+          (command='show version', os='ios') }}
+# >- allows you to split the command over multiple lines. using clay584.genie collection to
+# parse out the version, serial number and uptime from the show version output   
+    - name: "TASK3 - Print the output"
+      debug:
+        msg: 
+        - "This device Serial number is: {{ parsed_data.version.chassis_sn }}"
+        - "This device is running IOS version: {{ parsed_data.version.version }}"
+        - "This device uptime is: {{ parsed_data.version.uptime }}"
+      

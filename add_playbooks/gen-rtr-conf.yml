@@ -8,9 +8,6 @@
   connection: local
 
   vars:
-    cli:
-    username: geordie
-    password: teabag22
     timeout: 100
 
   tasks:
@@ -25,8 +22,7 @@
           - banner motd $***********WELCOME TO GH LAB**********$
 
       register: print_output
-
     - debug: var=print_output
-
+...
 
  

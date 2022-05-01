@@ -7,10 +7,7 @@
   connection: local
 
   vars: 
-    cli:
-     username: geordie
-     password: teabag
-     timeout: 200
+    timeout: 200
 
   tasks:
     - name: Generic config settings
@@ -19,10 +16,8 @@
         lines:
           - no ip http server
           - no ip http secure-server
-          - banner motd &******THIS IS GEORDIE LAB ROUTER - DO NOT MAKE CHANGES OR YOU WILL BE SHOT! ******&
-
+          - banner motd &******THIS IS A LAB ROUTER - DO NOT MAKE CHANGES OR YOU WILL BE SHOT! ******&
 
       register: print_output
     - debug: var=print_output
-
 ...

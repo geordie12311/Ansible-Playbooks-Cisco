@@ -1,0 +1,7 @@
+---
+# handlers file for ntp_role
+- name: "ntp_handler - This will check NTP has been updated"
+  listen: ntp_handler
+  debug:
+    msg: "CONFIG THAT HAS BEEN ADDED: {{ ntp_result.commands }}"
+...

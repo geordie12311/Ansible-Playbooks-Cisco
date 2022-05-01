@@ -1,0 +1,20 @@
+---
+- name: "Playbook for vyos"
+  hosts: "vyos"
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: "Add the pre-login banner configuration"
+      vyos.vyos.vyos_banner:
+        banner: pre-login
+        text: "You are about to login to a device in GH-LAB, if you are not authorised quit now!"
+        state: present
+
+    - name: "Add a post-login banner"
+      vyos.vyos.vyos_banner:
+        banner: post-login
+        text: "Welcome to GH-LAB vyos device, do not make changes to configuration unless authorised to do so!"
+        state: present
+...
+

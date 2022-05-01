@@ -4,7 +4,6 @@
   gather_facts: false
 
   vars:
-  
     aaa_configs:
       - aaa new-model
       - aaa authentication login default group tacacs+ local
@@ -20,15 +19,10 @@
       - aaa session-id common
 
   tasks:
-  
   - name: get the current aaa configs
     ios_command:
       commands:
         - "show running-config full | include aaa"
-        
     register: get_config
-
-  - debug: var=get_config.stdout_lines
-
+    debug: var=get_config.stdout_lines
 ...
-

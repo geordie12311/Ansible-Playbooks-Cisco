@@ -1,0 +1,18 @@
+---
+# tasks file for ntp_role
+- name: "TASK1 - {{ TASK_ONE_NAME }}"
+  cisco.ios.ios_config:
+   src: "{{ ntp_template }}"
+  register: ntp_result
+
+- name: "TASK2 - {{ TASK_THREE_NAME }}"
+  cisco.ios.ios_command: 
+    commands:
+      - "{{ show_commands }}"
+  register: ntp_show_output
+
+- name: "TASK3 - {{ TASK_FOUR_NAME }}"
+  debug:
+    msg: "{{ ntp_show_output.stdout_lines }}"
+
+...

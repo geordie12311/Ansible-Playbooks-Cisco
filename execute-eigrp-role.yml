@@ -1,0 +1,8 @@
+---
+- name: "Playbook that executes configuring EIGRP using eigrp_role"
+  hosts: "R1"
+  connection: network_cli
+  gather_facts: false
+
+  roles: 
+   - ./roles/eigrp_role

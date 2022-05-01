@@ -1,29 +1,16 @@
-#Ansible Playbook to add ntp servers
 ---
-- hosts: all
-  gather_facts: no
 
-  vars:
-  
-    ntp_servers:
-      - ntp server 20.20.20.1
-      - ntp server 20.20.20.2
- 
+- name: "Adding NTP servers using Jinja2 template"
+  hosts: "R1"
+  gather_facts: false
+  connection: network_cli
 
   tasks:
-  
-  - name: get the current ntp server configs
-    ios_command:
-      commands:
-        - "show running-config full | include ntp server"
-    register: get_config
-  - debug: var=get_config.stdout_lines
-
-  - name: set ntp server commands
-    with_items: "{{ ntp_servers }}"
-    ios_config:
-      lines:
-          - "{{ item }}"
-    register: set_ntp
-
+    - name: "Configure NTP servers"
+      cisco.ios.ios_config:
+      src: "ntp.j2"
+      register: ntp_result
+    - name: "Print results"
+      debug: 
+        msg: "{{ ntp_result }}"
 ...
