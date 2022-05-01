@@ -8,9 +8,9 @@
   tasks:
     - name: "Configure NTP servers"
       cisco.ios.ios_config:
-        src: "ntp.j2"
+      src: "ntp.j2"
       register: ntp_result
-
     - name: "Print results"
       debug: 
         msg: "{{ ntp_result }}"
+...

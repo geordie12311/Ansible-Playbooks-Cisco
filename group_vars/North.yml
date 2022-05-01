@@ -12,3 +12,6 @@ ospf:
     - "25.25.25.0 0.0.0.255"
   redistributing:
     bgp: "65001"
+
+secret_bgp: 5432
+secret_ospf: 5

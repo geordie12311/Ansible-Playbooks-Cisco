@@ -6,8 +6,8 @@
   
     vars:
     cli:
-      username: geordie
-      password: teabag22
+      username: cisco
+      password: cisco1
           
       log_servers:
       - logging 10.10.10.1
