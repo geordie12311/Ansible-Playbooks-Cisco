@@ -1,0 +1,21 @@
+---
+
+BGP:
+  ASN: "65002"
+  peers:
+    - neighbor: "22.22.22.1"
+      peer_asn: "65001"
+
+    - neighbor: "23.23.23.2"
+      peer_asn: "65003"
+
+    - neighbor: "24.24.24.2"
+      peer_asn: "65004"
+
+  redistribute: "connected"
+  update_source: "loo0"
+
+eigrp_style: "normal"
+
+eigrp:
+  asn: "2"

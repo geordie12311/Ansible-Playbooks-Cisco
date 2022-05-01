@@ -16,13 +16,13 @@ R4
 SW1
 SW2
 
-[Routers]
+[routers]
 R1
 R2
 R3
 R4
 
-[Switches]
+[switches]
 SW1
 SW2
 

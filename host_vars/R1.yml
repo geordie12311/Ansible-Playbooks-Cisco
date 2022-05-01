@@ -1,0 +1,26 @@
+---
+
+BGP:
+  ASN: "65001"
+  peers:
+    - neighbor: "22.22.22.2"
+      peer_asn: "65002"
+
+    - neighbor: "23.23.23.2"
+      peer_asn: "65003"
+  
+    - neighbor: "24.24.24.2"
+      peer_asn: "65004"
+
+  redistribute: "connected"
+
+eigrp_style: "named"
+
+eigrp:
+  asn: "1"
+    
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4
+    - 99.99.99.99

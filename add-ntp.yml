@@ -1,0 +1,16 @@
+---
+
+- name: "Adding NTP servers using Jinja2 template"
+  hosts: "R1"
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: "Configure NTP servers"
+      cisco.ios.ios_config:
+        src: "ntp.j2"
+      register: ntp_result
+
+    - name: "Print results"
+      debug: 
+        msg: "{{ ntp_result }}"

@@ -1,0 +1,19 @@
+---
+
+- name: "Adding NTP servers using Jinja2 template"
+  hosts: "R1"
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: "Configure NTP servers"
+      cisco.ios.ios_config:
+        src: "ntp.j2"
+      notify: ntp_handler
+      register: ntp_result
+
+  handlers:
+    - name: "ntp_handler - This will check NTP has been updated"
+      listen: ntp_handler
+      debug:
+        msg: "CONFIG THAT HAS BEEN ADDED: {{ ntp_result.commands }}"

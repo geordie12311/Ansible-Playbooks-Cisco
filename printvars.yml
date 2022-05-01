@@ -1,7 +1,7 @@
 ---
 
 - name: "Printing Host Variables"
-  hosts: all
+  hosts: Routers
   gather_facts: false
 
   tasks:
