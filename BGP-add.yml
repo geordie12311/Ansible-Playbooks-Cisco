@@ -17,5 +17,4 @@
       listen: bgp_handler
       debug:
         msg: "CONFIG THAT HAS BEEN ADDED: {{ bgp_result.commands }}"
-
 ...
