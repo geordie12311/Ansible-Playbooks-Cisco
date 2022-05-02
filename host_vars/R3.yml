@@ -15,6 +15,9 @@ BGP:
   redistribute: "connected"
   update_source: "loo0"
 
+ospf:
+  rid: 3.3.3.3
+
 eigrp_style: "named"
 
 eigrp:

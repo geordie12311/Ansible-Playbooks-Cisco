@@ -1,4 +1,3 @@
 ---
-ansible_user: vyos
-ansible_pass: vyos
-ansible_ios: vyos
+ospf:
+  rid: "6.6.6.6"
