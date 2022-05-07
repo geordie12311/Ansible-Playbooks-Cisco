@@ -11,11 +11,10 @@
         username: "{{ ansible_user }}"
         password: "{{ ansible_password }}"
         dev_os: "{{ napalm_platform }}"
-        validation_file: "{{ inventory_hostname }}-facts.yml"
+        validation_file: "{{ inventory_hostname }}-vlans.yml"
       register: result
       ignore_errors: yes
-#using napalm validate to validate a set of facts about hosts
+
     - name: "Task1 - print the result"
       debug:
         msg: "{{ result }}"
-...

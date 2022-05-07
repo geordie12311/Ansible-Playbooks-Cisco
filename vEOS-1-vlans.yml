@@ -1,0 +1,11 @@
+---
+ - get_vlans:
+    '1':
+      interfaces:
+        list:
+        - Ethernet2
+        - Ethernet3
+        - Ethernet1
+        - Ethernet4
+        - Ethernet5
+      name: default
