@@ -10,11 +10,11 @@
         username: "{{ ansible_user }}"
         password: "{{ ansible_password }}"
         dev_os: "{{ napalm_platform }}"
-        filter: ["facts"]
+        filter: ["vlans"]
       register: result
 
     - name: "Print Result"
       debug:
-        msg: "{{ result.ansible_facts.napalm_facts }}"
+        msg: "{{ result.ansible_facts.napalm_vlans }}"
 # filtering the results down to specific information
 ...
