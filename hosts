@@ -7,10 +7,12 @@ SW1
 SW2
 PA-FW-01
 CHECK-FW-01
-vEOS1
-vEOS2
+vyos-1
+vyos-2
 can-sw1
 can-sw2
+vEOS-1
+vEOS-2
 
 [cisco_ios]
 R1
@@ -31,6 +33,10 @@ R4
 [vyos]
 vyos-1
 vyos-2
+
+[vEOS]
+vEOS-1
+vEOS-2
 
 [ios_switches]
 SW1
@@ -53,6 +59,10 @@ vyos-2
 [Canada]
 can-sw1
 can-sw2
+
+[France]
+vEOS-1
+vEOS-2
 
 [Palo_Firewalls]
 PA-FW-01
