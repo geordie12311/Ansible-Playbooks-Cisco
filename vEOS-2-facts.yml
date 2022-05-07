@@ -1,0 +1,8 @@
+---
+- get_facts:
+    hostname: vEOS-2
+    model: vEOS-lab
+    os_version: 4.27.0F-24305004.4270F
+    serial_number: 88AF2CC1D4F8CA049F51BAFDE81C5CBA
+    uptime: 17434
+    vendor: Arista

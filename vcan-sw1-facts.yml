@@ -1,0 +1,6 @@
+---
+- get_facts:
+    hostname: can-sw1
+    model: IOSv
+    serial_number: 9SFCKN1GNGP
+    vendor: Cisco
