@@ -1,0 +1,48 @@
+---
+ - get_vlans:
+    '1':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+        - GigabitEthernet0/2
+        - GigabitEthernet1/0
+      name: default
+    '5':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+        - GigabitEthernet0/3
+        - GigabitEthernet1/1
+      name: HR_VLAN
+    '10':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+        - GigabitEthernet1/2
+        - GigabitEthernet1/3
+      name: Sales_VLAN
+    '30':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+      name: PROC_VLAN
+    '1002':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+      name: fddi-default
+    '1003':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+      name: token-ring-default
+    '1004':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+      name: fddinet-default
+    '1005':
+      interfaces:
+        list:
+        - GigabitEthernet0/1
+      name: trnet-default
