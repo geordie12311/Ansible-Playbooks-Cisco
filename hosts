@@ -64,10 +64,10 @@ can-sw2
 vEOS-1
 vEOS-2
 
-[Palo_Firewalls]
+[Palo]
 PA-FW-01
 
-[Checkpoint_Firewalls]
+[Checkpoint]
 CHECK-FW-01
 
 
