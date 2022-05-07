@@ -1,0 +1,48 @@
+---
+#Playbook using Ansible VLAN module to configure VLAN on Cisco & VYOS devices
+- name: "VLAN Playbook"
+  hosts: Canada, vyos
+  connection: network_cli
+
+  tasks:
+    - name: "Configure Cisco VLAN"
+      cisco.ios.ios_vlans:
+        config:
+          - name: HR_VLAN
+            vlan_id: 5
+            state: active
+            shutdown: disabled
+            remote_span: true
+          - name: Sales_VLAN
+            vlan_id: 10
+            mtu: 1000
+            state: active
+            shutdown: disabled
+          - name: PROC_VLAN
+            vlan_id: 30
+            state: suspend
+            shutdown: enabled
+        state: overridden
+      register: cisco_vlan_output
+
+    - name: "Print Cisco vlan config"
+      debug:
+        msg: "{{ cisco_vlan_output }}"
+
+    - name: "Configure VYOS VLANs"
+      vyos.vyos.vyos_vlan:
+        aggregate:
+          - vlan_id: 40
+            name: VLAN_40
+            interfaces: eth4
+            state: present
+          - vlan_id: 50
+            name: VLAN_50
+            interfaces: eth5
+            state: present
+      register: vyos_vlan_output
+
+    - name: "Print VLAN Output"
+      debug:
+        msg: "{{ vyos_vlan_output }}"
+...

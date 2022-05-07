@@ -1,0 +1,24 @@
+---
+#Playbook using Ansible VLAN module to configure VLANs on VYOS devices
+- name: "VLAN Playbook"
+  hosts: vyos
+  connection: network_cli
+
+  tasks:
+  - name: "Configure VYOS VLANs"
+    vyos.vyos.vyos_vlan:
+      aggregate:
+      - vlan_id: 40
+        name: VLAN_40
+        interfaces: eth4
+        state: present
+      - vlan_id: 50
+        name: VLAN_50
+        interfaces: eth5
+        state: present        
+        register: vyos_vlan_output
+
+  - name: "Print VLAN Output"
+    debug:
+      msg: "{{ vyos_vlan_output }}"
+...
