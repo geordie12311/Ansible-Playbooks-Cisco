@@ -1,0 +1,30 @@
+---
+#Playbook using jinja2 templates to configure BGP on Cisco and VYOS devices
+- name: "BGP Playbook using Jinja2 Templates"
+  hosts: ios_routers, vyos
+  connection: network_cli
+
+  tasks:
+    - name: "Configure Cisco BGP"
+      cisco.ios.ios_config:
+        src: "{{ ansible_network_os }}-bgp.j2"
+      register: cisco_bgp_output
+      when: "ansible_network_os == 'cisco.ios.ios'"
+
+
+    - name: "Print Cisco BGP config"
+      debug:
+        msg: "{{ cisco_bgp_output }}"
+      when: "ansible_network_os == 'cisco.ios.ios'"
+
+    - name: "Configure VyOS BGP"
+      vyos.vyos.vyos_config:
+        src: "{{ ansible_network_os }}-bgp.j2"
+      register: vyos_bgp_output
+      when: "ansible_network_os == 'vyos.vyos.vyos'"
+
+    - name: "Print VyOS BGP config"
+      debug:
+        msg: "{{ vyos_bgp_output }}"
+      when: "ansible_network_os == 'vyos.vyos.vyos'"
+...

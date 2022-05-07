@@ -1,0 +1,25 @@
+---
+
+- name: "Configure BGP on Cisco IOS devices with Ansible BGP module"
+  hosts: R1,R2
+  connection: network_cli
+
+  tasks:
+    - name: "Configure BGP on Cisco IOS devices"
+      cisco.ios.ios_bgp: 
+        config:
+          bgp_as: 65001
+          networks:
+          - prefix: "12.12.12.0"
+            masklen: 24
+          - prefix: "22.22.22.0"
+            masklen: 29
+        operation: merge
+      register: cisco_bgp_output
+      when: "ansible_network_os == 'cisco.ios.ios'"
+
+    - name: "Print Cisco BGP Output"
+      debug:
+        msg: "{{ cisco_bgp_output }}"
+      when: "ansible_network_os == 'cisco.ios.ios'"
+...

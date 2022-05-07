@@ -1,0 +1,22 @@
+---
+
+- name: "Configure BGP on Cisco ISO devices using the Ansible BGP module"
+  hosts: ios_routers
+  connection: network_cli
+
+  tasks:
+    - name: "Configure Cisco BGP"
+      cisco.ios.ios_bgp:
+        config:
+          bgp_as: "{{ bgp.asn }}"
+          router_id: "{{ bgp.rid }}"
+          log_neighbor_changes: true
+          neighbors:
+          - neighbor: "{{ item.neighbor }}"
+            remote_as: "{{ item.peer_asn }}"
+        operation: merge
+      register: cisco_bgp_output
+      when: "ansible_network_os == 'cisco.ios.ios'"
+      loop: "{{ bgp.neighbors }}"
+# Created a loop for "item" which is going to pull the host BGP variables for each item
+...
