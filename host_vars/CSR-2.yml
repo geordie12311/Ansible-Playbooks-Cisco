@@ -1,0 +1,32 @@
+---
+
+ansible_user: "cisco"
+ansible_password: "cisco1"
+
+ospf_configure:
+  Cisco-IOS-XE-native:router:
+    Cisco-IOS-XE-ospf:ospf:
+    - id: 1
+      network:
+      - area: 51
+        ip: 13.12.2.0
+        mask: 0.0.0.0
+      - area: 0
+        ip: 18.18.18.0
+        mask: 0.0.0.255
+      router-id: 19.19.19.19
+
+acl_configure:
+  Cisco-IOS-XE-native:access-list:
+    Cisco-IOS-XE-acl:extended:
+    - access-list-seq-rule:
+      - ace-rule:
+          action: deny
+          dscp: ef
+          dst-any:
+          -
+          host: 6.7.1.2
+          protocol: ip
+        sequence: '55'
+      name: LABACL
+    - name: meraki-fqdn-dns
