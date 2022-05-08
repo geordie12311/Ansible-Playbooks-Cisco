@@ -1,11 +1,11 @@
 ---
 
-- name: "Play to Validate Devices"
+- name: "Playbook to Validate VLANs on Devices"
   hosts: Canada, vEOS
   connection: network_cli
 
   tasks:
-    - name: "Task1 - use NAPALM Validate"
+    - name: "Use NAPALM to Validate VLANs"
       napalm_validate:
         hostname: "{{ inventory_hostname }}"
         username: "{{ ansible_user }}"
@@ -15,6 +15,6 @@
       register: result
       ignore_errors: yes
 
-    - name: "Task1 - print the result"
+    - name: "Print the result"
       debug:
         msg: "{{ result }}"

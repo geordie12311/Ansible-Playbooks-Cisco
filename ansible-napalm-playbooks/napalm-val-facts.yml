@@ -1,6 +1,6 @@
 ---
 
-- name: "Play to Validate Devices"
+- name: "Playbook to Validate device facts against host data files"
   hosts: Canada, vEOS
   connection: network_cli
 

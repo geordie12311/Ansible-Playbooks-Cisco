@@ -1,5 +1,5 @@
 ---
-- name: "Playbook to test Napalm-Ansible"
+- name: "Playbook to retrive facts from devices using Napalm-Ansible"
   hosts: Canada, vEOS
   connection: network_cli
 
