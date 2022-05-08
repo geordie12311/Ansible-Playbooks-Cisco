@@ -1,3 +1,6 @@
+"""Python script to convert ^C" character on IOS banners to allow 
+backup playbooks to be able to restore correctly from saved configs"""
+
 import sys
 
 target = sys.argv[1]

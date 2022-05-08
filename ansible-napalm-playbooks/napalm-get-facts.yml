@@ -1,6 +1,6 @@
 ---
 - name: "Playbook to retrive facts from devices using Napalm-Ansible"
-  hosts: Canada, vEOS
+  hosts: Canada, Arista
   connection: network_cli
 
   tasks:

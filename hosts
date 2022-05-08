@@ -11,8 +11,8 @@ vyos-1
 vyos-2
 can-sw1
 can-sw2
-vEOS-1
-vEOS-2
+EOS-1
+EOS-2
 
 [cisco_ios]
 R1
@@ -34,9 +34,9 @@ R4
 vyos-1
 vyos-2
 
-[vEOS]
-vEOS-1
-vEOS-2
+[Arista]
+EOS-1
+EOS-2
 
 [ios_switches]
 SW1
@@ -61,8 +61,8 @@ can-sw1
 can-sw2
 
 [France]
-vEOS-1
-vEOS-2
+EOS-1
+EOS-2
 
 [Palo]
 PA-FW-01
