@@ -1,0 +1,3 @@
+-archive
+ -path flash:archive
+-ip scp server enable

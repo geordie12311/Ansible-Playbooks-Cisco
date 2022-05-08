@@ -1,4 +1,5 @@
 ---
+# Ansible Playbook using ansible.bultin.setup and ansible napalm to backup device configs.
 
 - name: "Play 1: Backup device configs to directory structure"
   hosts: localhost
@@ -12,15 +13,17 @@
     - name: "Task 2 of Play 1: Recording Variable"
       set_fact:
         DATE: "{{ ansible_date_time.date }}"
+# Task records the date and time from localhost and assigns it to a Variable called "DATE"
 
     - name: "Task 3 of Play 1: Creating directories"
       file: 
         path: "Backups/{{ DATE }}"
         state: directory
       run_once: true
+# Task creates the directory called Backups
 
 - name: "Play2: Backing Up Configurations"
-  hosts: Canada, vEOS
+  hosts: Canada, Arista
   connection: network_cli
 
   tasks:
@@ -32,25 +35,31 @@
         dev_os: "{{ napalm_platform }}"
         filter: ["config"]
       register: result
+# Task is using napalm_get_facts to retrieve the configurations from the devices
 
     - name: "Task 2 of Play 2: Create Startup Configuration Subdirectory"
       file:
         path: "Backups/{{ hostvars.localhost.DATE }}/startup-configs"
         state: directory
       run_once: true
+# Task creates a directory called Backups and subdirectory called startup-configs
 
     - name: "Task 3 of Play 2: Create Running Configuration Subdirectory"
       file:
         path: "Backups/{{ hostvars.localhost.DATE }}/running-configs"
         state: directory
       run_once: true
+# Task creates a directory called Backups and subdirectory called running-configs
 
     - name: "Task 4 of Play 2: Copy Startup Configurations to Disk"
       copy:
         content: "{{ result.ansible_facts.napalm_config.startup }}"
         dest: "Backups/{{ hostvars.localhost.DATE }}/startup-configs/{{ inventory_hostname }}-startup-config.txt"
+# Task copies the startup configs from each device and then saves them to the startup-configs subfolder using hostname and date
 
     - name: "Task 5 of Play 2: Copy Running Configurations to Disk"
       copy:
         content: "{{ result.ansible_facts.napalm_config.running }}"
         dest: "Backups/{{ hostvars.localhost.DATE }}/running-configs/{{ inventory_hostname }}-running-config.txt"
+# Task copies the running configs from each device and then saves them to the runing-configs subfolder using hostname and date
+...
