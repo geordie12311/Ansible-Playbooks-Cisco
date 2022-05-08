@@ -13,6 +13,8 @@ can-sw1
 can-sw2
 EOS-1
 EOS-2
+CSR-1
+CSR-2
 
 [cisco_ios]
 R1
@@ -23,6 +25,10 @@ R4
 #SW2
 can-sw1
 can-sw2
+
+[cisco_iosxe]
+CSR-1
+CSR-2
 
 [ios_routers]
 R1
@@ -43,6 +49,10 @@ SW1
 SW2
 can-sw1
 can-sw2
+
+[Scotland]
+CSR-1
+CSR-2
 
 [North]
 R1
