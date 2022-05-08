@@ -1,4 +1,9 @@
 ---
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
 ospf:
   rid: "5.5.5.5"
   networks:

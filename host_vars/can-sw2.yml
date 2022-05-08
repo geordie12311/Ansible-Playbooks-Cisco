@@ -1,5 +1,8 @@
 ---
-
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+    
 vlans:
   interfaces:
     - interface: "gi0/1"

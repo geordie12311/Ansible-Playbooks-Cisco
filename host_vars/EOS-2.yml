@@ -1,4 +1,8 @@
 ---
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
 ospf:
   default_originate: false
   rid: "2.2.2.2"

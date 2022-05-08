@@ -1,4 +1,9 @@
 ---
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+    
 bgp:
   asn: "1"
   rid: "1.1.1.1"

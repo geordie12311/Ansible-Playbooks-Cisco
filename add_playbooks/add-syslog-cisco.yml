@@ -1,0 +1,48 @@
+---
+# Playbook to configure Syslog traps and server on Cisco devices
+
+- name: "Play 1: Targeting the Cisco Host Devices"
+  hosts: cisco_ios
+  connection: network_cli
+
+  tasks: 
+    - name: "Play1 - Task1: Push IP Configs to Cisco"
+      cisco.ios.ios_logging_global:
+        config:
+          hosts:
+            - hostname: "{{ item.ip }}"
+        state: merged
+      loop: "{{ syslog.hosts }}"
+      when: item.port is not defined
+      register: task1_output
+
+    - name: "Play1 - Task2: Push IP/Port Configs to Cisco"
+      cisco.ios.ios_logging_global:
+        config:
+          hosts:
+            - hostname: "{{ item.ip }}"
+              transport:
+                tcp:
+                  port: "{{ item.port }}"
+
+        state: merged
+      loop: "{{ syslog.hosts }}"
+      when: item.port is defined
+      register: task2_output
+
+    - name: "Print Task 1 Output for Cisco"
+      debug:
+        msg: "{{ item.commands }}"
+      loop: "{{ task1_output.results }}"
+      loop_control:
+        label: none
+      when: item.commands is defined
+
+    - name: "Print Task 2 Output for Cisco"
+      debug:
+        msg: "{{ item.commands }}"
+      loop: "{{ task2_output.results }}"
+      loop_control:
+        label: none
+      when: item.commands is defined
+...
