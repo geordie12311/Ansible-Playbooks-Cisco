@@ -1,0 +1,44 @@
+! Command: show running-config
+! device: vEOS-1 (vEOS-lab, EOS-4.27.0F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+username arista privilege 15 secret sha512 $6$EL1hgVNI5egGCaml$vZEU/KwjaMZUQ90noJlax/SOahpZn0gPkT53bHTJfEutdmiLSWAmUlKUTdph0vGQFW4tGVS95h/hhDddn2PR/1
+username geordie privilege 15 secret sha512 $6$eRI1vp1GFmWlbRiT$a.cJmmsb7KCR8uj7tDlkU006YJ2AlDhmHJFcrcffaYLSBMWB0zQhUtsSYqhGktPyh6WBwjEpaYh.mpVIfVfH6/
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname vEOS-1
+dns domain gh-lab.com
+!
+spanning-tree mode mstp
+!
+management api http-commands
+   no shutdown
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Management1
+   ip address 12.12.12.16/24
+!
+ip routing
+!
+ip route 140.140.1.0/24 12.12.12.1
+!
+router rip
+   network 12.12.12.0/24
+   no shutdown
+!
+end
