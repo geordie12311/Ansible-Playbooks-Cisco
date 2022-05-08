@@ -1,0 +1,46 @@
+---
+# Ansible Playbook to configure SNMP parameters on IOS devices
+
+- name: "Cico IOS SNMP Playbook"
+  hosts: cisco_ios
+  connection: network_cli
+
+  tasks:
+    - name: Apply the provided configuration
+      cisco.ios.ios_snmp_server:
+        config:
+          communities:
+          -   acl_v4: labACL
+              name: LABSNMP
+              rw: true
+          contact: G Harwood - GH-LAB.COM
+          engine_id:
+          - id: AB0C532FF0F
+            remote:
+              host: 140.140.1.5
+              udp_port: 25
+          groups:
+          - group: LABSNMP
+            version: v3
+            version_option: auth
+          file_transfer:
+            access_group: lab
+            protocol:
+            - ftp
+          hosts:
+          - community_string: LABSNMP
+            host: 140.140.1.5
+            informs: true
+            traps:
+            - msdp
+            - stun
+            - pki
+            version: 2c
+        state: merged
+      register: snmp_output
+
+    - name: "Print SNMP"
+      debug:
+        msg: "{{ snmp_output }}"
+...
+      
