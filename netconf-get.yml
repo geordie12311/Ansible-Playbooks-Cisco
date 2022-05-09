@@ -1,0 +1,11 @@
+---
+# Playbook using Netconf  to get running configuration from Cisco IOSXE devices
+- name: "Playbook1: Get running configs using Netconf"
+  hosts: cisco_iosxe
+  gather_facts: false
+  connection: ansible.netcommon.netconf
+
+  tasks:
+    - name: Get running configuration and state data
+      ansible.netcommon.netconf_get:
+...
