@@ -8,8 +8,8 @@
 
   vars:
     cli:
-      username: geordie
-      password: teabag22
+      username: cisco
+      password: cisco123
   
   tasks:
     - name: configure MOTD Banner
@@ -19,6 +19,4 @@
 
       register: print_ouptput
     - debug: var=print_ouptput  
-
-
 ...
