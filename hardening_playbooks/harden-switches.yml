@@ -20,8 +20,8 @@
 
   vars:
     cli:
-      username: geordie
-      password: teabag22
+      username: cisco
+      password: cisco123
 
   tasks:
  

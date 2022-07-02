@@ -7,8 +7,8 @@
 
   vars:
     cli:
-      username: geordie
-      password: teabag22
+      username: cisco
+      password: cisco123
 
   tasks:
     - name: "Job 1 of PLAY 1: Enumerating Local Time & Date..."
