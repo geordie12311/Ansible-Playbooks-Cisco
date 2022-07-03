@@ -1,0 +1,9 @@
+---
+- name: Show the ASA version
+  hosts: cisco_ASAs
+  
+  tasks:
+  - name: Show the ASA version
+    cisco.asa.asa_command:
+      commands:
+      - show version
