@@ -30,6 +30,10 @@ can-sw2
 CSR-1
 CSR-2
 
+[cisco_ASAs]
+ASA-FW-01
+ASA-FW-02
+
 [ios_routers]
 R1
 R2
