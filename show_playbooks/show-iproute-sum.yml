@@ -1,0 +1,14 @@
+# Ansible Playbook to show ip routing table summary on cisco device 
+---
+
+- name: Show summarised IP routing table
+  hosts: Core1
+  gather_facts: false
+  
+  tasks:
+  - name: Show IP routing table summary 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show ip route summary"
+    register: print_output
+  - debug: var=print_output.stdout_lines

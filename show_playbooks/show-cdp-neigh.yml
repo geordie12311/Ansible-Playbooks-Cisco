@@ -1,0 +1,14 @@
+# Ansible Playbook to show cdp neighbors on cisco device 
+---
+
+- name: Show CDP neighbors
+  hosts: Core1
+  gather_facts: false
+  
+  tasks:
+  - name: Show CDP neighbors 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show cdp neighbor"
+    register: print_output
+  - debug: var=print_output.stdout_lines

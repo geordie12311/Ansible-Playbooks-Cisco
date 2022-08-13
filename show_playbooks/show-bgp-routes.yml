@@ -1,0 +1,14 @@
+# Ansible Playbook to show routes learnt via BGP on cisco device 
+---
+
+- name: Show BGP learnt routes
+  hosts: Core1
+  gather_facts: false
+  
+  tasks:
+  - name: Show BGP routes in the routing table 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show ip route bgp"
+    register: print_output
+  - debug: var=print_output.stdout_lines

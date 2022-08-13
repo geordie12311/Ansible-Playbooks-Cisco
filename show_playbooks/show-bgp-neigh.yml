@@ -1,0 +1,14 @@
+# Ansible Playbook to show state of the bgp neighbors on cisco device 
+---
+
+- name: Show BGP neighbors
+  hosts: Core1
+  gather_facts: false
+  
+  tasks:
+  - name: Show status of the bgp neighbors 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show BGP all neighbors"
+    register: print_output
+  - debug: var=print_output.stdout_lines
