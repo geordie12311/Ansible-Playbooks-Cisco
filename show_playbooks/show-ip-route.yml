@@ -3,14 +3,9 @@
 ---
 
 - name: Get IP routes
-  hosts: all
+  hosts: cisco_switches
   gather_facts: false
-
-  vars:
-    cli:
-      username: cisco
-      password: cisco22
-          
+  
   tasks:
     - name: show IP route on devices
       raw: "show IP route"

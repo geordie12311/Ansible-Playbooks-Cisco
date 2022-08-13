@@ -54,6 +54,13 @@ SW2
 can-sw1
 can-sw2
 
+[cisco_switches]
+Core1
+Core2
+access-sw1
+access-sw2
+access-sw3
+access-sw4
 [Scotland]
 CSR-1
 CSR-2

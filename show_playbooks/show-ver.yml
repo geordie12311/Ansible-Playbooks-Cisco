@@ -1,7 +1,7 @@
 ---
 # Playbook to show version on IOS devices and save output to file
 
-- hosts: all
+- hosts: cisco_switches
 
   tasks:
    - name: Show Version 
