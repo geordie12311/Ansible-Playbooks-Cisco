@@ -15,6 +15,9 @@ EOS-1
 EOS-2
 CSR-1
 CSR-2
+PA-VM-PRI
+PA-VM-FAIL
+PA-VM-02
 
 [cisco_ios]
 R1
@@ -87,7 +90,9 @@ EOS-2
 
 [Palo]
 PA-FW-01
-
+PA-VM-PRI
+PA-VM-FAIL
+PA-VM-02
 [Checkpoint]
 CHECK-FW-01
 
