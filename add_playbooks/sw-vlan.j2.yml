@@ -1,13 +1,15 @@
-# Ansible Playbook using jinja2 templates to configure VLAN on Cisco Switches
+# Ansible Playbook using jinja2 templates to configure VLANs, trunks and SVIs on a Cisco Switch
+# 
 
 ---
 - name: "VLAN Playbook using Jinja2 Templates"
+  hosts: NN-SW-03
   connection: network_cli
 
   tasks:
     - name: "Configure Cisco VLAN"
       cisco.ios.ios_config:
-        src: "{{ ansible_network_os }}-vlans.j2"
+        src: "NN-SW-03-vlans.j2"
       register: cisco_vlan_output
       when: "ansible_network_os == 'cisco.ios.ios'"
 # jinja2 file the task calls is cisco.ios.ios-vlans.j2
@@ -16,4 +18,5 @@
       debug:
         msg: "{{ cisco_vlan_output }}"
       when: "ansible_network_os == 'cisco.ios.ios'"
+...
 ...

@@ -4,11 +4,12 @@
   hosts: routers
   connection: network_cli
   gather_facts: no
+
   vars:
     thestate: merged
     vrf_name: sample_vrf
     vrf_description: added by Ansible
-#add the vrf name and decription above
+#add the vrf names and decription above
 
   tasks:
 
@@ -25,4 +26,5 @@
       name: "{{ vrf_name }}"
       state: absent
     when: thestate == "deleted"
-#The above sectoin will remove the vrf named so # out if not needed
+...
+#The above section will remove the vrf named so # out if not needed

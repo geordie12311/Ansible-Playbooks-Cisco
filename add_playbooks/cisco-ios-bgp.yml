@@ -1,6 +1,7 @@
----
+# Ansible playbook to addn BGP to IOS devices
 
-- name: "Configure BGP on Cisco IOS devices with Ansible BGP module"
+---
+- name: "Configure BGP on Cisco IOS devices using Ansible BGP module"
   hosts: R1,R2
   connection: network_cli
 
