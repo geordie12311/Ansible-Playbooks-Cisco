@@ -1,16 +1,20 @@
----
+# Ansible playbook to add NTP configuration using jinja2 template
 
+---
 - name: "Adding NTP servers using Jinja2 template"
-  hosts: "R1"
+  hosts: North_Switches, South_Switches
   gather_facts: false
   connection: network_cli
 
   tasks:
     - name: "Configure NTP servers"
       cisco.ios.ios_config:
-      src: "ntp.j2"
+        save_when: modified
+        src: "ntp.j2"
+
+    - name: Show NTP configuration
+      cisco.ios.ios_command:
+        commands: "sh ntp config"
       register: ntp_result
-    - name: "Print results"
-      debug: 
-        msg: "{{ ntp_result }}"
+    - debug: var=ntp_result.stdout_lines
 ...

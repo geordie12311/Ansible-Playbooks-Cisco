@@ -1,12 +1,12 @@
 # Ansible Playbook to show state of the ospf neighbors on cisco device 
 ---
 
-- name: Show BGP neighbors
-  hosts: Core1
+- name: Show OSPF neighbors
+  hosts: North_Switches
   gather_facts: false
   
   tasks:
-  - name: Show status of the bgp neighbors 
+  - name: Show status of the OSPF neighbors 
     cisco.ios.ios_command:
       commands:
       - command: "Show ip ospf neighbor"

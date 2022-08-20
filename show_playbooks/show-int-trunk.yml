@@ -1,0 +1,14 @@
+# Ansible Playbook to show vlan information on cisco switch(es) 
+---
+
+- name: Show VLAN details
+  hosts: NN-SW-03
+  gather_facts: false
+  
+  tasks:
+  - name: Show brief summary of VLANs on the device 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show vlan brief"
+    register: print_output
+  - debug: var=print_output.stdout_lines

@@ -1,8 +1,8 @@
-# Ansible Playbook to show cdp neighbors on cisco device 
+# Ansible Playbook to show cdp neighbors on cisco devices 
 ---
 
 - name: Show CDP neighbors
-  hosts: Core1
+  hosts: South-Switches
   gather_facts: false
   
   tasks:

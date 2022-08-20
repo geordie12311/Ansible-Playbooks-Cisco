@@ -3,7 +3,7 @@
 --- 
 
 - name: gather information from ios devices
-  hosts: all
+  hosts: South_Switches
   gather_facts: false
   connection: network_cli
 
@@ -22,5 +22,4 @@
     - name: display serial number
       debug:
         msg: "The serial number is: {{ ansible_net_serialnum }}"
-
 ...

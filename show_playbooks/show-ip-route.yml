@@ -3,7 +3,7 @@
 ---
 
 - name: Get IP routes
-  hosts: cisco_switches
+  hosts: North-Switches
   gather_facts: false
   
   tasks:

@@ -1,14 +1,14 @@
-# Ansible playbook to show ip interfaces  on cisco ios switches and print the output to screen
-
+# Ansible Playbook to show IP interface information on cisco devices 
 ---
 
-- name: Get IP routes
-  hosts: cisco_switches
+- name: Show IP interface information
+  hosts: North_Switches
   gather_facts: false
   
   tasks:
-    - name: show interfaces on the devices
-      raw: "show ip interface brief"
-      register: print_output
-    - debug: var=print_output.stdout_lines
-...
+  - name: Show IP Interface Brief 
+    cisco.ios.ios_command:
+      commands:
+      - command: "Show ip int bri"
+    register: print_output
+  - debug: var=print_output.stdout_lines

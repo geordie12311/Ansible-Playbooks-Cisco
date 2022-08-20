@@ -2,7 +2,7 @@
 ---
 
 - name: Show CPU and Memory usage
-  hosts: Core1
+  hosts: NN-SW-01
   gather_facts: false
   
   tasks:
