@@ -6,11 +6,6 @@
   gather_facts: false
   connection: network_cli
   
-   vars:
-    cli:
-      username: geordie
-      password: teabag22
-
   tasks:
     - name: Create VLAN
       ios_config:
