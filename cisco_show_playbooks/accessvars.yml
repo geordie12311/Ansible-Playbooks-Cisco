@@ -1,7 +1,7 @@
 ---
 
 - name: "Printing Host Variables"
-  hosts: North
+  hosts: North_Switches
   gather_facts: false
 
   tasks:

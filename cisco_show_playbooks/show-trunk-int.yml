@@ -2,7 +2,7 @@
 ---
 
 - name: Show trunk interfaces
-  hosts: Core1
+  hosts: NN-SW-01
   gather_facts: false
   
   tasks:

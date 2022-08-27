@@ -1,7 +1,7 @@
 #Ansible playbook to print out the vty information from cisco IOS devices
 
 ---
-- hosts: all 
+- hosts: NN-SW-01
   gather_facts: no
   connection: network_cli
 

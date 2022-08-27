@@ -1,6 +1,6 @@
 ---
 - name: "Looping through IP interface info"
-  hosts: North
+  hosts: North_Switches
   gather_facts: true
   connection: network_cli
 

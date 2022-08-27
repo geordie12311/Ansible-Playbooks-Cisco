@@ -2,7 +2,7 @@
 ---
 
 - name: Clear interface counters on specific interface
-  hosts: Core1
+  hosts: NN-SW-01
   gather_facts: false
   
   tasks:
