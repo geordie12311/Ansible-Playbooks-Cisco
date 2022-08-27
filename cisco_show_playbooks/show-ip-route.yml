@@ -3,12 +3,14 @@
 ---
 
 - name: Get IP routes
-  hosts: North-Switches
+  hosts: North_Switches
   gather_facts: false
   
   tasks:
     - name: show IP route on devices
-      raw: "show IP route"
+      cisco.ios.ios_command:
+        commands:
+        - command: "Show ip route"
       register: print_output
     - debug: var=print_output.stdout_lines
 ...
