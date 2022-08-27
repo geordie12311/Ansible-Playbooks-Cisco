@@ -2,7 +2,7 @@
 ---
 
 - name: Show CDP neighbors
-  hosts: South-Switches
+  hosts: South_Switches
   gather_facts: false
   
   tasks:
