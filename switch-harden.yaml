@@ -1,22 +1,10 @@
-# Ansible playbook to configure Cisco IOS Hardening commands listed below:
-
-# + no service pad
-# + ip ssh version 2
-# + no ip domain-lookup
-# + no ip http server
-# + no ip finger
-# + no ip bootp
-# + no service pad
-# + service tcp-keepalives-in
-# + service tcp-keepalives-out
-# + transport input ssh
-# + logging buffered 15000
-# + Write changes to startup configuration
 ---
-
 - name: Hardening the Configuration of the Switches as per Best Practice
   hosts: North_Switches, South_Switches
   gather_facts: no
+
+  vars:
+    ansible_network_os: ios
 
   tasks:
   - name: no service pad

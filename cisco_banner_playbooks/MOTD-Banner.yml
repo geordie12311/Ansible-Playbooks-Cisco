@@ -2,11 +2,12 @@
 
 ---
 - name: Add MOTD Banner to all devices
-  hosts: all
+  hosts: North_Switches, South_Switches
   order: sorted
   gather_facts: false
 
   vars:
+    ansible_network_os: ios
     cli:
       username: cisco
       password: cisco123

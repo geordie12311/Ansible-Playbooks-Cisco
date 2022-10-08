@@ -26,6 +26,14 @@ SS-SW-01
 SS-SW-02
 SS-SW-03
 SS-SW-04
+OP-SW-01
+OP-SW-02
+OP-SW-03
+OP-SW-04
+SB-SW-01
+SB-SW-02
+SB-SW-03
+SB-SW-04
 
 [cisco_ios]
 R1
@@ -97,29 +105,33 @@ CSR-2
 R1
 R3
 
+[South]
+R2
+R4
+
 [North_Switches]
 NN-SW-01
 NN-SW-02
 NN-SW-03
 NN-SW-04
-SS-SW-01
-SS-SW-02
-SS-SW-03
-SS-SW-04
-
-[South]
-R2
-R4
 
 [South_Switches]
-NN-SW-01
-NN-SW-02
-NN-SW-03
-NN-SW-04
 SS-SW-01
 SS-SW-02
 SS-SW-03
 SS-SW-04
+
+[Selby]
+SB-SW-01
+SB-SW-02
+SB-SW-03
+SB-SW-04
+
+[Opus]
+OP-SW-01
+OP-SW-02
+OP-SW-03
+OP-SW-04
 
 [USA]
 vyos-1
@@ -140,5 +152,7 @@ PA-VM-FAIL
 PA-VM-02
 [Checkpoint]
 CHECK-FW-01
+
+
 
 

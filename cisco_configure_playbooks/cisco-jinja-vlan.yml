@@ -2,6 +2,7 @@
 
 ---
 - name: "VLAN Playbook using Jinja2 Templates"
+  hosts: SB-SW-01
   connection: network_cli
 
   tasks:

@@ -2,7 +2,7 @@
 
 ---
 - name: "Adding NTP servers using Jinja2 template"
-  hosts: North_Switches, South_Switches
+  hosts: SB-SW-01
   gather_facts: false
   connection: network_cli
 
@@ -14,7 +14,7 @@
 
     - name: Show NTP configuration
       cisco.ios.ios_command:
-        commands: "sh ntp config"
+        commands: "show run | section ntp server"
       register: ntp_result
     - debug: var=ntp_result.stdout_lines
 ...

@@ -1,0 +1,95 @@
+---
+    - name: Switch reload Playbook
+    hosts: Switches
+      gather_facts: false
+      models:
+        "WS-C2960XR-48FPD-I":
+          ios_version: "15.2(7)E0a"
+          ios_path: "IOS/"
+          ios_archive: "c2960x-universalk9-tar.152-7.E0a.tar"
+          ios_binary: "c2960x-universalk9-mz.152-7.E0a.bin"
+          ios_md5: "07195a8c7866ac2a91c64b716465c516"
+          ios_size_kb: 37489
+    
+      tasks:
+        - name: Wait until the lock file is removed
+          wait_for:
+            path: playbooks/file.lock
+            state: absent
+          tags:
+            - lock
+    
+        - name: Email start of process on switch Name
+          mail:
+            subject: Reloading {{ inventory_hostname }}
+            host: my.smtp.local
+            port: 25
+            to: 
+              - GroupITNetworks@drax.com
+            from: ansible@drax.com
+          delegate_to: localhost
+          tags:
+            - email
+            - reload
+        
+        - name: Create Lock File
+          file:
+            path: playbooks/file.lock
+            state: touch
+          tags:
+            - reload
+            - lock
+        
+        - name: Reload Switch
+          ios_command:
+            commands:
+              - command: "reload"
+                prompt: "Proceed with reload? \[confirm\]"
+                answer: '\r'
+          tags:
+            - reload
+        
+        - name: Wait for the switch to return
+          wait_for:
+            host: "{{ ansible_host }}"
+            port: 22
+            delay: 180
+            timeout: 600
+          delegate_to: localhost
+          tags:
+            - reload
+            - check_online
+        
+        - name: Email switch name back online
+          mail:
+            subject: Back Online {{ inventory_hostname }}
+            host: my.smtp.local
+            port: 25
+            to: 
+              - GroupITNetworks@drax.com
+            from: ansible@drax.com
+          delegate_to: localhost
+          tags:
+            - email
+            - reload
+        
+        - name: Gather all legacy facts
+          ios_facts:
+            gather_subset: hardware
+          tags:
+            - facts
+        
+        - name: Asset that the IOS version is the correct one
+          assert:
+            that:
+              - ansible_net_version = models[ansible_net_model]["ios_version"]
+          tags:
+            - facts
+        
+        - name: Delete Lock File
+          file:
+            path: playbooks/file.lock
+            state: absent
+          tags:
+            - reload
+            - lock

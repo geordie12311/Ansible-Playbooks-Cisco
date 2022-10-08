@@ -8,8 +8,8 @@
 
   vars:
     cli:
-      username: geordie
-      password: teabag22
+      username: cisco
+      password: cisco123
 
   vars_prompt:
     - name: "primary_snmp_host"

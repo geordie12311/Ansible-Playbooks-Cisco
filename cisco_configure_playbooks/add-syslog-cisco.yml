@@ -3,7 +3,7 @@
 
 ---
 - name: "Play 1: Targeting the Cisco Host Devices"
-  hosts: NN-SW-01
+  hosts: SB-SW-01
   connection: network_cli
 
   tasks: 
