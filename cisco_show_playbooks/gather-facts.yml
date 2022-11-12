@@ -3,23 +3,28 @@
 --- 
 
 - name: gather information from ios devices
-  hosts: South_Switches
-  gather_facts: false
+  hosts: OP-SW-01
+  gather_facts: true
   connection: network_cli
 
   tasks:
-    - name: gather device facts
-      ios_facts:
+  - name: gather device facts
+    cisco.ios.ios_facts:
+      gather_subset: all
+        
+  - name: display version
+    debug:
+      msg: "the IOS version is: {{ ansible_net_version }}"
 
-    - name: display device model
-      debug:
-        msg: "the device model is: {{ ansible_net_model }}"
-
-    - name: display version
-      debug:
-        msg: "the IOS version is: {{ ansible_net_version }}"
-
-    - name: display serial number
-      debug:
-        msg: "The serial number is: {{ ansible_net_serialnum }}"
+  - name: display serial number
+    debug:
+      msg: "The serial number is: {{ ansible_net_serialnum }}"
+  
+  - name: display device Interfaces
+    debug:
+      msg: "the device IPv4 configured addresses are: {{ ansible_net_all_ipv4_addresses }}"
+  
+  #- name: display device model
+  #  debug:
+  #    msg: "the device model is: {{ ansible_net_model }}"
 ...
