@@ -1,0 +1,52 @@
+---
+- hosts: OP-SW-01
+  gather_facts: no
+  connection: network_cli
+
+  vars_prompt:
+    - name: "username1"
+      prompt: "Enter your username"
+    - name: "password1"
+      prompt: Enter you password
+      private: yes
+# Above vars_prompt section is going to prompt the user to enter their credentials
+
+    - name: "vlan"
+      prompt: "Enter the VLAN number"
+    - name: "vlan_id"
+      prompt: Enter a description for the VLAN
+    - name: "vlan_interface"
+      prompt: Enter the interface you want to add to the VLAN to
+# prompting user for VLAN and interface information
+
+  vars:
+    ansible_user: "{{ username1 }}"
+    ansible_password: "{{ password1 }}"
+# vars is using then using the username / password entered by the user to connect to the host(s)
+
+  tasks:
+     - name: Print details
+       debug:
+         msg: "The VLAN is: {{ vlan }}, VLAN name is: {{ vlan_id }} VLAN interface is: {{ vlan_interface }}"
+
+     - name: Create the VLAN
+       ios_vlan:
+         vlan_id: "{{ vlan }}"
+         name: "{{ vlan_id }}"
+         state: present
+
+     - name: Add interface to VLAN
+       ios_vlan:
+        vlan_id: "{{ vlan }}"
+        interfaces:
+          - "{{ vlan_interface }}"
+        state: present
+        
+     - name: Verify VLAN & Interface configuration.
+       ios_command:
+         commands: 
+           - show vlan id {{ vlan }} 
+           - show run int {{ vlan_interface }}     
+
+       register: int
+     - debug: var=int.stdout_lines  
