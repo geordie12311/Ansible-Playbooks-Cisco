@@ -1,9 +1,0 @@
----
-- name: "print some encrypted data"
-  hosts: "Switches"
-  gather_facts: false
-  tasks:
-    - name: "Task 1 - decrypt and print"
-      debug:
-        msg: "{{ snmp_data }}"
-...
