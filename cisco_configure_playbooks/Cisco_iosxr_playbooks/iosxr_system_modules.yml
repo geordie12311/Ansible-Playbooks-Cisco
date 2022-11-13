@@ -1,0 +1,55 @@
+---
+- hosts: iosxr01
+  name: Configure iosxr device
+  gather_facts: false
+  connection: network_cli
+
+  vars_prompt:
+      - name: "username1"
+        prompt: "Enter your username" # prompting user to input username, will be used to login
+        private: no
+      - name: "password1"
+            prompt: Enter you password # prompting user to input password, will be used to login
+        private: yes # Note: private set to yes means details will not be displayed on screen
+
+  vars:
+    ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
+
+  tasks:
+  - name: configure hostname and domain-name (default vrf=default)
+  cisco.iosxr.iosxr_system:
+    hostname: iosxr01
+    domain_name: test.example.com
+    domain_search:
+    - ansible.com
+    - redhat.com
+    - cisco.com
+  - name: remove configuration
+    cisco.iosxr.iosxr_system:
+      hostname: iosxr01
+      domain_name: test.example.com
+      domain_search:
+      - ansible.com
+      - redhat.com
+      - cisco.com
+      state: absent
+  - name: configure hostname and domain-name with vrf
+    cisco.iosxr.iosxr_system:
+      hostname: iosxr01
+      vrf: nondefault
+      domain_name: test.example.com
+      domain_search:
+      - ansible.com
+      - redhat.com
+      - cisco.com
+  - name: configure DNS lookup sources
+    cisco.iosxr.iosxr_system:
+      lookup_source: MgmtEth0/0/CPU0/0
+      lookup_enabled: true
+  - name: configure name servers
+    cisco.iosxr.iosxr_system:
+      name_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+...
