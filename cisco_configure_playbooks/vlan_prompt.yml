@@ -1,3 +1,4 @@
+# Ansible-playbook using user input to create and assign a VLAN to an interface
 ---
 - hosts: OP-SW-01
   gather_facts: no
@@ -5,48 +6,54 @@
 
   vars_prompt:
     - name: "username1"
-      prompt: "Enter your username"
+      prompt: "Enter your username" # prompting user to input username, will be used to login
+      private: no
     - name: "password1"
-      prompt: Enter you password
-      private: yes
-# Above vars_prompt section is going to prompt the user to enter their credentials
-
+      prompt: Enter you password # prompting user to input password, will be used to login
+      private: yes # Note: private set to yes means details will not be displayed on screen
     - name: "vlan"
-      prompt: "Enter the VLAN number"
+      prompt: "Enter the VLAN number" # promting user to add the vlan number, will be used later in the playbook
+      private: no # Note: private set to no means details will be displayed on screen
     - name: "vlan_id"
-      prompt: Enter a description for the VLAN
-    - name: "vlan_interface"
-      prompt: Enter the interface you want to add to the VLAN to
-# prompting user for VLAN and interface information
+      prompt: Enter a name for the VLAN # prompting user to input vlan name, will be used later in the playbook
+      private: no
+    - name: "vlan_interface" 
+      private: no
+      prompt: Enter the interface you want to add to the VLAN to # prompting user to input interface to assign vlan to, will be used later in the playbook
 
   vars:
-    ansible_user: "{{ username1 }}"
-    ansible_password: "{{ password1 }}"
-# vars is using then using the username / password entered by the user to connect to the host(s)
+    ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
 
   tasks:
      - name: Print details
        debug:
          msg: "The VLAN is: {{ vlan }}, VLAN name is: {{ vlan_id }} VLAN interface is: {{ vlan_interface }}"
+# Displaying a message to the user to show what information they provided before starting the tasks
 
      - name: Create the VLAN
-       ios_vlan:
-         vlan_id: "{{ vlan }}"
-         name: "{{ vlan_id }}"
-         state: present
+       cisco.ios.ios_vlan:
+         vlan_id: "{{ vlan }}" # Creating the vlan using the vlan number input by the user
+         name: "{{ vlan_id }}" # adding the vlan id using the vlan name input by the user
+         state: present # tells ansible to create the vlan if not already present
 
      - name: Add interface to VLAN
-       ios_vlan:
-        vlan_id: "{{ vlan }}"
-        interfaces:
-          - "{{ vlan_interface }}"
-        state: present
+       cisco.ios.ios_vlan:
+         vlan_id: "{{ vlan }}" # adding the vlan to the interface input by the user
+         interfaces:
+         - "{{ vlan_interface }}" #using the interface details input by the user to add the vlan to
+         state: present # tells ansible to add the vlan to the interface if not already present
         
-     - name: Verify VLAN & Interface configuration.
-       ios_command:
-         commands: 
-           - show vlan id {{ vlan }} 
-           - show run int {{ vlan_interface }}     
+     - name: save running to startup when modified
+       cisco.ios.ios_config:
+         save_when: modified # saving the configuration once tasks are completed
 
-       register: int
-     - debug: var=int.stdout_lines  
+     - name: Verify VLAN & Interface configuration.
+       cisco.ios.ios_command:
+         commands: 
+           - show vlan id {{ vlan }} # using show vlan id command to verify vlan was created
+           - show run int {{ vlan_interface }} # using show run interface (interface input) to verify vlan added   
+
+       register: int # registering the output of the commands as int
+     - debug: var=int.stdout_lines  # telling ansible to use int output and display on screen
+...
