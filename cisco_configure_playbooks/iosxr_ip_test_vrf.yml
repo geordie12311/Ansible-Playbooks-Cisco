@@ -1,10 +1,10 @@
 ---
 - hosts: iosxr01
-  name: Configure iosxr device
+  name: Test IP reachablity over specified VRF
   gather_facts: false
   connection: network_cli
 
-vars_prompt:
+  vars_prompt:
     - name: "username1"
       prompt: "Enter your username" # prompting user to input username, will be used to login
       private: no
@@ -30,4 +30,5 @@ vars_prompt:
       vrf: "{{ vrf }}"
       afi: ipv4
       count: 10
-...
+    register: ip_test
+  - debug: var=ip_test.stdout_lines  # telling ansible to use ip_test results and output and display on screen
