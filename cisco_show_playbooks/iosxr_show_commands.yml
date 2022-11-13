@@ -1,0 +1,26 @@
+---
+- hosts: iosxr01
+  name: Test IP reachablity over specified VRF
+  gather_facts: false
+  connection: network_cli
+
+  vars_prompt:
+    - name: "username1"
+      prompt: "Enter your username" # prompting user to input username, will be used to login
+      private: no
+    - name: "password1"
+          prompt: Enter you password # prompting user to input password, will be used to login
+      private: yes # Note: private set to yes means details will not be displayed on screen
+
+  vars:
+    ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
+
+  tasks:
+  - name: run multiple commands
+    cisco.iosxr.iosxr_command:
+      commands:
+      - show version
+      - show interfaces
+      - {command: example command that prompts, prompt: expected prompt, answer: yes}
+...
