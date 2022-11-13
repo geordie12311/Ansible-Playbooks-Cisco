@@ -1,0 +1,33 @@
+# Ansible playbook to test ip reachablity over a specified VRF
+
+---
+    - hosts: R1
+      name: test IP reachablity over specified VRF
+      gather_facts: false
+      connection: network_cli
+vars_prompt:
+    - name: "username1"
+      prompt: "Enter your username" # prompting user to input username, will be used to login
+      private: no
+    - name: "password1"
+          prompt: Enter you password # prompting user to input password, will be used to login
+      private: yes # Note: private set to yes means details will not be displayed on screen
+
+    - name: "VRF"
+      prompt: "Enter the VRF name" # promting user to add the VRF name, will be used later in the playbook
+      private: no # Note: private set to no means details will be displayed on screen
+    - name: "IP"
+      prompt: Enter destination IP address to test # prompting user to input the ip address, will be used later in the playbook
+      private: no
+
+  vars:
+    ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
+
+  tasks:
+  - name: Test reachability to 198.51.100.252 using prod vrf
+    cisco.ios.ios_ping:
+      dest: "{{ IP}}" # using the ip address input by user for ping test
+      vrf: " {{ VRF }}" # using vrf name input by user to test if the IP address is reachable over the VRF
+      afi: ip
+...
