@@ -10,10 +10,12 @@
   vars_prompt:
     - name: "username1"
       prompt: "Enter your username"
+      private: no
     - name: "password1"
       prompt: Enter you password
       private: yes
-# Above vars_prompt section is going to prompt the user to enter their credentials
+# Above vars_prompt section is going to prompt the user to enter their credentials. Note
+# private is set to yes for password so won't display on the screen
 
   vars:
     ansible_user: "{{ username1 }}"
