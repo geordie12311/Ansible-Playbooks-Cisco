@@ -34,6 +34,14 @@ SB-SW-01
 SB-SW-02
 SB-SW-03
 SB-SW-04
+vIOS1
+vIOS2
+vIOS3
+vIOS4
+vIOS5
+vIOS6
+vIOS7
+vIOS8
 
 [cisco_ios]
 R1
@@ -132,6 +140,16 @@ OP-SW-01
 OP-SW-02
 OP-SW-03
 OP-SW-04
+
+[vIOS]
+vIOS1
+vIOS2
+vIOS3
+vIOS4
+vIOS5
+vIOS6
+vIOS7
+vIOS8
 
 [USA]
 vyos-1
