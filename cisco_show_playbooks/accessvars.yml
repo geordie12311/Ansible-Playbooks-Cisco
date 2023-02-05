@@ -1,7 +1,7 @@
 ---
 
 - name: "Printing Host Variables"
-  hosts: North_Switches
+  hosts: Selby, Opus
   gather_facts: false
 
   tasks:

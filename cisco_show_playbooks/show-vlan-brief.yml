@@ -2,8 +2,9 @@
 ---
 
 - name: Show trunk interfaces
-  hosts: NN-SW-03
+  hosts: SB-SW-01
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show the trunk interfaces on the switch 

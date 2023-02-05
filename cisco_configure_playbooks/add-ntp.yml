@@ -14,7 +14,7 @@
 
     - name: Show NTP configuration
       cisco.ios.ios_command:
-        commands: "show run | section ntp server"
+        - "show run | section ntp server"
       register: ntp_result
     - debug: var=ntp_result.stdout_lines
 ...

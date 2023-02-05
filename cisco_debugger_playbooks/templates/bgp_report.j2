@@ -1,0 +1,11 @@
+Hostname: {{ inventory_hostname }}
+-----------------
+{% for neighbor, details in bgp["ansible_facts"]["napalm_bgp_neighbors"]["global"]["peers"].items() %}
+Neighbor:           {{ neighbor }}
+Enabled:            {{ details["is_enabled"] }}
+Neighbor_UP:        {{ details["is_up"] }}
+Accepted Prefixes:  {{ details['address_family']['ipv4 unicast']['accepted_prefixes'] }}
+Received Prefixes:  {{ details['address_family']['ipv4 unicast']['received_prefixes'] }}
+Sent Prefixes:      {{ details['address_family']['ipv4 unicast']['sent_prefixes'] }}
+
+{% endfor %}

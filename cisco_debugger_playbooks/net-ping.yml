@@ -1,0 +1,12 @@
+#Ansible playbook to test reachability of end devices in inventory
+
+---
+- hosts: all
+  
+  tasks:
+      - name: Ensure the end devices are reachable
+        net_ping:
+            dest: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+
+
+...

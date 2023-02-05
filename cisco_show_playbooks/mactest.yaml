@@ -1,0 +1,50 @@
+---
+
+- name: Cisco ios Find Mac
+  hosts: SB-SW-01, SB-SW-02, SB-SW-03, SB-SW-04
+  gather_facts: false
+  connection: network_cli
+  vars_prompt:
+  - name: user_mac
+    prompt: Enter MAC
+    private: no
+
+
+
+  tasks:
+    - name: show_mac
+      ios_command:
+        commands: 
+          - "show mac add | i {{ user_mac }}"
+      register: sh_vlan_res
+    - debug: var=sh_vlan_res.stdout
+
+
+    # This is true 
+    - set_fact:
+        vlan_int: "{{ sh_vlan_res.stdout[0].split()[0] }}"
+
+
+
+    - name: print variable
+      debug:
+        var: vlan_int
+
+
+    - name: show run int of MAC address
+      ios_command:
+        commands: 
+          - "show run int vlan {{ vlan_int }}"
+      register: output
+
+    - name: print output
+      debug:
+        var: output.stdout_lines
+
+    # Sets the MAC address as a fact
+    - set_fact:
+        mac_addr: "{{ sh_mac_res.stdout[0].split()[3] }}"
+
+    - name: PRINT MAC
+      debug:
+        var: mac_addr

@@ -1,0 +1,4 @@
+ansible_user: "cisco"
+ansible_password: "cisco123"
+ansible_network_os: "ios"
+ansible_python_interpreter: "/usr/bin/python3"

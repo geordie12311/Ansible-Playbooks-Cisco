@@ -1,0 +1,43 @@
+---
+- name: NAPALM get_facts and get_interfaces
+  hosts: vIOS1
+  gather_facts: False
+  connection: network_cli
+  
+  tasks:
+  - name: "TASK:1 - 'SHOW IP BGP SUMMARY'"
+    ios_command:
+      commands: "show ip bgp summary"
+    register: "output_ios"
+  - name: "TASK:2 - PRINT BGP OUTPUT"
+    debug:
+      msg: "{{ output_ios.stdout[0] }}"
+
+  - name: TASK:3 - GET BGP FACTS 
+    napalm_get_facts:
+      filter:
+      - "bgp_neighbors"
+    register: "bgp"
+  - debug: var=bgp
+
+  - name: TASK:4 - GENERATE BGP REPORT
+    template:
+      src: "./templates/bgp_report.j2"
+      dest: "./build/{{ inventory_hostname }}.txt"
+
+  - name: TASK:3 - ASSEMBLE REPORTING FROM HOST DETAILS
+    assemble:
+      src: "./build"
+      dest: "./reports/report.txt"
+  - name: TASK:4 - PING BGP NEIGHBORS THAT ARE DOWN
+    napalm_ping:
+      destination: "{{ item['key'] }}"
+    with_dict: "{{ bgp['ansible_facts']['napalm_bgp_neighbors']['global']['peers'] }}"
+    when: "not item['value']['is_up']"
+    register: "neighbor_down"
+
+  - name: "TASK:5 - PRINT PING RESULTS FOR DOWN NEIGHBORS"
+    debug:
+      msg: "{{ item['ping_results'] }}"
+    loop: "{{ neighbor_down['results'] }}"
+    when: "item['ping_results'] is defined"

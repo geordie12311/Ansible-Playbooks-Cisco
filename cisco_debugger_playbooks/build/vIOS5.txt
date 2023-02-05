@@ -1,0 +1,51 @@
+Hostname: vIOS5
+-----------------
+Neighbor:           10.10.15.1
+Enabled:            True
+Neighbor_UP:        True
+Accepted Prefixes:  4
+Received Prefixes:  4
+Sent Prefixes:      4
+
+Neighbor:           10.10.16.2
+Enabled:            True
+Neighbor_UP:        True
+Accepted Prefixes:  4
+Received Prefixes:  4
+Sent Prefixes:      4
+
+Neighbor:           10.10.25.1
+Enabled:            True
+Neighbor_UP:        True
+Accepted Prefixes:  4
+Received Prefixes:  4
+Sent Prefixes:      4
+
+Neighbor:           10.10.27.2
+Enabled:            True
+Neighbor_UP:        True
+Accepted Prefixes:  4
+Received Prefixes:  4
+Sent Prefixes:      4
+
+Neighbor:           10.10.36.1
+Enabled:            True
+Neighbor_UP:        False
+Accepted Prefixes:  -1
+Received Prefixes:  -1
+Sent Prefixes:      -1
+
+Neighbor:           10.10.38.2
+Enabled:            True
+Neighbor_UP:        False
+Accepted Prefixes:  -1
+Received Prefixes:  -1
+Sent Prefixes:      -1
+
+Neighbor:           10.10.47.1
+Enabled:            True
+Neighbor_UP:        False
+Accepted Prefixes:  -1
+Received Prefixes:  -1
+Sent Prefixes:      -1
+
