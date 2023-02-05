@@ -1,0 +1,25 @@
+
+---
+- name: Show IP interface information
+  hosts: OP-SW-03
+  connection: network_cli
+
+  tasks:
+  - name: Configure ip helpers on multiple interfaces
+    cisco.ios.ios_config:
+      lines:
+      - ip helper-address 172.26.1.10
+      - ip helper-address 172.26.3.8
+      parents: '{{ item }}'
+    with_items:
+    - interface Ethernet0/2
+    - interface Ethernet0/3
+
+  - name: Show helper-address configured on the interfaces
+    cisco.ios.ios_command:
+          commands:
+          - "Show run interface eth 0/2"
+          - "show run interface eth 0/3"
+    register: print_output
+  - debug: var=print_output.stdout_lines
+...
