@@ -1,6 +1,6 @@
 ---
 - name: "PLAY 1: DEMO OF TEXTFSM"
-  hosts: NN-SW-01
+  hosts: SB-SW-01
   connection: network_cli
   gather_facts: no
   tasks:

@@ -1,10 +1,10 @@
 # Ansible playbook to show ip route on cisco ios devices and print the output to screen
-
 ---
 
 - name: Get IP routes
-  hosts: North_Switches
+  hosts: Selby
   gather_facts: false
+  connection: network_cli
   
   tasks:
     - name: show IP route on devices

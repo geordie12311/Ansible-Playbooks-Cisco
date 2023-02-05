@@ -2,8 +2,9 @@
 ---
 
 - name: Show OSPF learnt routes
-  hosts: Core1
+  hosts: Opus, Selby
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show OSPF routes in the routing table 

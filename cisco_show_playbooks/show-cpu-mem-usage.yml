@@ -2,8 +2,9 @@
 ---
 
 - name: Show CPU and Memory usage
-  hosts: NN-SW-01
+  hosts: OP-SW-03
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show CPU and Memory usage by highest percentage order 

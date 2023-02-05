@@ -2,13 +2,14 @@
 ---
 
 - name: Show IP interface information
-  hosts: North_Switches
+  hosts: Opus
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show IP Interface Brief 
     cisco.ios.ios_command:
       commands:
-      - command: "Show ip int bri"
+      - command: "Show ip int brief"
     register: print_output
   - debug: var=print_output.stdout_lines

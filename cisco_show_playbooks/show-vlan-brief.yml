@@ -1,15 +1,15 @@
-# Ansible Playbook to show trunk interface information on cisco switch(es) 
+# Ansible Playbook to show vlan information on cisco switch(es) 
 ---
 
-- name: Show trunk interfaces
-  hosts: SB-SW-01
+- name: Show VLAN details
+  hosts: Opus
   gather_facts: false
   connection: network_cli
   
   tasks:
-  - name: Show the trunk interfaces on the switch 
+  - name: Show brief summary of VLANs on the device(s) 
     cisco.ios.ios_command:
       commands:
-      - command: "Show interface trunk"
+      - command: "Show vlan brief"
     register: print_output
   - debug: var=print_output.stdout_lines

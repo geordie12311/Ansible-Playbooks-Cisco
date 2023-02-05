@@ -1,6 +1,6 @@
 ---
 - name: "Looping through IP interface info"
-  hosts: North_Switches
+  hosts: SB-SW-02
   gather_facts: true
   connection: network_cli
 

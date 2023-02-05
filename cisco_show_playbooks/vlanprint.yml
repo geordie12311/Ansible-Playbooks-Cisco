@@ -1,7 +1,7 @@
 ---
 
 - name: "Print out VLAN information"
-  hosts: can-sw1
+  hosts: SB-SW-01
   connection: network_cli
 
   tasks:

@@ -1,0 +1,18 @@
+# Ansible Playbook to clear counters on specified interface on cisco device 
+---
+
+- name: Clear Counters
+  hosts: SB-SW-03
+  gather_facts: false
+  connection: network_cli
+  
+  tasks:
+  - name: Clear the counters on Ethernet 0/2 
+    cisco.ios.ios_command:
+      commands:
+      - command: "clear counters Ethernet 0/2"
+        prompt: 'show interface" counters on this interface \[confirm\]'
+        answer: "\r"
+    register: print_output
+  - debug: var=print_output.stdout_lines
+...

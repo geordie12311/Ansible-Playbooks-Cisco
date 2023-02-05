@@ -2,7 +2,7 @@
 ---
 
 - name: Show OSPF neighbors
-  hosts: SB-SW-01, SB-SW-02, SB-SW-03, SB-SW-04
+  hosts: Selby, Opus
   gather_facts: false
   connection: network_cli
   

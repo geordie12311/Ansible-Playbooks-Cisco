@@ -1,0 +1,14 @@
+---
+
+- name: Show IP interface information
+  hosts: Opus
+  gather_facts: false
+  connection: network_cli
+  
+  tasks:
+  - name: Run show version and check to see if output contains IOS
+    cisco.ios.ios_command:
+      commands: show version
+      wait_for: result[0] contains IOS
+    register: print_output
+  - debug: var=print_output.stdout_lines

@@ -3,7 +3,7 @@
 --- 
 
 - name: gather information from ios devices
-  hosts: OP-SW-01
+  hosts: Selby, Opus
   gather_facts: true
   connection: network_cli
 
