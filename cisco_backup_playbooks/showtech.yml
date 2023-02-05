@@ -1,0 +1,24 @@
+#Ansible playbook to Gather running Config and show tech files
+---
+- hosts: SB-SW-01
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+  - name: Gather Show Tech and running-config files
+    ios_command:
+      commands:
+        - show running-config
+        - show tech-support 
+    register: cisco_config
+
+  - name: Save the running config file
+    copy:
+      content: "{{ cisco_config.stdout[0] }}"
+      dest: "~/{{ inventory_hostname }}_backup.txt"
+
+  - name: Save the show tech support file
+    copy:
+      content: "{{ cisco_config.stdout[1] }}"
+      dest: "~/{{ inventory_hostname }}_show_tech.txt"
+...
