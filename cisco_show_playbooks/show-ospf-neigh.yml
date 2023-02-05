@@ -2,8 +2,9 @@
 ---
 
 - name: Show OSPF neighbors
-  hosts: North_Switches
+  hosts: SB-SW-01, SB-SW-02, SB-SW-03, SB-SW-04
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show status of the OSPF neighbors 

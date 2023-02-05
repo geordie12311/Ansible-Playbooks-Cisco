@@ -2,11 +2,12 @@
 ---
 
 - name: Show CDP neighbors
-  hosts: South_Switches
+  hosts: Selby, Opus
   gather_facts: false
+  connection: network_cli
   
   tasks:
-  - name: Show CDP neighbors 
+  - name: Show CDP neighbors
     cisco.ios.ios_command:
       commands:
       - command: "Show cdp neighbor"

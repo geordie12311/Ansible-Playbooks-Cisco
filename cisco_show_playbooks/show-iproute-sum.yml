@@ -2,8 +2,9 @@
 ---
 
 - name: Show summarised IP routing table
-  hosts: Core1
+  hosts: SB-SW-01
   gather_facts: false
+  connection: network_cli
   
   tasks:
   - name: Show IP routing table summary 
