@@ -1,6 +1,6 @@
 ---
 - name: Backup running Configs by IOS type
-  hosts: Core2
+  hosts: all
   gather_facts: false
   connection: network_cli
   
