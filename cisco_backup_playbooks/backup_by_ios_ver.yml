@@ -1,23 +1,31 @@
 ---
-#Ansible Playbook to backup Cisco devices based on IOS version
-
-- hosts: all
+- name: Backup running Configs by IOS type
+  hosts: Core2
   gather_facts: false
+  connection: network_cli
   
-   tasks:
+  tasks:
     - name: Backup running-config from IOSXE devices
+      ios_config:
+        backup: yes
+        backup_options:
+          dir_path: backup_configs/IOSXE_configs/{{ inventory_hostname}}/
+          filename: initial_running_config.cfg
       when: ansible_network_os == "cisco.ios.ios"
-      cisco.ios.ios.config:
-        backup: yes
-        backup_options:
-          dir_path: "backup_configs/IOSXE_configs/{{ inventory_hostname}}/"
-          filename: "initial_running_config.cfg"
 
-    - name: Backup running-config from NXOS devices
-      when: ansible_network_os == "cisco.nxos.nxos"
-      cisco.ios.ios.config:
+    - name: Backup running-config from NOSX devices
+      nxos_config:
         backup: yes
         backup_options:
-          dir_path: "backup_configs/NXOS_configs/{{ inventory_hostname}}/"
-          filename: "initial_running_config.cfg"         
+          dir_path: backup_configs/NXOS_configs/{{ inventory_hostname}}/
+          filename: initial_running_config.cfg
+      when: ansible_network_os == "cisco.ios.ios"
+
+#  - name: Backup running-config from NXOS devices
+#    when: ansible_network_os == "cisco.nxos.nxos"
+#    cisco.ios.ios.config:
+#      backup: yes
+#      backup_options:
+#        dir_path: "backup_configs/NXOS_configs/{{ inventory_hostname}}/"
+#        filename: "initial_running_config.cfg"         
 ...
