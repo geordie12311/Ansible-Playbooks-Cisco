@@ -5,6 +5,10 @@ R3
 R4
 SW1
 SW2
+Core1
+Core2
+Access1
+Access2
 PA-FW-01
 CHECK-FW-01
 vyos-1
@@ -60,6 +64,8 @@ SS-SW-03
 SS-SW-04
 can-sw1
 can-sw2
+
+
 
 [cisco_iosxe]
 CSR-1
