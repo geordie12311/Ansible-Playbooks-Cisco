@@ -18,3 +18,5 @@
     - name: print response
       debug:
         msg: "{{ diff_results }}"
+# If there is any differences between the files it will display them on screen
+...
