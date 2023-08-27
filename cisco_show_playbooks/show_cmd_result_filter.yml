@@ -1,0 +1,21 @@
+---
+# Ansible script to send commands to IOS device(s) and to register results based on output
+
+- hosts: Core1
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: test ios_command module
+      ios_command:
+        commands: 
+          - show version
+          - show ip int brief
+        wait_for: 
+          - result[0] contains Configuration register
+          - result[1] contains Ethernet
+      register: response
+
+    - name: "Print result"
+      debug:
+        var: response
