@@ -1,0 +1,128 @@
+---
+# Ansible Playbook to upgrade C9300 devices. Playbook also creates a backup folder
+# and copies the current configuration
+
+- name: Firmware upgrade C9200 switches
+  hosts: ios_switches
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+   - name: Get ansible date/time facts
+     setup:
+       filter: "ansible_date_time"
+       gather_subset: "!all"
+
+   - name: Store DTG as fact
+     set_fact:
+       DTG: "{{ ansible_date_time.date }}"
+
+   - name: Create Directory {{hostvars.localhost.DTG}}
+     file:
+      path: ./backup_configs/{{hostvars.localhost.DTG}}
+      state: directory
+  run_once: true
+
+# Now we backup the running configuration on the host(s)
+
+- hosts: Access1
+
+  tasks:
+   - name: Backup Running Config
+     ios_command:
+       commands: show run
+     register: config
+
+   - name: Save output to ./backup_configs/
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "./backup_configs/{{hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}-config.txt"
+
+
+# Now we check the firmware version
+
+- name: upgrade firmware cisco ios
+  hosts: Access1
+
+  vars_files:
+  - ./cisco_upgrade_playbooks/ios_upgrades.yml
+
+
+#Now we check the current version against target version
+  tasks:
+    - name: CHECK CURRENT VERSION
+      ios_facts:
+
+    - debug:
+        msg:
+        - "Current version is {{ ansible_net_version }}"
+        - "Upgrade image is {{ ios_9200_version }}"
+
+    - debug:
+        msg:
+        - "Firmware will be upgraded to the latest version"
+
+      when: ansible_net_version != ios_9200_version
+
+    - name: END PLAY FOR HOST
+
+      meta: end_host
+
+      when: ansible_net_version == ios_9200_version
+
+# Now we install and remove inactive
+
+    - name: Running the software clean command
+      ios_command:
+        commands:
+          - command: 'install remove inactive'
+            prompt: 'Do you want to remove the above files?'
+            answer: 'y'
+      vars:
+        ansible_command_timeout: 360
+
+# Next we copy firmware to switch 
+    - name: enable scp
+      ios_config:
+        commands:
+          - "ip scp server enable"
+        save_when: never
+    - name: Copying bin file. This may take a while...
+      net_put:
+        src: "./cisco_upgrade_playbooks/firmware/{{ios_9200_file}}"
+        dest: "flash:{{ios_9200_file}}"
+      vars:
+        ansible_command_timeout: 7200
+
+# Next we change boot 
+
+    - name: Change Boot Variable to new image
+      ios_config:
+        commands:
+          - "boot system flash:{{ios_9200_file}}"
+        save_when: always
+      vars:
+        ansible_command_timeout: 360
+
+# Now we save with new boot variable
+
+    - name: Save running config
+      ios_config:
+        save_when: always
+      vars:
+        ansible_command_timeout: 360
+
+
+
+# Finally we reload the switch
+    - name: Reload the Device 
+      cli_command: 
+        command: reload
+        prompt: 
+          - confirm
+        answer: 
+          - 'y'
+    - debug: 
+        msg: 
+        - "Switch upgrade successfull and the switch is reloading. You can close this window."
+...
