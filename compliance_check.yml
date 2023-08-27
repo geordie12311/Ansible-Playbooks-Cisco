@@ -1,0 +1,20 @@
+---
+# Ansible Playbook to compare running configuration against a master version held in master_configs folder
+- name: Compliance Check running config against master version
+  hosts: Core1
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: compare running configuration against master (reference file)
+      ios_config:
+        diff_against: intended
+        intended_config: "{{ lookup('file', './master_configs/{{inventory_hostname}}.master.cfg') }}"
+        match: line
+      diff: true
+      register: diff_results
+      changed_when: false
+
+    - name: print response
+      debug:
+        msg: "{{ diff_results }}"

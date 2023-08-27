@@ -9,7 +9,7 @@
       ios_config:
         backup: yes
         backup_options:
-          dir_path: backup_configs/IOSXE_configs/{{ inventory_hostname}}/
+          dir_path: backup_configs/IOSXE_configs/{{ inventory_hostname }}/
           filename: initial_running_config.cfg
       when: ansible_network_os == "cisco.ios.ios"
 
