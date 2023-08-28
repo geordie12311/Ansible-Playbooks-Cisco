@@ -1,0 +1,5 @@
+---
+
+ansible_user: cisco
+ansible_password: Cisco12345@
+

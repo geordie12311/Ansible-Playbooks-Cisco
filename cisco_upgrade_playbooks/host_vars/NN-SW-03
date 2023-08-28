@@ -1,0 +1,57 @@
+---
+syslog:
+    hosts:
+      - ip: 140.140.1.5
+  
+vlans:
+  vlan:
+    - number: 10
+      name: "HR_VLAN"
+      svi: "10.10.10.1 255.255.255.0"
+    - number: 20
+      name: "Finance_VLAN"
+      svi: "10.10.15.1 255.255.255.0"
+    - number: 30
+      name: "VOICE_VLAN" 
+      svi: "10.10.20.1 255.255.255.0"
+    - number: 50
+      svi: "50.50.50.1 255.255.255.0"
+      name: "Native_VLAN"
+    - number: 666
+      name: "Blackhole"
+      svi: "66.66.66.1 255.255.255.252"
+  interfaces:
+    - interface: "gi0/1"
+      mode: trunk
+      allowed: 10,20,40,50
+      native: 50
+    - interface: "gi0/2"
+      mode: trunk
+      allowed: 10,20,40,50
+      native: 50
+    - interface: "gi0/3"
+      mode: access
+      access:
+      voice: 40
+      vlan: 10
+    - interface: "gi1/0"
+      mode: access
+      voice: 40
+      vlan: 20
+    - interface: "gi1/1"
+      mode: access
+      voice: 40
+      vlan: 666
+    - interface: "gi1/2"
+      mode: access
+      voice: 40
+      vlan: 666
+    - interface: "gi1/3"
+      mode: access
+      voice: 40
+      vlan: 666
+
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4

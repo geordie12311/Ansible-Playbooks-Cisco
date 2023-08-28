@@ -1,0 +1,6 @@
+---
+
+ansible_user: cisco
+ansible_password: cisco1
+ansible_network_os: ios
+ntp: 8.8.8.8

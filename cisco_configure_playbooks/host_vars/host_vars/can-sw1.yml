@@ -1,0 +1,36 @@
+---
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
+vlans:
+  interfaces:
+    - interface: "gi0/1"
+      mode: trunk
+    - interface: "gi1/1"
+      mode: access
+      vlan: 5
+    - interface: "gi1/2"
+      mode: access
+      vlan: 5
+    - interface: "gi0/3"
+      mode: access
+      vlan: 10
+    - interface: "gi1/3"
+      mode: access
+      vlan: 10
+  
+  vlan:
+    - number: 5
+      name: "HR"
+      svi: "10.10.5.1 255.255.255.0"
+
+    - number: 10
+      name: "SALES"
+      svi: "10.10.10.1 255.255.255.0"
+
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4

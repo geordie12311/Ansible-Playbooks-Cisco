@@ -1,0 +1,6 @@
+---
+ansible_network_os: "cisco.ios.ios"
+napalm_platform: "ios"
+ansible_user: cisco
+ansible_password: cisco1
+ntp: 4.4.4.4

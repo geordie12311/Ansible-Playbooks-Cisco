@@ -1,0 +1,20 @@
+---
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
+ospf:
+  rid: "5.5.5.5"
+  networks:
+    - network: 14.14.0.0/16
+      area: 1
+    - network: 12.12.12.0/24
+      area: 0
+
+bgp:
+  asn: "5"
+  rid: "5.5.5.5"
+  neighbors:
+    - "14.14.3.2"
+    - "14.14.1.2"
