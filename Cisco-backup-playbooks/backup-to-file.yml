@@ -1,0 +1,18 @@
+# Playbook to Backup Cisco Configs and save to file
+---
+- hosts: all
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+   - name: Show Run on Device
+     ios_command:
+       commands:
+         - show run
+     register: config
+
+   - name: Save output to /backups
+     copy:
+       content: "{{config.stdout[0]}}"
+       dest: "./backups/{{inventory_hostname}}-backup.txt"
+...
