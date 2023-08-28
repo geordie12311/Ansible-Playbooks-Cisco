@@ -1,3 +1,0 @@
-ansible_user: "vyos"
-ansible_password: "vyos"
-ansible_network_os: "vyos.vyos.vyos"

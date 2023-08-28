@@ -1,4 +1,0 @@
-ansible_network_os: "cisco.asa.asa"
-ansible_user: "cisco"
-ansible_password: "cisco123"
-napalm_platform: "ios"
