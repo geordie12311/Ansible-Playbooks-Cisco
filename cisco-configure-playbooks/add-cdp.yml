@@ -1,16 +1,18 @@
 # Ansible playbook to Enable CDP
-
 ---
-- name: "Enabling CDP to devices"
+- name: Enabling CDP to devices
   hosts: SB-SW-01, SB-SW-02, SB-SW-03, SB-SW-04
   gather_facts: false
   connection: network_cli
 
   tasks:
-  - name: "Configuring CDP"
-    cisco.ios.ios_config:
-      commands:
-      - "cdp run"
-    register: print_output
-  - debug: var=print_output.stdout_lines
+    - name: Configuring CDP
+      cisco.ios.ios_config:
+        commands:
+          - "cdp run"
+      register: print_output
+
+    - name: Output the playbook output to screen
+      ansible.builtin.debug:
+        var: print_output.stdout_lines
 ...
