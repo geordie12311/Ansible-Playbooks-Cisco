@@ -15,9 +15,9 @@
     - name: Configure MOTD Banner
       cisco.ios.ios_config:
         lines: banner motd &Unauthorised users will be shot!&
-      register: print_ouptput
+      register: print_output
 
     - name: Output the text added to screen
       ansible.builtin.debug:
-        var: print_ouptput
+        var: print_output
 ...
