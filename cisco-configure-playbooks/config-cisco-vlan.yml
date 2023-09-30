@@ -1,11 +1,12 @@
+# Playbook using Ansible VLANs module to configure VLAN on Cisco Switches
 ---
-#Playbook using Ansible VLANs module to configure VLAN on Cisco Switches
-- name: "VLAN Playbook using Ansible vlans module"
+- name: VLAN Playbook using Ansible vlans module
   hosts: Canada
   connection: network_cli
+  gather_facts: false
 
   tasks:
-    - name: "Configure Cisco VLAN"
+    - name: Configure Cisco VLAN
       cisco.ios.ios_vlans:
         config:
           - name: HR_VLAN
@@ -25,7 +26,7 @@
         state: overridden
       register: cisco_vlan_output
 
-    - name: "Print Cisco vlan config"
-      debug:
+    - name: Print Cisco vlan config
+      ansible.builtin.debug:
         msg: "{{ cisco_vlan_output }}"
 ...

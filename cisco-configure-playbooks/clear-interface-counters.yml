@@ -1,16 +1,18 @@
 # Ansible Playbook to clear counters on a given cisco device interface
 ---
-
 - name: Clear interface counters on specific interface
   hosts: NN-SW-01
   gather_facts: false
-  
   tasks:
-  - name: Clear counters on a interface
-    cisco.ios.ios_command:
-      commands:
-      - command: clear counters GigabitEthernet0/1
-        prompt: '[confirm]'
-        answer: "\r"
-    register: print_output
-  - debug: var=print_output.stdout_lines
+    - name: Clear counters on a interface
+      cisco.ios.ios_command:
+        commands:
+          - command: clear counters GigabitEthernet0/1
+            prompt: '[confirm]'
+            answer: "\r"
+      register: print_output
+
+    - name: Output the playbook output to screen
+      ansible.builtin.debug:
+        var: print_output.stdout_lines
+...

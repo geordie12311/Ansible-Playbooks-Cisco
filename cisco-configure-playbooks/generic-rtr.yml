@@ -1,23 +1,23 @@
 # Ansible playbook to set some basic global settings to cisco IOS routers
-
 ---
 - name: Generic Router configuration
   hosts: routers
   gather_facts: false
-  connection: local
-
-  vars: 
-    timeout: 200
+  connection: network_cli
+  vars:
+    ansible_command_timeout: 200
 
   tasks:
     - name: Generic config settings
-      ios_config:
-        provider: "{{ cli }}"
+      cisco.ios.ios_config:
         lines:
           - no ip http server
           - no ip http secure-server
           - banner motd &******THIS IS A LAB ROUTER - DO NOT MAKE CHANGES OR YOU WILL BE SHOT! ******&
 
       register: print_output
-    - debug: var=print_output
+
+    - name: Output the playbook output to screen
+      ansible.builtin.debug:
+        var: print_output.stdout_lines
 ...
