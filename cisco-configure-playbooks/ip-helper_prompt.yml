@@ -1,15 +1,17 @@
+# Ansible Playbook to configure IP Helper on multiple interfaces
 ---
-- hosts: R1
-  gather_facts: no
+- name: Configure IP Helper on multiple interfaces
+  hosts: R1
+  gather_facts: false
   connection: network_cli
 
   vars_prompt:
     - name: "username1"
       prompt: "Enter your username" # prompting user to input username, will be used to login
-      private: no
+      private: false
     - name: "password1"
       prompt: Enter you password # prompting user to input password, will be used to login
-      private: yes # Note: private set to yes means details will not be displayed on screen
+      private: true # Note: private set to true means details will not be displayed on screen
 
   vars:
     ansible_user: "{{ username1 }}"
@@ -17,21 +19,24 @@
 # vars is using then using the username / password entered by the user to connect to the host(s)
 
   tasks:
-  - name: Configure ip helpers on multiple interfaces
-    cisco.ios.ios_config:
-      lines:
-      - ip helper-address 172.26.1.10
-      - ip helper-address 172.26.3.8
-      parents: '{{ item }}'
-    with_items:
-    - interface Ethernet 0/1
-    - interface Ethernet 0/2
-    - interface Ethernet 0/3
+    - name: Configure ip helpers on multiple interfaces
+      cisco.ios.ios_config:
+        lines:
+          - ip helper-address 172.26.1.10
+          - ip helper-address 172.26.3.8
+        parents: '{{ item }}'
+      with_items:
+        - interface Ethernet 0/1
+        - interface Ethernet 0/2
+        - interface Ethernet 0/3
 
-  - name: Verify IP Helper Interface configuration.
-    cisco.ios.ios_command:
-      commands: 
-      - show run | section ip helper-address # using command to show if ip helper configuration created
-    register: int # registering the output of the commands as int
-  - debug: var=int.stdout_lines  # telling ansible to use int output and display on screen
+    - name: Verify IP Helper Interface configuration.
+      cisco.ios.ios_command:
+        commands:
+          - show run | section ip helper-address # using command to show if ip helper configuration created
+      register: int # registering the output of the commands as int
+
+    - name: Display output to screen
+      ansible.builtin.debug:
+        var: int.stdout_lines # telling ansible to use int output and display on screen
 ...

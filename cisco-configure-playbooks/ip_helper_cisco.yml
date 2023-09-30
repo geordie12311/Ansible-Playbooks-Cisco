@@ -1,12 +1,12 @@
+# Ansible playbook to add IP Helper address to multiple interfaces on cisco devices
 ---
-#Ansible playbook to add IP Helper address to multiple interfaces on cisco devices
 - name: Add IP Helper Address to mulitple interfaces / hosts
   hosts: ios_switches
   connection: network_cli
 
   tasks:
-    - name: configure dhcp server with loop fucntion
-      ios_config:
+    - name: Configure dhcp server with loop fucntion
+      cisco.ios.ios_config:
         lines:
           - ip helper-address 172.26.1.10
           - ip helper-address 172.26.3.8

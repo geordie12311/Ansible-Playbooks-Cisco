@@ -1,134 +1,114 @@
+# Ansible playbook to updgrade firmware on IOS devices
 ---
-    - name: IOS upgrade Playbook
-      hosts: all
-      gather_facts: false
-      connection: network_cli
-    
+- name: IOS upgrade Playbook
+  hosts: switches
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    models:
+      "WS-C2960XR-48FPD-I":
+        ios_version: "15.2(7)E0a"
+        ios_path: "IOS/"
+        ios_archive: "c2960x-universalk9-tar.152-7.E0a.tar"
+        ios_binary: "c2960x-universalk9-mz.15.2-7.E0a.bin"
+        ios_md5: "07195a8c7866ac2a91c64b716465c516"
+        ios_size_kb: 37489
+    server: "1.1.1.1"
+    protocol: "http"
+
+  tasks:
+    - name: Gather all legacy facts
+      cisco.ios.ios_facts:
+        gather_subset: hardware
+      tags:
+        - facts
+
+    - name: Check Boot path
+      cisco.ios.ios_command:
+        commands: 'show boot | i BOOT'
+      register: bootvar
+      tags:
+        - bootvar
+
+    - name: Check if IOS is already present on the flash
+      cisco.ios.ios_command:
+        commands: 'show flash: | include {{ models[ansible_net_model]["ios_archive"] }}'
+      register: dir_flash
+      tags:
+        - flash
+
+    - name: Asset that there is enough flash space for upload
+      ansible.builtin.assert:
+        that:
+          - ansible_net_filesystems_info['flash:']['spacefree_kb'] > models[ansible_net_model]["ios_size_kb"]
+        msg: "There is not enough space left on the device's flash"
+      tags:
+        - flash
+
+    - name: Start Copy from Server
+      cisco.ios.ios_command:
+        commands:
+          - command: copy {{ protocol }}://{{ server }}/{{ models[ansible_net_model]["ios_path"] }}{{ models[ansible_net_model]["ios_archive"] }} flash:/
+            prompt: 'Destination filename \[{{ models[ansible_net_model]["ios_archive"] }}\]?'
+            answer: "\r"
       vars:
-        models:
-          "WS-C2960XR-48FPD-I":
-            ios_version: "15.2(7)E0a"
-            ios_path: "IOS/"
-            ios_archive: "c2960x-universalk9-tar.152-7.E0a.tar"
-            ios_binary: "c2960x-universalk9-mz.152-7.E0a.bin"
-            ios_md5: "07195a8c7866ac2a91c64b716465c516"
-            ios_size_kb: 37489
-        server: "1.1.1.1"
-        protocol: "http"
-    
-      tasks:
-        - name: Gather all legacy facts
-          ios_facts:
-            gather_subset: hardware
-          tags:
-            - facts
-    
-        - name: Check Boot path
-          ios_command:
-            commands: 'show boot | i BOOT'
-          register: bootvar
-          when:
-            - models[ansible_net_model] is defined
-          tags:
-            - bootvar
-    
-        - name: Upgarde when non-compliant
-          block:
-            - name: Check if IOS is already present on the flash
-              ios_command:
-                commands: 'show flash: | include {{ models[ansible_net_model]["ios_archive"] }}'
-              register: dir_flash
-              tags:
-                - flash
-    
-            - name: Asset that there is enough flash space for upload
-              assert:
-                that:
-                  - ansible_net_filesystems_info['flash:']['spacefree_kb'] > models[ansible_net_model]["ios_size_kb"]
-                msg: "There is not enough space left on the device's flash"
-              when:
-                - models[ansible_net_model]["ios_archive"] not in dir_flash.stdout[0]
-              tags:
-                - flash
-    
-            - name: Start Copy from Server
-              ios_command:
-                commands: 
-                  - command: copy {{ protocol }}://{{ server }}/{{ models[ansible_net_model]["ios_path"] }}{{ models[ansible_net_model]["ios_archive"] }} flash:/
-                    prompt: 'Destination filename \[{{ models[ansible_net_model]["ios_archive"] }}\]?'
-                    answer: "\r"
-              when: 
-                - ansible_net_filesystems_info['flash:']['spacefree_kb'] > models[ansible_net_model]["ios_size_kb"] 
-                - ansible_net_model != models[ansible_net_model]["ios_version"]
-                - models[ansible_net_model]["ios_archive"] not in dir_flash.stdout[0]
-              vars:
-                  ansible_command_timeout: 1800
-              tags:
-                - upload
-    
-            - name: Check if IOS is already present on the flash
-              ios_command:
-                commands: 'show flash: | include {{ models[ansible_net_model]["ios_archive"] }}'
-              register: dir_flash
-              tags:
-                - flash
-    
-            - name: Asset that IOS is present
-              assert:
-                that:
-                  - models[ansible_net_model]["ios_archive"] in dir_flash.stdout[0]
-              tags:
-                - flash
-    
-            - name: Check MD5 Hash
-              ios_command:
-                commands:
-                  - command: 'verify /md5 flash:{{ models[ansible_net_model]["ios_archive"] }}'
-              register: md5_result
-              vars:
-                ansible_command_timeout: 300
-              when:
-                - models[ansible_net_model]["ios_archive"] in dir_flash.stdout[0]
-              tags:
-                - md5
-    
-            - name: Asset that MD5Sums are identical
-              assert:
-                that:
-                  - models[ansible_net_model]["ios_md5"] in md5_result.stdout[0]
-                msg: "IOS File on device MD5Sum is not correct"
-              tags:
-                - md5
-    
-            - name: Changing the boot image to the new version
-              ios_command:
-                commands: archive download-sw flash:{{ models[ansible_net_model]["ios_archive"] }}
-              when: models[ansible_net_model]["ios_md5"] in md5_result.stdout[0]
-              vars:
-                  ansible_command_timeout: 3600
-              tags:
-                - boot
-          when: 
-            - models[ansible_net_model] is defined
-            - ansible_net_version != models[ansible_net_model]["ios_version"]
-            - models[ansible_net_model]["ios_binary"] not in bootvar.stdout[0]
-    
-        - name: Check Boot path
-          ios_command:
-            commands: 'show boot | i BOOT'
-          register: bootvar
-          when:
-            - models[ansible_net_model] is defined
-            - models[ansible_net_model]["ios_binary"] not in bootvar.stdout[0]
-          tags:
-            - bootvar
-    
-        - name: Asset that the boot path is set to the new IOS
-          assert:
-            that:
-              models[ansible_net_model]["ios_binary"] in bootvar.stdout[0]
-            msg: "Boot path is not set to the new image"
-          when:
-            - models[ansible_net_model] is defined
-          tags:
-            - bootvar
+        ansible_command_timeout: 1800
+      tags:
+        - upload
+
+    - name: Check if IOS is already present on the flash
+      cisco.ios.ios_command:
+        commands: 'show flash: | include {{ models[ansible_net_model]["ios_archive"] }}'
+      register: dir_flash
+      tags:
+        - flash
+
+    - name: Asset that IOS is present
+      ansible.builtin.assert:
+        that:
+          - models[ansible_net_model]["ios_archive"] in dir_flash.stdout[0]
+      tags:
+        - flash
+
+    - name: Check MD5 Hash
+      cisco.ios.ios_command:
+        commands:
+          - command: 'verify /md5 flash:{{ models[ansible_net_model]["ios_archive"] }}'
+      register: md5_result
+      vars:
+        ansible_command_timeout: 300
+      tags:
+        - md5
+
+    - name: Asset that MD5Sums are identical
+      ansible.builtin.assert:
+        that:
+          - models[ansible_net_model]["ios_md5"] in md5_result.stdout[0]
+        msg: "IOS File on device MD5Sum is not correct"
+      tags:
+        - md5
+
+    - name: Changing the boot image to the new version
+      cisco.ios.ios_command:
+        commands: archive download-sw flash:{{ models[ansible_net_model]["ios_archive"] }}
+      vars:
+        ansible_command_timeout: 3600
+      tags:
+        - boot
+
+    - name: Check Boot path
+      cisco.ios.ios_command:
+        commands: 'show boot | i BOOT'
+      register: bootvar
+      tags:
+        - bootvar
+
+    - name: Asset that the boot path is set to the new IOS
+      ansible.builtin.assert:
+        that:
+          models[ansible_net_model]["ios_binary"] in bootvar.stdout[0]
+        msg: "Boot path is not set to the new image"
+      tags:
+        - bootvar
+...

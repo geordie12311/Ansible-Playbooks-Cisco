@@ -4,16 +4,16 @@
 
 ---
 - hosts: OP-SW-01
-  name: test prompt
+  name: Test prompt
   gather_facts: false
   connection: network_cli
   vars_prompt:
     - name: "username1"
       prompt: "Enter your username"
-      private: no
+      private: false
     - name: "password1"
       prompt: Enter you password
-      private: yes
+      private: true
 # Above vars_prompt section is going to prompt the user to enter their credentials. Note
 # private is set to yes for password so won't display on the screen
 
@@ -23,10 +23,12 @@
 # vars is using then using the username / password entered by the user to connect to the host(s)
 
   tasks:
-    - name: show IP route on devices
+    - name: Show IP route on devices
       cisco.ios.ios_command:
-        commands:
-        - command: "Show ip route"
+        commands: Show ip route
       register: print_output
-    - debug: var=print_output.stdout_lines
+
+    - name: Output the playbook output to screen
+      ansible.builtin.debug:
+        var: print_output.stdout_lines
 ...

@@ -1,3 +1,4 @@
+# Ansible Playbook to test IP over specific VRF
 ---
 - hosts: iosxr01
   name: Test IP reachablity over specified VRF
@@ -7,28 +8,31 @@
   vars_prompt:
     - name: "username1"
       prompt: "Enter your username" # prompting user to input username, will be used to login
-      private: no
+      private: false
     - name: "password1"
-          prompt: Enter you password # prompting user to input password, will be used to login
-      private: yes # Note: private set to yes means details will not be displayed on screen
-
+      prompt: "Enter your password" # prompting user to input password, will be used to login
+      private: true # Note: private set to true means details will not be displayed on screen
     - name: "vrf"
       prompt: "Enter the VRF name" # promting user to add the VRF name, will be used later in the playbook
-      private: no # Note: private set to no means details will be displayed on screen
+      private: false # Note: private set to false means details will be displayed on screen
     - name: "dest_ip"
       prompt: Enter destination IP address to test # prompting user to input the ip address, will be used later in the playbook
-      private: no
+      private: false
 
   vars:
     ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
     ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
 
   tasks:
-  - name: Test reachability to 198.51.100.252 using prod vrf
-    cisco.iosxr.iosxr_ping:
-      dest: " {{ dest_ip }}"
-      vrf: "{{ vrf }}"
-      afi: ipv4
-      count: 10
-    register: ip_test
-  - debug: var=ip_test.stdout_lines  # telling ansible to use ip_test results and output and display on screen
+    - name: Test reachability to 198.51.100.252 using prod vrf
+      cisco.iosxr.iosxr_ping:
+        dest: " {{ dest_ip }}"
+        vrf: "{{ vrf }}"
+        afi: ipv4
+        count: 10
+      register: ip_test
+
+    - name: Output the playbook output to screen
+      ansible.builtin.debug:
+        var: ip_test.stdout_lines # telling ansible to use ip_test results and output and display on screen
+...
