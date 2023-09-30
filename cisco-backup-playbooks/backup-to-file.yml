@@ -1,18 +1,19 @@
 # Playbook to Backup Cisco Configs and save to file
 ---
-- hosts: all
+- name: Backup configs and save to file
+  hosts: all
   connection: network_cli
   gather_facts: false
 
   tasks:
-   - name: Show Run on Device
-     ios_command:
-       commands:
-         - show run
-     register: config
+    - name: Do a show run on hosts
+      cisco.ios.ios_command:
+        commands: show run
+      register: config
 
-   - name: Save output to /backups
-     copy:
-       content: "{{config.stdout[0]}}"
-       dest: "./backups/{{inventory_hostname}}-backup.txt"
+    - name: Save output from show run to /backups directory labelling files with hostnames
+      ansible.builtin.copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "./backups/{{ inventory_hostname }}-backup.txt"
+        mode: '644'
 ...

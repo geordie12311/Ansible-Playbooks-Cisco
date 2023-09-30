@@ -1,50 +1,16 @@
 # Playbook to backup Cisco Config Files in date stamped folder and run show commands
 ---
-- hosts: all
-  gather_facts: false
-  
-  tasks:
-   - name: Get ansible date/time facts
-     setup:
-       filter: "ansible_date_time"
-       gather_subset: "!all"
-
-   - name: Store DTG as fact
-     set_fact:
-       DTG: "{{ ansible_date_time.date }}"
-
-   - name: Create Directory {{hostvars.localhost.DTG}} 
-     file: 
-      path: ./backups/{{hostvars.localhost.DTG}}
-      state: directory
-
-- hosts: Routers
+- name: 1st run book - Backup configs with date - time stamps
+  hosts: routers
   connection: network_cli
   gather_facts: false
-
-  tasks:
-   - name: Show Run on Device
-     ios_command:
-       commands:
-         - show run
-     register: config
-
-   - name: Save output to /backups/
-     copy:
-       content: "{{config.stdout[0]}}"
-       dest: "./backups/{{hostvars.localhost.DTG}}/{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.txt"
-
-- hosts: Routers
-  connection: network_cli
-  gather_facts: false
-
   vars:
     command_list:
-      - show etherchannel summary 
-      - show cdp neigh 
+      - show etherchannel summary
+      - show cdp neigh
       - show environment all
-      - show ip ospf int brief 
-      - show ip ospf neigh 
+      - show ip ospf int brief
+      - show ip ospf neigh
       - show cdp neighbors detail
       - show clock
       - show users
@@ -54,12 +20,41 @@
       - show ip interface brief | exc admin
 
   tasks:
-   - name: Run the SHOW commands and save output 
-     ios_command:
-       commands: "{{ command_list }}"
-     register: showoutput
+    - name: Get ansible date/time facts
+      ansible.builtin.setup:
+        filter: "ansible_date_time"
+        gather_subset: "!all"
 
-   - name: "Put all the files together into one nice text file"
-     template: 
-       src: template.j2 
-       dest: "./backups/{{hostvars.localhost.DTG}}/{{ inventory_hostname }}-{{hostvars.localhost.DTG}}-showoutput.txt"
+    - name: Store date and time as fact
+      ansible.builtin.set_fact:
+        dtg: "{{ ansible_date_time.date }}"
+
+    - name: Create Directory
+      ansible.builtin.file:
+        path: ./backups/{{ hostvars.localhost.dtg }}
+        state: directory
+        mode: '644'
+
+    - name: Show Run on hosts
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: config
+
+    - name: Save show command output to /backups folder
+      ansible.builtin.copy:
+        content: "{{ config.stdout[0] }} -> {{ config.stdout[0] }}"
+        dest: "./backups/{{ hostvars.localhost.dtg }}/{{ inventory_hostname }}-{{ hostvars.localhost.dtg }}-showoutput.txt"
+        mode: '644'
+
+    - name: Run the SHOW commands and save output
+      cisco.ios.ios_command:
+        commands: "{{ command_list }}"
+      register: showoutput
+
+    - name: "Put all the files together into one nice text file"
+      ansible.builtin.template:
+        src: template.j2
+        dest: "./backups/{{ hostvars.localhost.dtg }}/{{ inventory_hostname }}-{{ hostvars.localhost.dtg }}-showoutput.txt"
+        mode: '644'
+...

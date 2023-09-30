@@ -1,37 +1,35 @@
+# Playbook to Backup Cisco Config Files
 ---
-# Playbook to Backup Cisco Config Files 
-- hosts: Routers
+- name: Backup Cisco Configs to a Director
+  hosts: Routers
 
   tasks:
-   - name: Get ansible date/time facts
-     setup:
-       filter: "ansible_date_time"
-       gather_subset: "!all"
+    - name: Gathering the subnet data
+      ansible.builtin.setup:
+        gather_subset: "!all"
+        filter: "ansible_date_time"
 
-   - name: Store DTG as fact
-     set_fact:
-       DTG: "{{ ansible_date_time.weekday }}"
+    - name: Store day and time as dtg
+      ansible.builtin.set_fact:
+        dtg: "{{ ansible_date_time.weekday }}"
 
-   - name: Create Directory {{hostvars.localhost.DTG}}
-     file:
-      path: /etc/ansible/backups/{{hostvars.localhost.DTG}}
-      state: directory
-  run_once: true
+    - name: Creating the Directory
+      ansible.builtin.file:
+        path: "/etc/ansible/backups/{{ hostvars.localhost.DTG }} -> /etc/ansible/backups/{{ hostvars.localhost.dtg }}"
+      run_once: true
 
-- hosts: Switches
+    - name: Backup Running configs
+      cisco.ios.ios_command:
+        commands: show run
+      register: config
 
-  tasks:
-   - name: Backup config  
-     ios_command: 
-       commands: show run 
-     register: config 
+    - name: Save output to ansible/backups folder and label files with hostname+date+time
+      ansible.builtin.copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "/etc/ansible/backups/{{ hostvars.localhost.DTG }}/{{ inventory_hostname }}-{{ hostvars.localhost.dtg }}-config.txt"
+        mode: '644'
 
-   - name: Save output to /etc/ansible/backups/{{hostvars.localhost.DTG}}
-     copy:
-       content: "{{config.stdout[0]}}"
-       dest: "/etc/ansible/backups/{{hostvars.localhost.DTG}}/{{inventory_hostname}}-{{hostvars.localhost.DTG}}-config.txt"
-
-   - name: Save Config 
-     ios_config: 
-       save_when: modified 
+    - name: Saving the Configs
+      cisco.ios.ios_config:
+        save_when: modified
 ...
