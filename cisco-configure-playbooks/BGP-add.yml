@@ -1,11 +1,12 @@
+# Playbook to add BGP configuration from Jinja 2 template
 ---
-- name: "configure BGP from Jinja template"
-  hosts: "routers"
+- name: Configure BGP from Jinja template
+  hosts: routers
   gather_facts: false
   connection: network_cli
 
   tasks:
-    - name: "Configuring BGP"
+    - name: Configuring BGP
       cisco.ios.ios_config:
         src: "BGP.j2"
         save_when: modified
@@ -13,8 +14,8 @@
       register: bgp_result
 
   handlers:
-    - name: "bgp_handler - This will check if BGP config has been changed"
+    - name: Now checking if BGP config has been successfully changed
       listen: bgp_handler
-      debug:
+      ansible.builtin.debug:
         msg: "CONFIG THAT HAS BEEN ADDED: {{ bgp_result.commands }}"
 ...

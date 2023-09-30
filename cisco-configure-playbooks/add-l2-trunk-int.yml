@@ -1,48 +1,48 @@
 # Ansible Playbook to create trunk ports on the switches and a new Native VLAN
 ---
-- name: Add Trunk ports to the switches
-  hosts: NN-SW-01, NN-SW-02, SS-SW-01, SS-SW-02
+- name: Add trunk ports to the switches
+  hosts: switches
+  connection: network_cli
   gather_facts: false
-  connection: local
 
   tasks:
-  - name: Create the new Native and blackhole VLANs
-    cisco.ios.ios_vlans:
-      config:
-      - name: Native_VLAN
-        vlan_id: 50
-        state: active 
-        shutdown: disabled
-      state: merged
-# Task above will create the new Native VLAN
+    - name: Create the new Native and blackhole VLANs
+      cisco.ios.ios_vlans:
+        config:
+          - name: Native_VLAN
+            vlan_id: 50
+            state: active
+            shutdown: disabled
+        state: merged
 
-  - name: Create the L2 interfaces and add the VLANs
-    cisco.ios.ios_l2_interfaces:
-      config:
-      - name: GigabitEthernet0/1
-        mode: trunk
-        trunk:
-          allowed_vlans: 10,20,40,50
-          native_vlan: 50
-          encapsulation: dot1q
-      - name: GigabitEthernet0/2
-        mode: trunk
-        trunk:
-          allowed_vlans: 10,20,40,50
-          native_vlan: 50
-          encapsulation: dot1q
-      state: merged
-# Task is going to create the L2 trunk interfaces,configure the native vlan and allowed vlans
+    - name: Create the L2 interfaces and add the VLANs
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: GigabitEthernet0/1
+            mode: trunk
+            trunk:
+              allowed_vlans: 10,20,40,50
+              native_vlan: 50
+              encapsulation: dot1q
+          - name: GigabitEthernet0/2
+            mode: trunk
+            trunk:
+              allowed_vlans: 10,20,40,50
+              native_vlan: 50
+              encapsulation: dot1q
+        state: merged
 
-  - name: show merged VLAN information
-    ios_command:
-      commands: show vlan brief
-    register: print_vlan
-  - debug: var=print_vlan.stdout_lines
-# Task will show the VLAN configuration on the switches after the new trunk vlan configuration has been added
+    - name: Show merged VLAN information
+      cisco.ios.ios_command:
+        commands: show vlan brief
+      register: print_vlan
 
-  - name: Save the new runnig configuration to memory
-    ios_command:
-      commands: wr mem
+    - name: Printing output to screen
+      ansible.builtin.debug:
+        var: print_vlan.stdout_lines
+
+    - name: Save the new runnig configuration to memory
+      cisco.ios.ios_command:
+        commands: wr mem
 # task will save the running configuration to memory
 ...

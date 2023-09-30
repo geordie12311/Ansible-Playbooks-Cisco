@@ -1,38 +1,34 @@
 # Playbook to configure Syslog traps and server on Cisco devices
 # hostname = IP address of the log servers
-
 ---
-- name: "Play 1: Targeting the Cisco Host Devices"
+- name: Configure Syslog traps on cisco devices
   hosts: SB-SW-01
   connection: network_cli
 
-  tasks: 
-  - name: "Push the Logging configuration to the devices"
-    cisco.ios.ios_logging_global:
-      config:
-        hosts:
-          - hostname: 172.16.1.12
-          - hostname: 172.16.1.11
-        buffered:
-          severity: notifications
-          size: 5099
-          xml: True
-        console:
-          severity: critical
-          xml: True
-        facility: local5
-        hosts:
-          - hostname: 172.16.1.12
-          - hostname: 172.16.1.11
-            transport:
-              tcp:
-                port: 512
-        monitor:
-          severity: warnings
-        message_counter: log
-        snmp_trap:
-          - errors
-        trap: errors
-        userinfo: True
-      state: merged
+  tasks:
+    - name: Push the Logging configuration to the devices
+      cisco.ios.ios_logging_global:
+        config:
+          hosts:
+            - hostname: 172.16.1.12
+            - hostname: 172.16.1.11
+          buffered:
+            severity: notifications
+            size: 5099
+            xml: true
+          console:
+            severity: critical
+            xml: true
+          facility: local5
+          transport:
+            tcp:
+              port: 514
+          monitor:
+            severity: warnings
+          message_counter: log
+          snmp_trap:
+            - errors
+          trap: errors
+          userinfo: true
+        state: merged
 ...

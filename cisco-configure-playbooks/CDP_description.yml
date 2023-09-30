@@ -1,25 +1,26 @@
+# Add Descriptions to Interfaces based on CDP neighbor information
 ---
-    - name: Set Interface description based on CDP/LLDP discovery
-      hosts: all
-      gather_facts: yes
-      connection: network_cli
-    
-      tasks:
-    
-      - name: Set IOS Interface Description
-        ios_config:
-          lines:
-            - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
-          parents: interface {{ item.key }}
-          save_when: changed
-        with_dict: "{{ansible_facts.net_neighbors }}"
-        when: ansible_network_os == 'ios'
-    
-      - name: Set NXOS Interface Description
-        nxos_config:
-          lines:
-            - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
-          parents: interface {{ item.key }}
-          save_when: changed
-        with_dict: "{{ansible_facts.net_neighbors }}"
-        when: ansible_network_os == 'nxos'
+- name: Set Interface description based on CDP/LLDP discovery
+  hosts: all
+  gather_facts: true
+  connection: network_cli
+
+  tasks:
+    - name: Set IOS Interface Description
+      cisco.ios.ios_config:
+        lines:
+          - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
+        parents: interface {{ item.key }}
+        save_when: changed
+      with_dict: "{{ ansible_facts.net_neighbors }}"
+      when: ansible_network_os == 'ios'
+
+    - name: Set NXOS Interface Description
+      cisco.nxos.nxos_config:
+        lines:
+          - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
+        parents: interface {{ item.key }}
+        save_when: changed
+      with_dict: "{{ ansible_facts.net_neighbors }}"
+      when: ansible_network_os == 'nxos'
+...
