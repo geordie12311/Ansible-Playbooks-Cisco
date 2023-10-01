@@ -1,0 +1,22 @@
+# Ansible playbook to validate that NTP is running on the localhost
+---
+- name: Playbook to check NTP is running
+  hosts: localhost
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Ensure NTP is installed
+      ansible.builtin.apt:
+        name: ntp
+        state: present
+
+    - name: Ensure NTP is running
+      cisco.ios.ios_command:
+        commands: show ntp peer-status
+      register: ntp_status
+
+    - name: Print NTP status to screen
+      ansible.builtin.debug:
+        var: ntp_status
+...

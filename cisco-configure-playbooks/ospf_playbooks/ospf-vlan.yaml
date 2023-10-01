@@ -1,0 +1,31 @@
+# Ansible Playbook to add OSPF to all devices and configure VLANs
+---
+- name: Configure OSPF on all devices
+  hosts: switches
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Enable OSPF
+      cisco.ios.ios_config:
+        parents: router ospf 1
+        lines:
+          - network 0.0.0.0 255.255.255.255 area 0
+      register: print_output
+
+    - name: Print OSPF output to screen
+      ansible.builtin.debug:
+        var: print_output
+
+    - name: Create Access VLANs
+      cisco.ios.ios_config:
+        lines:
+          - VLAN 10
+          - VLAN 20
+          - VLAN 30
+          - VLAN 40
+      register: print_output
+
+    - name: Print VLAN output to screen
+      ansible.builtin.debug:
+        var: print_output

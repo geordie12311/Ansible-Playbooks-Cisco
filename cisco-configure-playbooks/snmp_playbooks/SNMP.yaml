@@ -1,19 +1,13 @@
-#Ansible playbook to add basic SNMP server configuraiton to cisco IOS devices
-
+# Ansible playbook to add basic SNMP server configuraiton to cisco IOS devices
 ---
 - name: Add basic SNMP Server config
   hosts: all
   gather_facts: false
-  connection: local
-  
-  vars:
-    cli:
-      username: geordie
-      password: teabag22
+  connection: network_cli
 
   tasks:
-    - name: add basic SNMP configuration
-      ios_config:
+    - name: Add basic SNMP configuration
+      cisco.ios.ios_config:
         lines:
           - service tcp-keepalives-in
           - service tcp-keepalives-out
@@ -21,7 +15,8 @@
           - snmp-server enable traps
           - snmp-server host 80.80.80.1 version 2c labro
           - do wr mem
-          
       register: print_output
-    -  debug: var=print_output
-...
+
+    - name: Print the SNMP configuration output to screen
+      ansible.builtin.debug:
+        var: print_output

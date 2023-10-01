@@ -1,0 +1,26 @@
+# Playbook that configures OSPF area and adds all interface
+---
+- name: Configure OSPF and add interfaces
+  hosts: RTR-1
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Configure OSPF 100 and put all interfaces into Area 0
+      cisco.ios.ios_config:
+        lines:
+          - network 10.0.0.0 0.0.0.255 area 0
+        parents: router ospf 100
+
+    - name: Save the config
+      cisco.ios.ios_command:
+        commands:
+          - write memory
+
+    - name: Verify OSPF interface is Active
+      cisco.ios.ios_command:
+        commands:
+          - sh run | sec router ospf
+        waitfor:
+          - result[0] contains 'router ospf 100'
+...

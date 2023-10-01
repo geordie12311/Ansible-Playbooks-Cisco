@@ -1,12 +1,12 @@
+# Ansible Playbook to configure OSPF
 ---
-
-- name: simple ospf playbook
+- name: Simple ospf playbook
   hosts: R1
   gather_facts: false
   connection: network_cli
 
   tasks:
-    - name: Configure OSPF 
+    - name: Configure OSPF
       cisco.ios.ios_config:
         lines:
           - router-id 33.44.88.22
@@ -14,5 +14,7 @@
           - router ospf 19
       register: my_output
 
-    - debug: var=my_output
-
+    - name: Print output to screen
+      ansible.builtin.debug:
+        var: my_output
+...
