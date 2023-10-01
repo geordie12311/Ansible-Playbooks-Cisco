@@ -1,0 +1,36 @@
+## Ansible network debug playbook, to be used in conjunction with network snapshot to identify any changes to state of
+## hosts for fault finding purposes. Note: You must have ran network-snapshot.yml to be able to compare the outputs
+---
+- name: Initialising Ansible
+  hosts: all
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Job 1 of PLAY 1 - Enumerate the Time/Date
+      ansible.builtin.setup:
+        filter: "ansible_date_time"
+        gather_subset: "!all"
+
+    - name: Job 2 of PLAY 1 - Recording Information as variable
+      ansible.builtin.set_fact:
+        fact: TimeDate="{{ ansible_date_time.date }}"
+
+    - name: Job 1 of PLAY 2 - Taking copy of current Runnings Configs
+      cisco.ios.ios_command:
+        commands:
+          - show run
+      register: response
+
+    - name: Job 2 of PLAY 2 - Creating Comparison Subfolder
+      ansible.builtin.file:
+        path: "~/Calendar/{{ hostvars.localhost.TimeDate }}/comparison"
+        state: directory
+        mode: '0644'
+
+    - name: Job 3 of PLAY 2 - Saving the output to target subfolder
+      ansible.builtin.copy:
+        content: "{{ response.stdout[0] }}\n"
+        dest: "~/Calendar/{{ hostvars.localhost.TimeDate }}/comparison/{{ inventory_hostname }}-running-config.txt"
+        mode: '0644'
+...

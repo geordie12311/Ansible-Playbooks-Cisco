@@ -1,0 +1,36 @@
+## Ansible snapshot playbook, takes a snapshot of the running configs on the hosts and saves them
+## to directory so you can run a debugger playbook to check for changes should there be issues
+---
+- name: Initialising Ansible Network Snapshot!
+  hosts: all
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Task 1 - Enumerate Local Time & Date
+      ansible.builtin.setup:
+        filter: "ansible_date_time"
+        gather_subset: "!all"
+
+    - name: Task 2 - Record Information as variable = TimeDate
+      ansible.builtin.set_fact:
+        fact: TimeDate="{{ ansible_date_time.date }}"
+
+    - name: Task 3 - Creating Calendar Subfolders
+      ansible.builtin.file:
+        path: ~/Calendar/{{ hostvars.localhost.TD }}
+        state: directory
+        mode: '0644'
+
+    - name: Task 4 - Create Snapshot Subfolder
+      ansible.builtin.file:
+        path: "~/Calendar/{{ hostvars.localhost.TimeDate }}/snapshots"
+        state: directory
+        mode: '0644'
+
+    - name: Task 5 - upload data to the target subfolders
+      ansible.builtin.copy:
+        content: "{{ response.stdout[0] }}\n"
+        dest: "~/Calendar/{{ hostvars.localhost.TimeDate }}/snapshots/{{ inventory_hostname }}-running-config.txt"
+        mode: '0644'
+...

@@ -1,0 +1,13 @@
+# Ansible playbook to test reachability to a specific IP address
+---
+- name: Test Reachabiltiy of all hosts to all hosts on the network
+  hosts: all
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Test IP reachabilty to specific destination
+      ansible.netcommon.net_ping:
+        dest: 10.20.20.20
+        count: 5
+...

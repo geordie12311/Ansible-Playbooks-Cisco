@@ -1,3 +1,4 @@
+# Ansible Playbook using Napalm to get facts and interface information
 ---
 - name: NAPALM get_facts and get_interfaces
   hosts: vIOS
@@ -5,32 +6,36 @@
   connection: network_cli
 
   tasks:
-  - name: "TASK:1 - 'SHOW IP BGP SUMMARY'"
-    ios_command:
+  - name: TASK:1 - 'SHOW IP BGP SUMMARY
+    cisco.ios.ios_command:
       commands: "show ip bgp summary"
     register: "output_ios"
-  - name: "TASK:2 - PRINT BGP OUTPUT"
-    debug:
+
+  - name: TASK 2 - PRINT BGP OUTPUT
+    ansible.builtin.debug:
       msg: "{{ output_ios.stdout[0] }}"
 
-  - name: TASK:3 - GET BGP FACTS 
+  - name: TASK 3 - GET BGP FACTS 
     napalm_get_facts:
       filter:
       - "bgp_neighbors"
     register: "bgp"
-  - debug: var=bgp
 
-  - name: TASK:4 - GENERATE BGP REPORT
+  - name: Print the BGP Facts to screen
+  ansible.builtin.debug:
+    var: bgp
+
+  - name: TASK 4 - GENERATE BGP REPORT
     template:
       src: "./templates/bgp_report.j2"
       dest: "./build/{{ inventory_hostname }}.txt"
 
-  - name: TASK:3 - ASSEMBLE REPORTING FROM HOST DETAILS
+  - name: TASK 3 - ASSEMBLE REPORTING FROM HOST DETAILS
     assemble:
       src: "./build"
       dest: "./reports/report.txt"
 
-  - name: TASK:4 - PING BGP NEIGHBORS THAT ARE DOWN
+  - name: TASK 4 - PING BGP NEIGHBORS THAT ARE DOWN
     napalm_ping:
       hostname: "{{ inventory_hostname }}"
       username: "{{ ansible_user }}"
@@ -41,7 +46,7 @@
     when: "not item['value']['is_up']"
     register: "neighbor_down"
 
-  - name: "TASK:5 - PRINT PING RESULTS FOR DOWN NEIGHBORS"
+  - name: TASK 5 - PRINT PING RESULTS FOR DOWN NEIGHBORS
     debug:
       msg: "{{ item['ping_results'] }}"
     loop: "{{ neighbor_down['results'] }}"
