@@ -2,7 +2,7 @@
 # Playbook to pull native data from IOSXE devices
 
 - name: "Play 1: RESTCONF Playbook"
-  hosts: cisco_iosxe
+  hosts: CSR_hosts
   connection: local
   tasks:
     - name: "Task 1 - pull information from hosts"
@@ -20,4 +20,4 @@
     - name: "Print Result"
       debug:
         msg: "{{ result.json }}"
-  
+...

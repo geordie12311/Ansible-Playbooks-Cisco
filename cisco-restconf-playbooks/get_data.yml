@@ -1,0 +1,23 @@
+---
+# Playbook to pull data from IOSXE devices using restconf
+
+- name: Get hostname & IOS version using Restconf
+  hosts: CSR_hosts
+  connection: local
+  tasks:
+    - name: Task- pull information the version and hostname from the hosts
+      uri:
+        url: "https://{{ ansible_host }}/restconf/data/native?fields=version;hostname"
+        user: "{{ ansible_user }}" #using the ansible username saved in group_vars
+        password: "{{ ansible_password }}" #using the ansible password saved in group_vars
+        method: GET
+        return_content: true
+        headers:
+          Accept: "application/yang-data+json" #requesting the data is output as yang (default is xml)
+        validate_certs: false #telling Ansible to ignore cert validation
+      register: result #saving the output as a variable called result
+   
+    - name: "Print Result"
+      debug:
+        msg: "{{ result.json }}" #printing the results in json format
+...

@@ -1,0 +1,46 @@
+---
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
+bgp:
+  asn: "4"
+  rid: "4.4.4.4"
+  neighbors:
+    - neighbor: "24.24.24.1"
+      peer_asn: "1"
+    - neighbor: "25.25.25.1"
+      peer_asn: "3"      
+  networks: 
+    - network: "4.4.4.4"
+      mask: "255.255.255.255"
+
+#BGP:
+#  ASN: "65004"
+#  peers:
+#    - neighbor: "22.22.22.1"
+#      peer_asn: "65001"
+#    - neighbor: "23.23.23.1"
+#      peer_asn: "65002"
+#    - neighbor: "25.25.25.1"
+#      peer_asn: "65003"
+#  redistribute: "connected"
+#  update_source: "loo0"
+
+ospf:
+  default_originate: false
+  process: 1
+  rid: "4.4.4.4"
+  networks:
+    - network: "12.12.12.0"
+      wildcard: "0.0.0.255"
+      area: 0
+    - network: "22.22.22.0"
+      wildcard: "0.0.0.255"
+      area: 0 
+
+eigrp_style: "normal"
+
+eigrp:
+  asn: "4"

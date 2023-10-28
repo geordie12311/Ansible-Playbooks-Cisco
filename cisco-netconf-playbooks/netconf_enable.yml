@@ -1,0 +1,23 @@
+# Ansible playbook to add enable Netconf on cisco IOS devices
+---
+- name: Add basic netconf config to hosts
+  hosts: CSR_hosts
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Add NETCONF configuration to hosts
+      cisco.ios.ios_config:
+        lines:
+          - ip http server
+          - ip http authentication local
+          - ip http secure-server
+          - ip http client source-interface GigabitEthernet1
+          - netconf-yang
+          - netconf-yang ssh port 830
+        save_when: modified
+      register: print_output
+
+    - name: Print the Netconf configuration output to screen
+      ansible.builtin.debug:
+        var: print_output

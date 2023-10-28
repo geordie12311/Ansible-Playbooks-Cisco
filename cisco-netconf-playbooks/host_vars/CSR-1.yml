@@ -1,0 +1,35 @@
+---
+ansible_user: "cisco"
+ansible_password: "cisco1"
+
+ospf:
+  Cisco-IOS-XE-native:router:
+    Cisco-IOS-XE-ospf:ospf:
+    - id: 1
+      network:
+      - area: 51
+        ip: 18.18.18.18
+        mask: 0.0.0.0
+      - area: 0
+        ip: 10.0.0.0
+        mask: 0.0.0.255
+      - area: 16
+        ip: 18.18.18.0
+        mask: 0.0.0.255
+      - area: 18
+      router-id: 18.18.18.18
+
+acl_1:
+  Cisco-IOS-XE-native:access-list:
+    Cisco-IOS-XE-acl:extended:
+    - access-list-seq-rule:
+      - ace-rule:
+          action: deny
+          dscp: ef
+          dst-any:
+          -
+          host: 1.2.3.4
+          protocol: ip
+        sequence: '55'
+      name: GHLAB
+    - name: MERAKI-FQDN-DNS
