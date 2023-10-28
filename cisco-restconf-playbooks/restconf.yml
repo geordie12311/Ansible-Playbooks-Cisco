@@ -1,0 +1,22 @@
+# Ansible playbook to add enable Restconf on cisco IOS devices
+---
+- name: Add basic restconf config to hosts
+  hosts: CSRs
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Add RESTCONF configuration to hosts
+      cisco.ios.ios_config:
+        lines:
+          - netconf-yang
+          - restconf
+          - remote-management
+
+        backup: true
+      register: print_output
+
+    - name: Print the Restconf configuration output to screen
+      ansible.builtin.debug:
+        var: print_output
+...

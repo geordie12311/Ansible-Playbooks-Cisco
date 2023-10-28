@@ -1,8 +1,9 @@
 # Ansible playbook to configure SSH version 2 on Cisco devices
 ---
 - name: Configure SSH V2 on Cisco hosts
-  hosts: ios
+  hosts: CSR2
   gather_facts: false
+  connection: network_cli
 
   tasks:
     - name: CONFIGURE SSH VERSION 2

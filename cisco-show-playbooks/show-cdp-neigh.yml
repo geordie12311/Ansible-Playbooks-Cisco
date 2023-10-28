@@ -2,7 +2,7 @@
 ---
 
 - name: Show CDP neighbors
-  hosts: Selby, Opus
+  hosts: Core1
   gather_facts: false
   connection: network_cli
   

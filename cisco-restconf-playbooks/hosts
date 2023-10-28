@@ -1,7 +1,25 @@
 [all]
 CSR-1
 CSR-2
+CSR1
+CSR2
+CSR3
+CSR4
+CSR5
+CSR6
+CSR7
+CSR8
 
 [cisco_iosxe]
 CSR-1
 CSR-2
+
+[restconf_hosts]
+CSR1
+CSR2
+CSR3
+CSR4
+CSR5
+CSR6
+CSR7
+CSR8

@@ -46,6 +46,14 @@ vIOS5
 vIOS6
 vIOS7
 vIOS8
+CSR1
+CSR2
+CSR3
+CSR4
+CSR5
+CSR6
+CSR7
+CSR8
 
 [cisco_ios]
 R1
@@ -177,6 +185,15 @@ PA-VM-02
 [Checkpoint]
 CHECK-FW-01
 
+[CSRs]
+CSR1
+CSR2
+CSR3
+CSR4
+CSR5
+CSR6
+CSR7
+CSR8
 
 
 
