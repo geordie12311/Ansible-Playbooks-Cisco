@@ -1,0 +1,15 @@
+---
+# Playbook to pull data from IOSXE devices using restconf
+
+- name: Add basic netconf config to hosts
+  hosts: CSR_hosts
+  gather_facts: false
+
+  tasks:
+    - name: Direct Content
+      ansible.netcommon.netconf_config:
+          backup: true
+          backup_options:
+            filename: backup_{{ ansible_host }}.cfg
+            dir_path: ./backups
+...

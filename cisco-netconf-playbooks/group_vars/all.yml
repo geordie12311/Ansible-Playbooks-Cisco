@@ -1,3 +1,4 @@
 ansible_user: "cisco"
 ansible_ssh_pass: "cisco123"
 ansible_network_os: "ios"
+ansible_connection: ansible.netcommon.netconf
