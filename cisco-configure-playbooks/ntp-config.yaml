@@ -1,7 +1,7 @@
 # Ansible Playbook to configure NTP servers using a loop
 ---
 - name: NTP Config Playbook - with loop
-  hosts: North
+  hosts: CSR_hosts
   gather_facts: false
   connection: network_cli
 
@@ -20,4 +20,18 @@
             - peer: "{{ item }}"
               version: 2
       loop: "{{ ntpservers }}"
+
+    - name: Show NTP configuration after changes
+      cisco.ios.ios_command:
+        commands:
+          - "show run | section ntp"
+      register: ntp_result
+
+    - name: Saving the running configuration to startup
+      cisco.ios.ios_config:
+        save_when: changed
+
+    - name: Output the ntp configuration to screen
+      ansible.builtin.debug:
+        var: ntp_result.stdout_lines
 ...

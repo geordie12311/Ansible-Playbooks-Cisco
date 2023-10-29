@@ -1,24 +1,24 @@
-# Ansible playbook to Enable CDP
+# Ansible playbook to Enable LLDP
 ---
-- name: Enabling CDP to devices
-  hosts: routers
+- name: Playbook to enable lldp on hosts
+  hosts: CSR_hosts
   gather_facts: false
   connection: network_cli
 
   tasks:
-    - name: Configuring CDP
+    - name: Configuring LLDP on hosts
       cisco.ios.ios_config:
         commands:
-          - "cdp run"
+          - "lldp run"
         save_when: changed
 
-    - name: Validate CDP is enabled
+    - name: Validate LLDP is enabled
       cisco.ios.ios_command:
         commands:
-          - "show cdp neigh"
+          - "show lldp neighbors"
       register: print_output
 
-    - name: Output cdp neigh output to screen
+    - name: Output lldp neigh output to screen
       ansible.builtin.debug:
         var: print_output.stdout_lines
 ...
