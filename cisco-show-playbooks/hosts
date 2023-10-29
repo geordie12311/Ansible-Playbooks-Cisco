@@ -185,7 +185,7 @@ PA-VM-02
 [Checkpoint]
 CHECK-FW-01
 
-[CSRs]
+[CSR_hosts]
 CSR1
 CSR2
 CSR3

@@ -1,0 +1,37 @@
+---
+ansible_user: "cisco"
+ansible_password: "cisco123"
+
+hostname: CSR2
+
+Interfaces:
+   Lo0:
+     ip: "2.2.2.2"
+     mask: "255.255.255.255"
+   Gi1: 
+     ip: "21.21.21.2"
+     mask: "255.255.255.0"
+   Gi2: 
+     ip: "50.50.52.2"
+     mask: "255.255.255.252"
+   Gi3: 
+     ip: "50.50.53.1"
+     mask: "255.255.255.252"
+
+ospf:
+  Cisco-IOS-XE-native:router:
+    Cisco-IOS-XE-ospf:ospf:
+    process: 1
+    rid: "2.2.2.2"
+    networks:
+      - network: "21.21.21.0"
+        wildcard: "0.0.0.255"
+
+syslog:
+  hosts:
+    - ip: "140.140.1.10"
+   
+ntp:
+  servers:
+    - "8.8.8.8"
+    - "8.8.4.4"
