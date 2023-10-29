@@ -14,7 +14,7 @@
     - name: Show NTP configuration
       cisco.ios.ios_command:
         commands:
-          - "show run | section ntp server"
+          - "show run | section ntp"
       register: ntp_result
 
     - name: Output the playbook output to screen
