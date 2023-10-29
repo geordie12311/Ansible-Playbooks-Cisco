@@ -1,4 +1,4 @@
-# Ansible playbook to add enable Netconf on cisco IOS devices
+# Ansible playbook to add basic Netconf configuration on Cisco IOSXE devices
 ---
 - name: Add basic netconf config to hosts
   hosts: CSR_hosts
@@ -21,3 +21,4 @@
     - name: Print the Netconf configuration output to screen
       ansible.builtin.debug:
         var: print_output
+...
