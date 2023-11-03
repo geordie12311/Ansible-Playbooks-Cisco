@@ -1,15 +1,13 @@
 ---
 # Playbook to pull data from IOSXE devices using restconf
-
 - name: Add basic netconf config to hosts
   hosts: CSR_hosts
-  gather_facts: false
-
+  gather_facts: true
   tasks:
-    - name: Direct Content
+    - name: Backup devices
       ansible.netcommon.netconf_config:
-          backup: true
-          backup_options:
-            filename: backup_{{ ansible_host }}.cfg
-            dir_path: ./backups
+        backup: true
+        backup_options:
+          filename: backup_{{ inventory_hostname }}.cfg
+          dir_path: /absolute/path/to/backups
 ...
