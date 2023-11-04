@@ -3,6 +3,7 @@
 - name: Add basic netconf config to hosts
   hosts: CSR_hosts
   gather_facts: true
+
   tasks:
     - name: Backup devices
       ansible.netcommon.netconf_config:

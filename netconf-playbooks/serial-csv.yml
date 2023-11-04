@@ -24,7 +24,7 @@
 
 
     - name: Store Output in CSV File
-      ansible.builtin.copy:
+      ansible.builtin.copy:ls
         content: |
           Hostname,Serial Number
           {{ inventory_hostname }},{{ serial_number.stdout_lines[0] }}
