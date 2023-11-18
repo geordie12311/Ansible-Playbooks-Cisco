@@ -1,7 +1,9 @@
 # Playbook to Backup Cisco Config Files
 ---
-- name: Backup Cisco Configs to a Director
+- name: Backup Cisco Configs to a Directory
   hosts: Routers
+  gather_facts: false
+  connection: network_cli
 
   tasks:
     - name: Gathering the subnet data
@@ -9,13 +11,13 @@
         gather_subset: "!all"
         filter: "ansible_date_time"
 
-    - name: Store day and time as dtg
+    - name: Store date and time as a fact
       ansible.builtin.set_fact:
-        dtg: "{{ ansible_date_time.weekday }}"
+        set_fact: "{{ ansible_date_time.weekday }}"
 
-    - name: Creating the Directory
+    - name: Create the Directory
       ansible.builtin.file:
-        path: "/etc/ansible/backups/{{ hostvars.localhost.DTG }} -> /etc/ansible/backups/{{ hostvars.localhost.dtg }}"
+        path: "/etc/ansible/backups/{{ hostvars.localhost.set_fact }} -> /etc/ansible/backups/{{ hostvars.localhost.set_fact }}"
       run_once: true
 
     - name: Backup Running configs
@@ -23,10 +25,11 @@
         commands: show run
       register: config
 
+
     - name: Save output to ansible/backups folder and label files with hostname+date+time
       ansible.builtin.copy:
         content: "{{ config.stdout[0] }}"
-        dest: "/etc/ansible/backups/{{ hostvars.localhost.DTG }}/{{ inventory_hostname }}-{{ hostvars.localhost.dtg }}-config.txt"
+        dest: "/etc/ansible/backups/{{ hostvars.localhost.set_fact }}/{{ inventory_hostname }}-{{ hostvars.localhost.set_fact }}-config.txt"
         mode: '644'
 
     - name: Saving the Configs

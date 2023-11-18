@@ -1,0 +1,13 @@
+# Ansible Playbook to show version on Cisco ASA Firewall
+---
+- name: Show the ASA version
+  hosts: cisco_ASAs
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Show the ASA version
+      cisco.asa.asa_command:
+        commands:
+          - show version
+...
