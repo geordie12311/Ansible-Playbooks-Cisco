@@ -12,7 +12,6 @@ jobs:
       uses: ansible/ansible-lint-action@main
               
       with:
-        path: /home/geordie/Ansible-Playbooks-Cisco/configure-playbooks
         targets: |
           CDP_description.yaml
           clear-interface-counters.yaml
