@@ -12,7 +12,7 @@ jobs:
     - name: checkout sources
       uses: actions/checkout@v4
     - name: ansible linting
-      uses: ansible/ansible-lint-action@c37fb7b4bda2c8cb18f4942716bae9f11b0dc9bc
+      uses: ansible/ansible-lint-action@b4ffde6
       with:
         targets: |
          Ansible-Playbooks-Cisco/configure-playbooks/ip_helper_cisco.yaml       
