@@ -6,10 +6,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.1
 
     - name: Lint Ansible Playbook
-      uses: ansible/ansible-lint-action@151b9a224f53c80fdc2c7aed08f3671d190e7a9e
+      uses: ansible/ansible-lint-action@b4ffde6
               
       with:
         override-deps: |
