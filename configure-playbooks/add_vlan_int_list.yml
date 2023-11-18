@@ -1,0 +1,35 @@
+# Ansible Playbook to add VLANs from list
+---
+- name: Add VLANs using cisco.ios.ios_vlan module from a list
+  hosts: ios_switches
+  gather_facts: false
+
+  tasks:
+    - name: Create VLAN 100
+      cisco.ios.ios_vlans:
+        vlan_id: 100
+        name: test-vlan
+        state: merged
+
+    - name: Add interfaces to VLAN 100
+      with_items: "{{ vlan_int_list }}"
+      cisco.ios.ios_vlans:
+        vlan_id: 100
+        interfaces:
+          - "{{ item }}"
+        state: merged
+
+    - name: Show VLAN 100 has been added
+      cisco.ios.ios_command:
+        commands:
+          - show vlan brief
+      register: print_vlan
+
+    - name: Print the vlan output to screen
+      ansible.builtin.debug:
+        var: print_vlan.stdout_lines
+
+    - name: Save the configuration to startup when modified
+      cisco.ios.ios_config:
+        save_when: modified
+...
