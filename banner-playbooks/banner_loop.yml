@@ -4,15 +4,16 @@
   hosts: all
 
   tasks:
-    - name: Add Banner
+    - name: Adding the Login Banner
       cisco.ios.ios_banner:
         banner: login
         text: |
           trespassers will be shot!
         state: present
 
-    - name: Add loopback
+    - name: Adding Loopback21
       cisco.ios.ios_interfaces:
-        name: Loopback21
-        state: present
+        config:
+          name: Loopback21
+        state: replaced
 ...

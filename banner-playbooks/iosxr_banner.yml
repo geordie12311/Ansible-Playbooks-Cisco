@@ -1,22 +1,22 @@
-# ansible playbook to create a login banner on iosxr device(s)
+# Ansible playbook to create a login banner on iosxr device(s)
 ---
-- hosts: iosxr01
-  name: Test IP reachablity over specified VRF
+- name: Create a login banner for IOSXR hosts
+  hosts: iosxr01
   gather_facts: false
   connection: network_cli
 
   vars_prompt:
     - name: "username1"
-      prompt: "Enter your username" # prompting user to input username, will be used to login
+      prompt: "Enter your username" # Prompting user to input username, will be used to login
       private: false
 
     - name: "password1"
-      prompt: Enter you password # prompting user to input password, will be used to login
+      prompt: Enter you password # Prompting user to input password, will be used to login
       private: true # Note: private set to yes means details will not be displayed on screen
 
   vars:
-    ansible_user: "{{ username1 }}" # using username input earlier to connect to device(s)
-    ansible_password: "{{ password1 }}" # using password input earlier to authenticate to the device(s)
+    ansible_user: "{{ username1 }}" # Using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # Using password input earlier to authenticate to the device(s)
 
   tasks:
     - name: Configure the login banner

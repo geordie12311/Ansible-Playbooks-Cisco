@@ -1,0 +1,45 @@
+# Ansible playbook to add snmp-server and enable traps
+---
+- name: Add SNMP-Servers and Enable Traps
+  hosts: routers
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    cli:
+      timeout: 100
+
+  tasks:
+
+    - name: Set The Community String
+      cisco.ios.ios_config:
+        lines:
+          - snmp-server community labro RO 99
+
+    - name: Set the Trap-source as loopback0
+      cisco.ios.ios_config:
+        lines:
+          - snmp-server trap-source Loopback0
+
+    - name: Set the contact information
+      cisco.ios.ios_config:
+        lines:
+          - snmp-server contact geordie12311@test.com
+
+    - name: Enable the SNMP traps
+      cisco.ios.ios_config:
+        lines:
+          - snmp-server enable traps bgp state-changes
+          - snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+          - snmp-server enable traps tty
+          - snmp-server enable traps bgp state-changes
+          - snmp-server enable traps config-copy
+          - snmp-server enable traps config
+          - snmp-server enable traps config-ctid
+
+
+    - name: Set SNMP server address, version and port
+      cisco.ios.ios_config:
+        lines:
+          - snmp-server host 80.80.80.1 version 2c public udp-port 161
+...
