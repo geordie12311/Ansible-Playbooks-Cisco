@@ -1,19 +1,17 @@
-# Add Github workflow for Cisco configure playbooks
-name: cisco Configure Playbook deployment
+# .github/workflows/ansible-lint.yml
+name: ansible-lint
 on:
-  workflow_dispatch:
-
+  pull_request:
+    branches: ["main", "stable", "release/v*"]
 jobs:
-  Linting: 
-    name: Lint Ansible files
+  build:
+    name: Ansible Lint # Naming the build is important to use it as a status check
     runs-on: ubuntu-latest
-
     steps:
-    - name: checkout sources
-      uses: actions/checkout@v3
-    - name: ansible linting
-      uses: ansible/ansible-lint-action@main
-      with:
-        targets: |
-         Ansible-Playbooks-Cisco/configure-playbooks/ip_helper_cisco.yaml       
-         Ansible-Playbooks-Cisco/configure-playbooks/clear-interface-counters.yaml
+      - uses: actions/checkout@v4
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main # or version tag instead of 'main'
+        with:
+          targets: |
+           Ansible-Playbooks-Cisco/configure-playbooks/ip_helper_cisco.yaml       
+           Ansible-Playbooks-Cisco/configure-playbooks/clear-interface-counters.yaml
