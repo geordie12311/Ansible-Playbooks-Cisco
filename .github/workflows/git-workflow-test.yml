@@ -10,9 +10,9 @@ jobs:
 
     steps:
     - name: checkout sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.1
     - name: ansible linting
-      uses: ansible/ansible-lint-action@b4ffde6
+      uses: ansible/ansible-lint-action@main
       with:
         targets: |
          Ansible-Playbooks-Cisco/configure-playbooks/ip_helper_cisco.yaml       
