@@ -12,8 +12,8 @@
           router_id: "{{ bgp.rid }}"
           log_neighbor_changes: true
           neighbors:
-          - neighbor: "{{ item.neighbor }}"
-            remote_as: "{{ item.peer_asn }}"
+            - neighbor: "{{ item.neighbor }}"
+              remote_as: "{{ item.peer_asn }}"
         operation: merge
       register: cisco_bgp_output
       when: "ansible_network_os == 'cisco.ios.ios'"

@@ -1,0 +1,64 @@
+# Ansible-playbook using user input to create and assign a VLAN to an interface
+---
+- name: Create and assign specific VLANs to an interface
+  hosts: OP-SW-01
+  gather_facts: false
+  connection: network_cli
+
+  vars_prompt:
+    - name: "username1"
+      prompt: "Enter your username" # prompting user to input username, will be used to login
+      private: false
+    - name: "password1"
+      prompt: Enter you password # Prompting user to input password, will be used to login
+      private: true # Note: private set to yes means details will not be displayed on screen
+    - name: "vlan"
+      prompt: "Enter the VLAN number" # Promting user to add the vlan number, will be used later in the playbook
+      private: false # Note: private set to no means details will be displayed on screen
+    - name: "vlan_id"
+      prompt: Enter a name for the VLAN # Prompting user to input vlan name, will be used later in the playbook
+      private: false
+    - name: "vlan_interface"
+      private: false
+      prompt: Enter the interface you want to add to the VLAN to # Prompting user to input interface to assign vlan to, will be used later in the playbook
+
+  vars:
+    ansible_user: "{{ username1 }}" # Using username input earlier to connect to device(s)
+    ansible_password: "{{ password1 }}" # Using password input earlier to authenticate to the device(s)
+
+  tasks:
+    - name: Print details
+      ansible.builtin.debug:
+        msg: "The VLAN is: {{ vlan }}, VLAN name is: {{ vlan_id }} VLAN interface is: {{ vlan_interface }}"
+    # Displaying a message to the user to show what information they provided before starting the tasks
+
+    - name: Create the VLAN
+      cisco.ios.ios_vlans:
+        config:
+          vlan_id: "{{ vlan }}" # Creating the vlan using the vlan number input by the user
+          name: "{{ vlan_id }}" # Adding the vlan id using the vlan name input by the user
+        state: replaced # Tells ansible to create the vlan if not already present
+
+    - name: Add interface to VLAN
+      cisco.ios.ios_vlans:
+        config:
+          vlan_id: "{{ vlan }}" # Adding the vlan to the interface input by the user
+          interfaces:
+            - "{{ vlan_interface }}" # Using the interface details input by the user to add the vlan to
+        state: replaced # Tells ansible to add the vlan to the interface if not already present
+
+    - name: Save running to startup when modified
+      cisco.ios.ios_config:
+        save_when: modified # Saving the configuration once tasks are completed
+
+    - name: Verify VLAN & Interface configuration.
+      cisco.ios.ios_command:
+        commands:
+          - show vlan id {{ vlan }} # Using show vlan id command to verify vlan was created
+          - show run int {{ vlan_interface }} # using show run interface (interface input) to verify vlan added
+      register: int # Registering the output of the commands as int
+
+    - name: Printing verification of VLAN changes to screen
+      ansible.builtin.debug:
+        var: int.stdout_lines  # Telling ansible to use int output and display on screen
+...

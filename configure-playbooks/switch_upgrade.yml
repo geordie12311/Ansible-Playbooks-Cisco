@@ -1,0 +1,85 @@
+---
+- name: UPGRADE SWITCH FIRMWARE
+  hosts: switches
+  connection: network_cli
+  gather_facts: false
+
+  vars_prompt:
+    - name: "compliant_ios_version"
+      prompt: "What is the compliant IOS version?"
+      private: false
+
+    - name: "new_ios_bin"
+      prompt: "What is the name of the new IOS file?"
+      private: false
+
+    - name: "new_ios_md5"
+      prompt: "What is the MD5 value of the new IOS file?"
+      private: false
+
+    - name: "should_reboot"
+      prompt: "Do you want Ansible to reboot the hosts? (YES or NO)"
+      private: false
+
+  tasks:
+    - name: GATHER SWITCH FACTS
+      cisco.ios.ios_facts:
+
+    - name: UPGRADE IOS IMAGE IF NOT COMPLIANT
+      vars:
+        ansible_command_timeout: 1800
+      block:
+        - name: COPY OVER IOS IMAGE
+          cisco.ios.ios_command:
+            commands:
+              - command: "copy tftp://xxx.xxx.xxx.xxx/{{ new_ios_bin }} bootflash:"
+                prompt: '[{{ new_ios_bin }}]'
+                answer: "\r"
+
+    - name: Check the MD5 hash
+      cisco.ios.ios_command:
+        commands:
+          - command: "verify /md5 bootflash:{{ new_ios_bin }}"
+            register: md5_result
+            vars:
+              ansible_command_timeout: 300
+
+    - name: CONTINUE UPGRADE IF MD5 HASH MATCHES
+      block:
+        - name: SETTING BOOT IMAGE
+          cisco.ios.ios_config:
+            lines:
+              - no boot system
+              - boot system flash bootflash:{{ new_ios_bin }}
+            match: none
+            save_when: modified
+
+    - name: REBOOT SWITCH IF INSTRUCTED
+      vars:
+        ansible_command_timeout: 30
+      block:
+        - name: REBOOT SWITCH
+          cisco.ios.ios_command:
+            commands:
+              - command: "reload"
+                prompt: '[confirm]'
+                answer: "\r"
+
+    - name: WAIT FOR SWITCH TO RETURN
+      ansible.builtin.wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        delay: 60
+        timeout: 600
+      delegate_to: localhost
+
+    - name: GATHER ROUTER FACTS FOR VERIFICATION
+      cisco.ios.ios_facts:
+
+    - name: ASSERT THAT THE IOS VERSION IS CORRECT
+      ansible.builtin.assert:
+        that:
+          - compliant_ios_version == ansible_net_version
+        msg: "IOS version does not match compliant version. Upgrade unsuccessful."
+      when: should_reboot == "YES" and '"new_ios_md5" in md5_result.stdout[0]' and ansible_net_version != compliant_ios_version
+...

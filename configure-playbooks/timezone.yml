@@ -1,0 +1,32 @@
+# Ansible playbook to configure timezones on Cisco devices
+---
+- name: Configure Timezones and Timestamps
+  hosts: routers
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+
+    - name: Configure Name Servers
+      cisco.ios.ios_system:
+        lookup_enabled: false
+        name_servers:
+          - 208.67.222.222
+          - 208.67.220.220
+        state: present
+
+    - name: Timezome and Timestamps
+      cisco.ios.ios_config:
+        lines:
+          - clock timezone EST -5 0
+          - clock summer-time EDT recurring
+          - service timestamps debug datetime msec localtime show-timezone
+          - service timestamps log datetime msec localtime show-timezone
+          - ip default-gateway 10.76.1.254
+
+    - name: Set NTP Server
+      cisco.ios.ios_ntp:
+        server: time.google.com
+        logging: false
+        state: present
+...

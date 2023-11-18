@@ -1,0 +1,16 @@
+# Playbook to push config file using commands listed in push.txt
+
+- name: Push config from push.txt file
+  hosts: all
+  connection: network-cli
+  gather_facts: false
+
+  tasks:
+    - name: Push config file
+      cisco.ios.ios_config:
+        src: "./configs/push.txt"
+
+    - name: Save config when modified
+      cisco.ios.ios_config:
+        save_when: modified
+...

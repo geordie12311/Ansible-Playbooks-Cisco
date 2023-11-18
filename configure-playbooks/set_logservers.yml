@@ -1,0 +1,35 @@
+# Ansible playbook to set logservers on cisco IOS devices
+
+---
+- name: Setup logservers on hosts
+  hosts: SB-SW-01
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    log_servers:
+      - logging 10.10.10.1
+      - logging 10.10.10.2
+
+  tasks:
+    - name: Get the current log server configs
+      cisco.ios.ios_command:
+        commands:
+          - show running-config full | include logging [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+
+      register: log
+
+    - name: Print current log server configuration
+      ansible.builtin.debug:
+        var: log.stdout_lines
+
+    - name: Set new logging configuration
+      cisco.ios.ios_config:
+        commands: "{{ item }}"
+        loop: "{{ log_servers }}"
+        register: set_logging
+        save_when: modified
+
+    - name: Print new log server configuration
+      ansible.builtin.debug:
+        var: set_logging.stdout_lines
+...

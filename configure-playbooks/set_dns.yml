@@ -1,0 +1,35 @@
+# Ansible playbook to set DNS nameservers on cisco IOS devices
+---
+- name: Set DNS nameservers
+  hosts: SB-SW-01
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    dns_servers:
+      - ip name-server 8.8.8.8
+      - ip name-server 8.8.4.4
+
+  tasks:
+    - name: Get the current name-server configs
+      cisco.ios.ios_command:
+        commands:
+          - "show running-config full | include ip name-server"
+      register: current_config
+
+    - name: Print current dns config to screen
+      ansible.builtin.debug:
+        var: current_config.stdout_lines
+
+    - name: Add the new DNS name servers
+      with_items: "{{ dns_servers }}"
+      cisco.ios.ios_config:
+        lines:
+          - "{{ item }}"
+        save_when: modified
+      register: set_dns
+
+    - name: Print new DNS config to screen
+      ansible.builtin.debug:
+        var: set_dns.stdout_lines
+...

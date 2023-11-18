@@ -1,22 +1,22 @@
 # Ansible playbook to create VLANs automatically on Cisco IOS switches
-
 ---
 - name: Configure Access VLANs
   hosts: switches
   gather_facts: false
   connection: network_cli
-  
+
   tasks:
-    - name: Create VLAN
-      ios_config:
-        provider: "{{ cli }}"
-        authorize: yes
+    - name: Create new vlans
+      cisco.ios.ios_config:
         lines:
           - VLAN 10
           - VLAN 20
           - VLAN 30
           - VLAN 40
-
+        save_when: modified
       register: print_output
-    -  debug: var=print_output
+
+    - name: Print the changes to screen
+      ansible.builtin.debug:
+        var: print_output
 ...

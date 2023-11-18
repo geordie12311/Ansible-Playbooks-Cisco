@@ -3,10 +3,10 @@
 - name: Configure Nexus Switch
   hosts: nxsw01
 
-  tasks: 
+  tasks:
     - name: Configure a single command on Nexus
       cisco.nxos.nxos_config:
-        lines: 
+        lines:
           - ntp server 9.9.9.9 use-vrf default
         save_when: modified
 ...

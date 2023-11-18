@@ -1,7 +1,7 @@
 # Ansible Playbook to test IP over specific VRF
 ---
-- hosts: iosxr01
-  name: Test IP reachablity over specified VRF
+- name: Test IP reachablity over specified VRF
+  hosts: iosxr01
   gather_facts: false
   connection: network_cli
 

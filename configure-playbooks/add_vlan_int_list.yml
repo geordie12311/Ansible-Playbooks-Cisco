@@ -7,16 +7,18 @@
   tasks:
     - name: Create VLAN 100
       cisco.ios.ios_vlans:
-        vlan_id: 100
-        name: test-vlan
+        config:
+          vlan_id: 100
+          name: test-vlan
         state: merged
 
     - name: Add interfaces to VLAN 100
       with_items: "{{ vlan_int_list }}"
       cisco.ios.ios_vlans:
-        vlan_id: 100
-        interfaces:
-          - "{{ item }}"
+        config:
+          vlan_id: 100
+          interfaces:
+            - "{{ item }}"
         state: merged
 
     - name: Show VLAN 100 has been added

@@ -3,8 +3,8 @@
 # then runs a show ip route on the devices
 
 ---
-- hosts: OP-SW-01
-  name: Test prompt
+- name: Test prompt
+  hosts: OP-SW-01
   gather_facts: false
   connection: network_cli
   vars_prompt:

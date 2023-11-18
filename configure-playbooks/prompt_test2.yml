@@ -2,8 +2,8 @@
 # uses the credentials input by the user to connect to the device
 # and gathers subset of facts for each host
 ---
-- hosts: OP-SW-01
-  name: Test user prompt for credentials
+- name: Test user prompt for credentials
+  hosts: OP-SW-01
   gather_facts: false
   connection: network_cli
   vars_prompt:
