@@ -15,7 +15,7 @@ jobs:
         override-deps: |
           ansible==2.9
           ansible-lint==4.2.0
-        working-directory: /home/geordie/Ansible-Playbooks-Cisco/configure-playbooks
+        path: /home/geordie/Ansible-Playbooks-Cisco/configure-playbooks
         targets:
           CDP_description.yaml
           clear-interface-counters.yaml
