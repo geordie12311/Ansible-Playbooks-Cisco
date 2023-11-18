@@ -1,0 +1,4 @@
+GigabitEthernet 0/19
+GigabitEthernet 0/20
+GigabitEthernet 0/21
+GigabitEthernet 0/22
