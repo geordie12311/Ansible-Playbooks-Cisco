@@ -11,7 +11,10 @@ jobs:
     - name: Lint Ansible Playbook
       uses: ansible/ansible-lint-action@151b9a224f53c80fdc2c7aed08f3671d190e7a9e
       with:
-         targets: |
+        override-deps: |
+          ansible==2.9
+          ansible-lint==4.2.0
+        targets: |
            CDP_description.yaml
            clear-interface-counters.yaml
  
