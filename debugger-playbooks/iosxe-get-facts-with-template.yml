@@ -1,0 +1,32 @@
+# This playbook is very basic and is used to demonstrate the basics tasks ansible can do
+---
+- name: "PLAY 1: This playbook gathers facts from sandbox-iosxe-recomm-1.cisco.com and prints them in the output and then saves it to the output folder"
+  hosts: CSR_hosts
+  connection: network_cli
+
+  tasks:
+    - name: "TASK 1: Connect to the device to gather facts about it"
+      cisco.ios.ios_facts:
+      register: raw_facts
+
+    - name: "TASK 2: Print out some information about the device that is formatted on the cli"
+      ansible.builtin.debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: "TASK 3: Print the raw output"
+      ansible.builtin.debug:
+        msg: "{{ raw_facts }}"
+
+    - name: "TASK 4: Create outputs/ folder if it does not exist"
+      ansible.builtin.file:
+        path: "host_facts_outputs"
+        state: directory
+        mode: "0775"
+      run_once: true
+
+    - name: "TASK 5: send the output of raw_facts to a nice template and print it to a file"
+      ansible.builtin.copy:
+        content: "{{ lookup('template', '../templates/facts-template.j2') }}"
+        dest: "outputs/{{ inventory_hostname }}.txt"
+        mode: "0664"
+...

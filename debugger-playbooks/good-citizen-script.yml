@@ -1,0 +1,18 @@
+# Ansible Playbook to remove loopback interfaces using Jinja2 template
+---
+- name: "PLAY 1: This playbook removes the loopback interfaces using a cli_conig module and a jinja"
+  hosts: CSR_hosts
+  connection: network_cli
+  tasks:
+    - name: "TASK 1: Remove the loopback interfaces that are listed in the host_vars/ directory"
+      ansible.netcommon.cli_config:
+        config: "{{ lookup('template', '../templates/good-citizen-interface-template.j2') }}"
+      notify: config_changed # A conditional that notifies the handler below if the configuration has changed
+      register: cli_result # save the output to the 'cli_result'
+
+  handlers:
+    - name: "HANDLER OUTPUT: Display output of Task 3 if configure has changed"
+      listen: config_changed # If the notify sends then config_changed then run debug.msg below
+      ansible.builtin.debug:
+        msg: "{{ cli_result }}"
+...

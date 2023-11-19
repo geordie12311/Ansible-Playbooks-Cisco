@@ -1,0 +1,37 @@
+# Ansible Playbook to use multiple roles
+
+---
+- name: "PLAY 1: USING MULTIPLE ROLES"
+  hosts: CSR_hosts
+  connection: network_cli
+
+  tasks:
+    - name: Import a role within the playbook to configure loopbacks
+      ansible.builtin.import_role:
+        name: configure-loopback
+
+    - name: Import a role within the playbook to verify interfaces
+      ansible.builtin.import_role:
+        name: show-command-basic
+
+    - name: Print sample-role show command output
+      ansible.builtin.debug:
+        msg: "{{ show_command_output.stdout_lines }}" # show_command_output variable defined in show-command-basic/tasks/main.yml
+
+- name: "PLAY 2: SHOW COMMANDS FROM ROLE"
+  hosts: CSR_hosts
+  connection: network_cli
+  tasks:
+    - name: Import a role within the playbook to rollback the configuration of loopbacks
+      ansible.builtin.import_role:
+        name: configure-loopback
+      vars:
+        rollback_flag: true
+
+    - name: Import a role within the playbook to verify interfaces
+      ansible.builtin.import_role:
+        name: show-command-basic
+
+    - name: Print sample-role show command output
+      ansible.builtin.debug:
+        msg: "{{ show_command_output.stdout_lines }}" # show_command_output variable defined in show-command-basic/tasks/main.yml

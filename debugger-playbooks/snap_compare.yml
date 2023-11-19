@@ -12,6 +12,7 @@
         name: ansible-pyats
         tasks_from: compare_command
       vars:
-        cisco.ios.ios_command: show ip route
+        cisco.ios.ios_command: 
+          commands: show ip route
         file: "{{ inventory_hostname }}_routes.json"
 ...

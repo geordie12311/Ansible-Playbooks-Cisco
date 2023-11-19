@@ -1,0 +1,9 @@
+---
+# tasks file for show-command-basic
+
+- name: Run multiple commands on remote nodes
+  cisco.ios.ios_command:
+    commands:
+      - show ip interface brief
+      - show ip route
+  register: show_command_output

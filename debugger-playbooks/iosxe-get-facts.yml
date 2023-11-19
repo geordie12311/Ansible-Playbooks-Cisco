@@ -1,0 +1,19 @@
+# This playbook is very basic and is used to demonstrate the basics about ansible facts
+---
+- name: "PLAY 1: This playbook gathers facts from hosts and prints them in the output"
+  hosts: CSR_hosts
+  connection: network_cli
+
+  tasks:
+    - name: "TASK 1: Connect to the device to gather facts about it"
+      cisco.ios.ios_facts:
+      register: raw_facts
+
+    - name: "TASK 2: DESCRIBE THE SECOND TASK"
+      ansible.builtin.debug:
+        msg: "The hostname is {{ ansible_net_hostname }} and the OS is {{ ansible_net_version }}"
+
+    - name: "TASK 3: send the output of raw_facts"
+      ansible.builtin.debug:
+        msg: "{{ raw_facts }}"
+...

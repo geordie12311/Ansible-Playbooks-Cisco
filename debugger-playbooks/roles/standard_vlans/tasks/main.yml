@@ -1,0 +1,16 @@
+---
+- name: Deploy Standard VLANs
+  cisco.ios.ios_vlans:
+    config:
+      - name: DATA
+        vlan_id: 100
+      - name: VOIP
+        vlan_id: 200
+      - name: WIFI
+        vlan_id: 300
+      - name: GUEST
+        vlan_id: 400
+      - name: NATIVE
+        vlan_id: 999
+    state: overridden
+...

@@ -1,0 +1,25 @@
+interfaces:
+  Loopback100:
+    description: "This is a loopback configured by ansible"
+    ipv4addr: "10.123.126.100"
+    subnet: "255.255.255.255"
+
+  Loopback101:
+    description: "This is a loopback configured by ansible"
+    ipv4addr: "10.123.126.101"
+    subnet: "255.255.255.255"
+
+  Loopback102:
+    description: "This is a loopback configured by ansible"
+    ipv4addr: "10.123.126.102"
+    subnet: "255.255.255.255"
+
+  Loopback103:
+    description: "This is a loopback configured by ansible"
+    ipv4addr: "10.123.126.103"
+    subnet: "255.255.255.255"
+
+  Loopback104:
+    description: "This is a loopback configured by ansible"
+    ipv4addr: "10.123.126.104"
+    subnet: "255.255.255.255"

@@ -1,0 +1,11 @@
+# tasks file for configure-loopback
+---
+- name: "ROLE TASK 1: CONFIGURE LOOPBACKS"
+  cisco.ios.ios_config:
+    src: role-interface-template.j2
+  when: rollback_flag == false # defaults/main.yml rollback_flag is false by default
+
+- name: "ROLE TASK 2: ROLL BACK LOOPBACKS"
+  cisco.ios.ios_config:
+    src: role-good-citizen-interface-template.j2
+  when: rollback_flag == true # defaults/main.yml rollback_flag is false by default

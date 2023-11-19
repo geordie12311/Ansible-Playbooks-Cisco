@@ -1,0 +1,10 @@
+# Ansible playbook to use roles to create standard vlans on IOS switches
+---
+- name: Configure Standard VLANs
+  hosts: Core1
+  connection: network_cli
+  gather_facts: false
+
+  roles: 
+    - ./roles/standard_vlans
+...

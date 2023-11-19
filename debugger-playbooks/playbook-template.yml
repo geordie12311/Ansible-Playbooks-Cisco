@@ -1,0 +1,16 @@
+# THIS IS A TEMPLATE THAT CAN BE USED TO CREATE A PLAY BOOK
+
+---
+- name: "PLAY 1: THIS IS THE TITLE OF THE PLAY - THIS SHOULD DESCRIBE WHAT THE PLAY BOOK DOES"
+  hosts:
+  connection: network_cli
+
+  tasks:
+    - name: "TASK 1: DESCRIBE THE FIRST TASK"
+      module_placeholder:
+      # THIS IS WHERE THE MODULE AND ACTION IS DEFINED
+
+    - name: "TASK 2: DESCRIBE THE SECOND TASK"
+      module_placeholder:
+      # THIS IS WHERE THE MODULE AND ACTION IS DEFINED
+...
