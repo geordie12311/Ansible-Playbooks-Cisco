@@ -1,7 +1,7 @@
 # Ansible playbook to Enable CDP
 ---
 - name: Enabling CDP to devices
-  hosts: routers
+  hosts: North_Switches, South_Switches
   gather_facts: false
   connection: network_cli
 

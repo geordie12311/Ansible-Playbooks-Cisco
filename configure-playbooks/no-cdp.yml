@@ -1,0 +1,14 @@
+# Ansible playbook to Enable CDP
+---
+- name: Disabling CDP on devices
+  hosts: North_Switches, South_Switches
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Configuring CDP
+      cisco.ios.ios_config:
+        commands:
+          - "no cdp run"
+        save_when: changed
+...
