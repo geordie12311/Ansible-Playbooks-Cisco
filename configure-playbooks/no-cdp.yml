@@ -6,7 +6,7 @@
   connection: network_cli
 
   tasks:
-    - name: Configuring CDP
+    - name: Configuring NO CDP
       cisco.ios.ios_config:
         commands:
           - "no cdp run"

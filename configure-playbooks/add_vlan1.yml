@@ -1,7 +1,7 @@
 # Ansible Playbook to add new vlans, create trunks and create the L2 interfaces and add the VLANs
 ---
 - name: Configure new VLANs on each IOS Switch
-  hosts: NN-SW-01
+  hosts: North_Switches, South_Switches
   gather_facts: false
   connection: local
 
@@ -21,7 +21,7 @@
             vlan_id: 30
             state: active
             shutdown: disabled
-          - name: Native_VLAN
+          - name: Management_VLAN
             vlan_id: 50
             state: active
             shutdown: disabled
@@ -29,47 +29,6 @@
             vlan_id: 666
             state: active
             shutdown: enabled
-        state: merged
-
-    - name: Create the L2 interfaces and add the VLANs
-      cisco.ios.ios_l2_interfaces:
-        config:
-          - name: GigabitEthernet0/1
-            mode: trunk
-            trunk:
-              allowed_vlans: 10,20,40,50
-              native_vlan: 50
-              encapsulation: dot1q
-          - name: GigabitEthernet0/2
-            mode: trunk
-            trunk:
-              allowed_vlans: 10,20,40,50
-              native_vlan: 50
-              encapsulation: dot1q
-          - name: GigabitEthernet 0/3
-            mode: access
-            access:
-              vlan: 10
-            voice:
-              vlan: 40
-          - name: GigabitEthernet1/0
-            mode: access
-            access:
-              vlan: 20
-            voice:
-              vlan: 40
-          - name: GigabitEthernet1/1
-            mode: access
-            access:
-              vlan: 666
-          - name: GigabitEthernet1/2
-            mode: access
-            access:
-              vlan: 666
-          - name: GigabitEthernet1/3
-            mode: access
-            access:
-              vlan: 666
         state: merged
 
     - name: Show merged VLAN information

@@ -1,7 +1,7 @@
 # Ansible Playbook to configure IP Helper on multiple interfaces
 ---
 - name: Configure IP Helper on multiple interfaces
-  hosts: R1
+  hosts: ios_routers
   gather_facts: false
   connection: network_cli
 
@@ -27,7 +27,7 @@
         parents: '{{ item }}'
       with_items:
         - interface Ethernet 0/1
-        - interface Ethernet 0/2
+        - interface tEthernet 0/2
         - interface Ethernet 0/3
 
     - name: Verify IP Helper Interface configuration.

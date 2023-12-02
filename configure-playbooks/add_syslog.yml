@@ -2,7 +2,7 @@
 # hostname = IP address of the log servers
 ---
 - name: Configure Syslog traps on cisco devices
-  hosts: SB-SW-01
+  hosts: NN-SW-01
   connection: network_cli
 
   tasks:

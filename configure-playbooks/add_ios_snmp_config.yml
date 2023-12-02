@@ -1,7 +1,7 @@
 # Ansible Playbook to configure SNMP parameters on IOS devices
 ---
 - name: Cico IOS SNMP Playbook
-  hosts: cisco_ios
+  hosts: NN-SW-01
   connection: network_cli
 
   tasks:
