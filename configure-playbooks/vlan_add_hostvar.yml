@@ -1,0 +1,68 @@
+# Playbook using Ansible VLANs module to configure VLAN on Cisco Switches
+---
+- name: Configure vlan on Cisco Switch
+  hosts: lab-sw5
+  connection: network_cli
+
+  tasks:
+    - name: Create the VLANs as defined in the hostvars files
+      cisco.ios.ios_vlans:
+        config:
+          - name: "{{ item.name }}"
+            vlan_id: "{{ item.id }}"
+        state: merged
+      loop: "{{ vlans.vlan }}"
+
+# Need to fix this section:
+
+#    - name: Configure SVI interfaces for the VLANs
+#      cisco.ios.ios_l3_interfaces:
+#        config:
+#          - name: "{{ item.port }}"
+#            ipv4:
+#              - address: "{{ item.ip }}"
+#        state: merged
+#        loop: "{{ vlans.svi }}"
+
+    - name: enable the SVI interfaces
+      cisco.ios.ios_config:
+        lines:
+         - no shutdown
+        parents:
+          - interface vlan 10 # Need to get this to pull from hostvars and loop
+#        loop: "{{ vlans.vlan }}"
+
+    - name: Configure L2 Trunk ports
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item.interface }}"
+            mode: "{{ item.mode }}"
+            trunk:
+              allowed_vlans: "{{ item. allowed }}"
+              native_vlan: "{{ item.native }}"
+              encapsulation: "{{ item.encap }}"
+        state: replaced
+      loop: "{{ trunks.interfaces }}"
+
+    - name: Configure the VLAN access ports
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item.interface }}"
+            mode: access
+            access:
+              vlan: "{{ item.vlan }}"
+        state: merged
+      loop: "{{ access.ports }}"
+      when: item.mode == "access"
+
+    - name: Show trunk and VLAN details following changes
+      cisco.ios.ios_command:
+        commands:
+          - "show interface trunk"
+          - "show vlan brief"
+      register: "config_output"
+
+    - name: Print show trunk and show vlan output
+      ansible.builtin.debug:
+        var: config_output.stdout_lines
+...

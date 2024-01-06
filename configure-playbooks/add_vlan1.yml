@@ -1,28 +1,24 @@
 # Ansible Playbook to add new vlans, create trunks and create the L2 interfaces and add the VLANs
 ---
 - name: Configure new VLANs on each IOS Switch
-  hosts: North_Switches, South_Switches
+  hosts: lab-sw5,lab-sw6,lab-sw7,lab-sw8
   gather_facts: false
-  connection: local
+  connection: network_cli
 
   tasks:
     - name: Create new VLANs and merge with existing VLANs on the device
       cisco.ios.ios_vlans:
         config:
           - name: HR_VLAN
-            vlan_id: 10
+            vlan_id: 30
             state: active
             shutdown: disabled
           - name: Finance_VLAN
             vlan_id: 20
             state: active
             shutdown: disabled
-          - name: VOICE_VLAN
-            vlan_id: 30
-            state: active
-            shutdown: disabled
-          - name: Management_VLAN
-            vlan_id: 50
+          - name: Sales_VLAN
+            vlan_id: 10
             state: active
             shutdown: disabled
           - name: Blackhole_VLAN
