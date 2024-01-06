@@ -1,7 +1,7 @@
 ---
 
 - name: "My Banner Playbook"
-  hosts: cisco_ios
+  hosts: lab-sw1
   gather_facts: false
   connection: network_cli
 

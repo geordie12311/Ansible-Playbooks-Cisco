@@ -1,19 +1,14 @@
-# Ansbible Playbook to add a login banner and new loopback int
+# Ansbible Playbook to add a login banner using a loop
 ---
-- name: Add a login banner & a new loopback
-  hosts: all
+- name: Add a login banner
+  hosts: lab_switches
+  connection: network_cli
 
   tasks:
     - name: Adding the Login Banner
       cisco.ios.ios_banner:
         banner: login
         text: |
-          trespassers will be shot!
+          Welcome to GH-lab, trespassers will be shot!
         state: present
-
-    - name: Adding Loopback21
-      cisco.ios.ios_interfaces:
-        config:
-          name: Loopback21
-        state: replaced
 ...
