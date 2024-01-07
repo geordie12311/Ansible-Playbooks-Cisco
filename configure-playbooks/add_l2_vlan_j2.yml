@@ -1,0 +1,20 @@
+# Playbook to using Jinja2 template to configure L2 interfaces, VLANs and SVIs
+---
+- name: "Test VLAN Playbook using Jinja2 Templates"
+  hosts: lab-sw5,lab-sw6,lab-sw7,lab-sw8
+  connection: network_cli
+  gather_facts: false
+
+  tasks:
+    - name: "Configure Cisco L2 interfaces, VLANs and SVIs"
+      cisco.ios.ios_config:
+        src: "lab-sw.j2"
+      register: cisco_vlan_output
+      when: "ansible_network_os == 'cisco.ios.ios'"
+# jinja2 file the task calls is cisco.ios.ios-vlans.j2
+
+    - name: "Print Cisco vlan config"
+      ansible.builtin.debug:
+        msg: "{{ cisco_vlan_output }}"
+      when: "ansible_network_os == 'cisco.ios.ios'"
+...

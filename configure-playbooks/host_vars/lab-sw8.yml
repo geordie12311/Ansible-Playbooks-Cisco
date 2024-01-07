@@ -3,7 +3,26 @@ syslog:
   hosts:
     - ip: 140.140.1.5
 
-trunks:
+vlans:
+  vlan:
+    - number: 50
+      name: "management"
+      svi: "10.100.50.8 255.255.255.0"
+    - number: 10
+      name: "Sales"
+      svi: "10.100.10.8 255.255.255.0"
+#    - number: 20
+#      name: "Finance"
+#      svi: "10.10.20.8 255.255.255.0"
+#    - number: 30
+#      name: "HR"
+#      svi: "10.100.30.8 255.255.255.0"
+    - number: 40
+      name: "VOICE_VLAN"
+      svi: "10.100.40.8 255.255.255.0"
+    - number: 666
+      name: Blackhole
+      svi: "66.66.66.8 255.255.255.0"
   interfaces:
     - interface: "eth0/1"
       mode: trunk
@@ -15,84 +34,86 @@ trunks:
       native: "50"
       encap: "dot1q"
       allowed: "20,50"
-
-access:
-  ports:
     - interface: "eth1/0"
       mode: access
       vlan: 20
+      voice: 40
     - interface: "eth1/1"
       mode: access
       vlan: 20
+      voice: 40
     - interface: "eth1/2"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth1/3"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth2/0"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth2/1"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth2/2"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth2/3"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth3/0"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth3/1"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth3/2"
       mode: access
+      voice: 40
       vlan: 666
     - interface: "eth3/3"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth4/0"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth4/1"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth4/2"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth4/3"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth5/0"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth5/1"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth5/2"
       mode: access
       vlan: 666
+      voice: 40
     - interface: "eth5/3"
       mode: access
       vlan: 666
-
-  vlan:
-    - number: 50
-      name: "management"
-    - number: 10
-      name: "Sales"
-      svi: "10.100.10.8 255.255.255.0"
-#    - number: 20
-#      name: "Finance"
-#      svi: "10.10.20.8 255.255.255.0"
-#    - number: 30
-#      name: "HR"
-#      svi: "10.100.30.8 255.255.255.0"
-    - number: 666
-      name: Blackhole
+      voice: 40
 
 ntp:
   servers:
