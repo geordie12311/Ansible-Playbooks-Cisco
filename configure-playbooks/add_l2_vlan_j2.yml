@@ -1,7 +1,8 @@
-# Playbook to using Jinja2 template to configure L2 interfaces, VLANs and SVIs
+# Playbook to using Jinja2 template to configure L2 interfaces, the VLANs
+# and an SVI to Sales VLAN as configured in Jinja2 template
 ---
 - name: "Test VLAN Playbook using Jinja2 Templates"
-  hosts: lab-sw5,lab-sw6,lab-sw7,lab-sw8
+  hosts: lab-sw5
   connection: network_cli
   gather_facts: false
 

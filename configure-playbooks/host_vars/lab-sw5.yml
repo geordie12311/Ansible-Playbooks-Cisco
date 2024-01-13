@@ -3,22 +3,22 @@ vlans:
   vlan:
     - number: 50
       name: "NATIVE VLAN"
-      svi: "10.100.50.5 255.255.255.0"
+#      svi: "10.100.50.5 255.255.255.0"
     - number: 10
       name: "Sales VLAN"
       svi: "10.100.10.5 255.255.255.0"
     - number: 20
       name: "Finance VLAN"
-      svi: "10.100.20.5 255.255.255.0"
+#      svi: "10.100.20.5 255.255.255.0"
 #    - number: 30
 #      name: "HR"
 #      svi: "10.100.30.5 255.255.255.0"
     - number: 40
       name: "VOICE_VLAN"
-      svi: "10.100.40.5 255.255.255.0"
+#      svi: "10.100.40.5 255.255.255.0"
     - number: 666
       name: "Blackhole VLAN"
-      svi: "66.66.66.5 255.255.255.0"
+#      svi: ""
   interfaces:
     - interface: "eth0/1"
       mode: trunk
@@ -110,7 +110,9 @@ vlans:
       mode: access
       vlan: 666
       voice: 40
-
+loopbacks:
+    - interface: "lo1"
+      ip: "10.10.55.5"
 syslog:
   hosts:
     - ip: 140.140.1.5

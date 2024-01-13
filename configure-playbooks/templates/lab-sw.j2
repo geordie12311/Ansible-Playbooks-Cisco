@@ -1,10 +1,15 @@
 {% for vl in vlans.vlan %}
+{% if vl.name == "Sales VLAN" %}
 vlan {{ vl.number }}
 name {{ vl.name }}
 interface vlan {{ vl.number }}
  ip address {{ vl.svi }}
- no shut
- exit
+ no shutdown
+exit
+{% else %}
+vlan {{ vl.number }}
+name {{ vl.name }}
+{% endif %}
 {% endfor %}
 {% for intf in vlans.interfaces %}
 {% if intf.mode == "access" %}
