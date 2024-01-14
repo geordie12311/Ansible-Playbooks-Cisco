@@ -46,7 +46,14 @@ vIOS5
 vIOS6
 vIOS7
 vIOS8
-
+lab-sw1
+lab-sw2
+lab-sw3
+lab-sw4
+lab-sw5
+lab-sw6
+lab-sw7
+lab-sw8
 [cisco_ios]
 R1
 R2
@@ -64,7 +71,14 @@ SS-SW-03
 SS-SW-04
 can-sw1
 can-sw2
-
+lab-sw1
+lab-sw2
+lab-sw3
+lab-sw4
+lab-sw5
+lab-sw6
+lab-sw7
+lab-sw8
 
 
 [cisco_iosxe]
@@ -174,9 +188,19 @@ PA-FW-01
 PA-VM-PRI
 PA-VM-FAIL
 PA-VM-02
+
 [Checkpoint]
 CHECK-FW-01
 
+[lab_switches]
+lab-sw1
+lab-sw2
+lab-sw3
+lab-sw4
+lab-sw5
+lab-sw6
+lab-sw7
+lab-sw8
 
 
 

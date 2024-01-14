@@ -1,0 +1,20 @@
+# Ansible playbook using gather facts to collate the device versions
+---
+- name: "Play 1: Gather facts from the hosts"
+  connection: network_cli
+  hosts: lab_switches
+
+  tasks:
+    - name: "Task1: Gather IOS version from hosts"
+      cisco.ios.ios_facts:
+        gather_subset:
+        - config
+
+    - name: "Task2: DEBUG >> Ansible Facts"
+      debug:
+        msg: "{{ ansible_facts }}"
+
+    - name: "Task3: Debug >> Print the IOS versions"
+      debug:
+        msg: "{{ ansible_net_version }}"
+...
