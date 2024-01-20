@@ -1,50 +1,22 @@
+# Ansible playbook using Jinja2 template to configure OSPF on IOS switches
 ---
 - name: "Play 1 Add OSPF to Hosts via jinj2 template"
   hosts: lab_switches
   connection: network_cli
 
   tasks:
-    - name: "Task1: Deploy the l3 interface configuration"
-      cisco.ios.ios_config:
-        src: "templates/ios_l3_interfaces.j2"
-      register: ios_layer3_output
-      ignore_errors: true
-      tags:
-      - l3 interfaces
+    - name: "Task1: Deploy OSPF configuration"
+    cisco.ios.ios_config:
+      src: "templates/ospf.j2"
+    register: ios_ospf_output
+    ignore_errors: true
 
-    - name: "Task2: Deploy the VLANs and L2 interface configuration"
-      cisco.ios.ios_config:
-        src: "templates/ios_l2_interfaces.j2"
-      register: ios_layer2_VLAN_output
-      ignore_errors: true
-      tags:
-      - l2_VLAN interfaces
+  - name: "Task2: Save the configuration changes"
+    cisco.ios.ios_command:
+      commands:
+        - wr mem
 
-    - name: "Task3: Add the static routes"
-      cisco.ios.ios_config:
-        src: "templates/static_route.j2"
-      register: ios_static_output
-      ignore_errors: true
-      tags:
-      - static_routes
-
-    - name: "Task4: Deploy OSPF configuration"
-      cisco.ios.ios_config:
-        src: "templates/ospf.j2"
-      register: ios_ospf_output
-      ignore_errors: true
-      tags:
-      - ospf
-
-    - name: "Task5: Save the configuration changes"
-      cisco.ios.ios_command:
-        commands:
-          - wr mem
-
-    - name: "Task6: Display the configuration changes"
-      ansible.builtin.debug:
-        msg:
-          - "{{ ios_layer3_output }}"
-          - "{{ ios_layer2_VLAN_output }}\n"
-          - "{{ ios_ospf_output }}"
+  - name: "Task3: Display the configuration changes"
+    ansible.builtin.debug:
+      msg: "{{ ios_ospf_output }}"
 ...
