@@ -1,0 +1,3 @@
+{% for route in static %}
+ip route {{ route.ip }} {{ route.mask }} {{ route.int }}
+{% endfor %}

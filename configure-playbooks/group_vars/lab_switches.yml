@@ -1,0 +1,23 @@
+---
+vlans:
+  - vlan_id: 50
+    name: "NATIVE VLAN"
+  - vlan_id: 10
+    name: "Sales VLAN"
+  - vlan_id: 20
+    name: "Finance VLAN"
+  - vlan_id: 30
+    name: "HR"
+  - vlan_id: 40
+    name: "VOICE_VLAN"
+  - vlan_id: 666
+    name: "Blackhole VLAN"
+
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4

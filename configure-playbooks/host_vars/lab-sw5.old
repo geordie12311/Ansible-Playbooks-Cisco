@@ -1,0 +1,124 @@
+---
+vlans:
+  vlan:
+    - number: 50
+      name: "NATIVE VLAN"
+#      svi: "10.100.50.5 255.255.255.0"
+    - number: 10
+      name: "Sales VLAN"
+      svi: "10.100.10.5 255.255.255.0"
+    - number: 20
+      name: "Finance VLAN"
+#      svi: "10.100.20.5 255.255.255.0"
+#    - number: 30
+#      name: "HR"
+#      svi: "10.100.30.5 255.255.255.0"
+    - number: 40
+      name: "VOICE_VLAN"
+#      svi: "10.100.40.5 255.255.255.0"
+    - number: 666
+      name: "Blackhole VLAN"
+#      svi: ""
+  interfaces:
+    - interface: "eth0/1"
+      mode: trunk
+      native: 50
+      encap: "dot1q"
+      allowed: 10,20,40,50
+    - interface: "eth0/2"
+      mode: trunk
+      native: 50
+      encap: "dot1q"
+      allowed: 10,20,40,50
+    - interface: "eth1/0"
+      mode: access
+      vlan: 10
+      voice: 40
+    - interface: "eth1/1"
+      mode: access
+      vlan: 30
+      voice: 40
+    - interface: "eth1/2"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth1/3"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth2/0"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth2/1"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth2/2"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth2/3"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth3/0"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth3/1"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth3/2"
+      mode: access
+      voice: 40
+      vlan: 666
+    - interface: "eth3/3"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth4/0"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth4/1"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth4/2"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth4/3"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth5/0"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth5/1"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth5/2"
+      mode: access
+      vlan: 666
+      voice: 40
+    - interface: "eth5/3"
+      mode: access
+      vlan: 666
+      voice: 40
+loopbacks:
+    - interface: "lo1"
+      ip: "10.10.55.5"
+syslog:
+  hosts:
+    - ip: 140.140.1.5
+
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4
+...

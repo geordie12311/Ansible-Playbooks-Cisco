@@ -1,0 +1,23 @@
+{% for vlan in vlans %}
+vlan {{ vlan.number }}
+name {{ vlan.name }}
+{% endfor %}
+{% for interface in l2_interfaces %}
+{% if interface.mode == "access" %}
+interface {{ interface.name }}
+ description {{ interface.desc }}
+ switchport mode access
+ switchport access vlan {{ interface.vlan }}
+ switchport voice vlan {{ interface.voice }}
+{% else %}
+interface {{ interface.name }}
+ description {{ interface.desc }}
+ switchport trunk encapsulation {{ interface.encap }}
+ switchport mode trunk
+ switchport trunk native vlan {{ interface.native }}
+ switchport trunk allowed vlan {{ interface.allowed }}
+ exit
+do wr
+end
+{% endif %}
+{% endfor %}

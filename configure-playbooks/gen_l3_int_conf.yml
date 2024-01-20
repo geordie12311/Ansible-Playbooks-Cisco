@@ -1,0 +1,13 @@
+# Playbook to generate VLAN configuration into a config file
+---
+- name: "Play1: Generate VLAN configuration"
+  connection: local
+  hosts: lab-sw5
+
+  tasks:
+    - name: "task1: Generate L3 interface configuration to test file"
+      template:
+        src: ios_l3_interfaces.j2
+        dest: ./configs/{{ inventory_hostname }}-l3_interfaces.cfg
+      delegate_to: localhost
+...

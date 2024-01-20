@@ -1,0 +1,38 @@
+---
+vlans:
+  - { number: 50, name: native }
+  - { number: 55, name: management }
+  - { number: 10, name: Sales }
+  - { number: 20, name: Finance }
+  - { number: 30, name: HR }
+  - { number: 40, name: management }
+
+l2_interfaces:
+  - { name: Gi0/1, mode: trunk, native: 50, encap: dot1q, allowed: 10,20,30,40,50,55, desc: connected_to_lab-sw4 }
+  - { name: Gi0/2, mode: trunk, native: 50, encap: dot1q, allowed: 10,20,30,40,50,55, desc: connected_to_lab-sw1 }
+  - { name: Gi0/3, mode: trunk, native: 50, encap: dot1q, allowed: 10,20,30,40,50,55, desc: connected_to_lab-sw2 }
+  
+
+l3_interfaces:
+  - { name: Gi0/0, ip_add: 10.10.10.3, subnet_mask: 255.255.255.0, desc: management_interface }
+  - { name: lo0, ip_add: 3.3.3.3, subnet_mask: 255.255.255.255, desc: loopback_ospf_id }
+
+static:
+  - { ip: 140.140.1.0, mask: 255.255.255.0, int: Gi0/0 }
+ 
+ospf:
+  process: 1
+  rid: 3.3.3.3
+  networks:
+    - { network: 10.10.10.0, wildcard: 0.0.0.255, area: 0 }
+  default_originate: false
+
+syslog:
+  hosts:
+    - ip: 140.140.1.10
+
+ntp:
+  servers:
+    - 8.8.8.8
+    - 8.8.4.4
+...

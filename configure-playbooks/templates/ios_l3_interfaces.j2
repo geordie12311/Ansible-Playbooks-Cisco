@@ -1,0 +1,6 @@
+{% for interface in l3_interfaces %}
+interface {{ interface.name }}
+ description {{ interface.desc }}
+ ip address {{ interface.ip_add }} {{ interface.subnet_mask }}
+ no shut
+{% endfor %}

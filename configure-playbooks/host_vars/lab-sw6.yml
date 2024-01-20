@@ -1,122 +1,69 @@
 ---
-syslog:
-  hosts:
-    - ip: 140.140.1.5
-
 vlans:
-  vlan:
-    - number: 50
-      name: "management"
-      svi: "10.10.50.6 255.255.255.0"
-#    - number: 10
-#      name: "Sales"
-#      svi: "10.100.10.6 255.255.255.0"
-    - number: 20
-      name: "SALES"
-      svi: "10.10.20.6 255.255.255.0"
-    - number: 30
-      name: "HR"
-      svi: "10.100.30.6 255.255.255.0"
-    - number: 40
-      name: "VOICE_VLAN"
-      svi: "10.100.40.6 255.255.255.0"
-    - number: 666
-      name: Blackhole
-      svi: "66.66.66.6 255.255.255.0"
-  interfaces:
-    - interface: "eth0/1"
-      mode: trunk
-      native: "50"
-      encap: "dot1q"
-      allowed: "10,30,50"
-    - interface: "eth0/2"
-      mode: trunk
-      native: "50"
-      encap: "dot1q"
-      allowed: "10,30,40,50"
-    - interface: "eth1/0"
-      mode: access
-      vlan: 10
-      voice: 40
-    - interface: "eth1/1"
-      mode: access
-      vlan: 30
-      voice: 40
-    - interface: "eth1/2"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth1/3"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth2/0"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth2/1"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth2/2"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth2/3"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth3/0"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth3/1"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth3/2"
-      mode: access
-      voice: 40
-      vlan: 666
-    - interface: "eth3/3"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth4/0"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth4/1"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth4/2"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth4/3"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth5/0"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth5/1"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth5/2"
-      mode: access
-      vlan: 666
-      voice: 40
-    - interface: "eth5/3"
-      mode: access
-      vlan: 666
-      voice: 40
+  - number: 50
+    name: native
+  - number: 55
+    name: management
+#  - number: 10
+#    name: Sales
+  - number: 20
+    name: Finance
+  - number: 30
+    name: HR
+  - number: 40
+    name: voice
+  - number: 666
+    name: Blackhole
+
+l2_interfaces:
+  - { name: eth0/1, mode: trunk, native: 50, encap: dot1q, allowed: 20,30,40,50,55, desc: connected_to_lab-sw3 }
+  - { name: eth0/2, mode: trunk, native: 50, encap: dot1q, allowed: 20,30,40,50,55, desc: connected_to_lab-sw4 }
+  - { name: eth1/0, mode: access, vlan: 20, voice: 40, desc: access_port }
+  - { name: eth1/1, mode: access, vlan: 30, voice: 40, desc: access_port }
+  - { name: eth1/2, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth1/3, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth2/0, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth2/1, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth2/2, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth2/3, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth3/0, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth3/1, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth3/2, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth3/3, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth4/0, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth4/1, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth4/2, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth4/3, mode: access, vlan: 666, voice: 40, desc: access_port}
+  - { name: eth5/0, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth5/1, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth5/2, mode: access, vlan: 666, voice: 40, desc: access_port }
+  - { name: eth5/3, mode: access, vlan: 666, voice: 40, desc: access_port }
+
+l3_interfaces:
+  - { name: eth0/0, ip_add: 10.10.10.6, subnet_mask: 255.255.255.0, duplex: full, desc: connected_to_lab-sw3 }
+  - { name: lo0, ip_add: 6.6.6.6, subnet_mask: 255.255.255.255, duplex: full, desc: connected_to_lab-sw4 }
+#  - { name: vlan 10, ip_add: 10.100.10.6, subnet_mask: 255.255.255.0, duplex: full }
+#  - { name: vlan 20, ip_add: 10.100.20.6, subnet_mask: 255.255.255.0, duplex: full, desc: connected_to_lab-sw4 }
+#  - { name: vlan 30, ip_add: 10.100.30.6, subnet_mask: 255.255.255.0, duplex: full, desc: vlan30_SVI }
+# - { name: vlan 40, ip_add: 10.100.40.6, subnet_mask: 255.255.255.0, duplex: full desc: vlan40_SVI }
+  - { name: vlan 55, ip_add: 10.100.55.6, subnet_mask: 255.255.255.0, duplex: full, desc: management_svi }
+
+static:
+  - { ip: 140.140.1.0, mask: 255.255.255.0, int: eth0/0 }
+
+ospf:
+  process: 1
+  rid: 6.6.6.6
+  networks:
+    - { network: 10.10.10.0, wildcard: 0.0.0.255, area: 0 }
+  default_originate: false
 
 ntp:
   servers:
     - 8.8.8.8
     - 8.8.4.4
+
+syslog:
+  hosts:
+    - ip: 140.140.1.10
 ...

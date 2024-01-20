@@ -1,0 +1,18 @@
+# Ansible Playbook to configure DNS servers on IOS devices using a Jinja2 template and loop
+---
+- name: "Play 1: Add DNS servers"
+  hosts: lab_switches
+  connection: network_cli
+
+  tasks:
+    - name: "Task1: Add name-servers"
+      cisco.ios.ios_config:
+        lines:
+          - name-server {{ item }}
+      loop: "{{ dns_servers }}"
+      register: dns_output
+
+    - name: "Print DNS"
+      ansible.builtin.debug:
+        var: "{{ dns_output }}"
+...
