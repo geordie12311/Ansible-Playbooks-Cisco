@@ -18,6 +18,7 @@ vlans:
 l2_interfaces:
   - { name: eth0/1, mode: trunk, native: 50, encap: dot1q, allowed: 20,30,40,50,55, desc: connected_to_lab-sw3 }
   - { name: eth0/2, mode: trunk, native: 50, encap: dot1q, allowed: 20,30,40,50,55, desc: connected_to_lab-sw4 }
+  - { name: eth0/3, mode: access, vlan: 666, voice: 40, desc: access_port }
   - { name: eth1/0, mode: access, vlan: 20, voice: 40, desc: access_port }
   - { name: eth1/1, mode: access, vlan: 30, voice: 40, desc: access_port }
   - { name: eth1/2, mode: access, vlan: 666, voice: 40, desc: access_port }
