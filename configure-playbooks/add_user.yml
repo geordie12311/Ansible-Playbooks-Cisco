@@ -1,7 +1,7 @@
 # Ansible Playbook to add priviledge users to devices
 ---
 - name: Add users to Cisco hosts
-  hosts: NN-SW-01
+  hosts: lab-sw1
   gather_facts: false
   vars:
     names:
