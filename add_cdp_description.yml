@@ -1,0 +1,36 @@
+# Add Descriptions to Interfaces based on CDP neighbor information
+---
+- name: Set Interface description based on CDP/LLDP discovery
+  hosts: North_Switches
+  gather_facts: true
+  connection: network_cli
+
+  tasks:
+    - name: Set IOS Devices Interface Description using CDP or LLDP information
+      cisco.ios.ios_config:
+        lines:
+          - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
+        parents: interface {{ item.key }}
+        save_when: changed
+      with_dict: "{{ ansible_facts.net_neighbors }}"
+      when: ansible_network_os == 'ios'
+
+    - name: Validate Interface descriptions have been written
+      cisco.ios.ios_command:
+        commands:
+          - "show interface GigabitEthernet 0/0 description"
+      register: print_output
+
+    - name: Output Validation check output to screen
+      ansible.builtin.debug:
+        var: print_output.stdout_lines
+
+#    - name: Set NXOS Devices Interface Descriptions using CDP or LLDP information
+#      cisco.nxos.nxos_config:
+#        lines:
+#          - description Connected to {{ item.value[0].host }} via its {{ item.value[0].port }}
+#        parents: interface {{ item.key }}
+#        save_when: changed
+#      with_dict: "{{ ansible_facts.net_neighbors }}"
+#      when: ansible_network_os == 'nxos'
+...
