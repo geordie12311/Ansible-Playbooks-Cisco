@@ -1,7 +1,7 @@
 # Add Descriptions to Interfaces based on CDP neighbor information
 ---
 - name: Set Interface description based on CDP/LLDP discovery
-  hosts: North_Switches
+  hosts: lab_switches
   gather_facts: true
   connection: network_cli
 
