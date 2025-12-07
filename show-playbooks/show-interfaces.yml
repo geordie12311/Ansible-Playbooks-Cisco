@@ -2,7 +2,7 @@
 ---
 
 - name: Show IP interface information
-  hosts: Opus
+  hosts: lab_switches
   gather_facts: false
   connection: network_cli
   

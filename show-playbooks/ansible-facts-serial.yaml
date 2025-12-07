@@ -1,7 +1,7 @@
 # Playbook using ansible facts module to display serial number of the host
 ---
 - name: Use Ansible Facts to display host serial number
-  hosts: CSR_hosts
+  hosts: lab_switches
   connection: network_cli
 
   tasks:
